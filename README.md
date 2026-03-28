@@ -1,24 +1,37 @@
-# README
+# StudyHub
+## サイト概要
+### サイトテーマ
+学習の継続と習慣化を目的とした、学習者向けコミュニティ型SNS
+​
+### テーマを選んだ理由
+私はこれまで学習を進める中で、モチベーションの維持や継続が難しいと感じることが多くありました。特に一人で学習していると、自分の進捗が見えづらく、途中で挫折してしまうことが課題だと感じていました。
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+また、一般的なSNSでは学習に特化した情報共有や継続支援の仕組みが十分ではなく、学習者同士が互いに刺激し合いながら成長できる環境が不足していると考えました。学習者は「継続できない」「成果が見えない」「仲間がいない」といった課題を抱えていると感じています。
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+そこで、学習の記録を可視化し、ユーザー同士が交流しながら継続を支援できる環境を提供することで、これらの課題を解決できるのではないかと考えました。以上の理由から、学習の継続と習慣化を支援するコミュニティ型SNSとして、本ポートフォリオを制作いたしました。
+​
+### ターゲットユーザ
+- 学習の継続が難しく、モチベーションを維持したいと考えている人
+- 日々の学習記録を可視化し、成長を実感したいと考えている人
+- 同じ目標を持つ学習者とつながり、互いに刺激を受けながら学びたい人
+- プログラミングや資格勉強などを習慣化したいと考えている人
+​
+### 主な利用シーン
+- 学習内容や学習時間を記録したい時
+- 日々の学習の進捗や成果を振り返りたい時
+- 他の学習者の取り組みを見てモチベーションを高めたい時
+- 学習を習慣化するために継続状況を確認したい時
+​
+## 設計書
+後ほど作成予定
+​
+## 開発環境
+- OS：Windows
+- 言語：HTML,CSS,JavaScript,Ruby,SQL
+- フレームワーク：Ruby on Rails
+- JSライブラリ：jQuery
+- IDE：Visual Studio Code（VSCode）
+​
+## 使用素材
+著作権を考慮し、架空のデータを扱う予定です。
+なお今後、実在するデータを利用する際には、事前に著作権保持者と契約を結んだ上で利用します。
