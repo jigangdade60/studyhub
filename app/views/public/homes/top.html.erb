@@ -16,11 +16,13 @@
 
       <!-- ボタンエリア -->
       <div class="d-flex flex-wrap gap-2">
-        <!-- 新規登録ボタン -->
-        <%= link_to "新規登録", sign_up_path, class: "btn btn-primary btn-lg px-4" %>
-
-        <!-- ログインボタン -->
-        <%= link_to "ログイン", new_session_path, class: "btn btn-outline-primary btn-lg px-4" %>
+        <% if authenticated? %>
+          <%= link_to "マイページ", mypage_path, class: "btn btn-primary btn-lg px-4" %>
+          <%= link_to "投稿一覧", posts_path, class: "btn btn-outline-primary btn-lg px-4" %>
+        <% else %>
+          <%= link_to "新規登録", new_user_path, class: "btn btn-primary btn-lg px-4" %>
+          <%= link_to "ログイン", new_session_path, class: "btn btn-outline-primary btn-lg px-4" %>
+        <% end %>
       </div>
     </div>
 
@@ -104,11 +106,13 @@
     </p>
 
     <div class="d-flex justify-content-center flex-wrap gap-2">
-      <!-- 新規登録ボタン -->
-      <%= link_to "今すぐ始める", sign_up_path, class: "btn btn-primary px-4" %>
-
-      <!-- Aboutページへの導線 -->
-      <%= link_to "StudyHubについて見る", about_path, class: "btn btn-outline-secondary px-4" %>
+      <% if authenticated? %>
+        <%= link_to "新しく記録する", new_post_path, class: "btn btn-primary px-4" %>
+        <%= link_to "投稿一覧を見る", posts_path, class: "btn btn-outline-secondary px-4" %>
+      <% else %>
+        <%= link_to "今すぐ始める", new_user_path, class: "btn btn-primary px-4" %>
+        <%= link_to "StudyHubについて見る", about_path, class: "btn btn-outline-secondary px-4" %>
+      <% end %>
     </div>
   </div>
 
