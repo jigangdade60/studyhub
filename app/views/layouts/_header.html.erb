@@ -18,14 +18,13 @@
           <% if authenticated? %>
             <!-- ログイン後 -->
             <li class="nav-item me-lg-2">
-              <%= link_to "マイページ", "#", class: "nav-link header-link", data: { turbo: false } %>
+              <%= link_to "マイページ", mypage_path, class: "nav-link header-link", data: { turbo: false } %>
             </li>
 
             <li class="nav-item mt-2 mt-lg-0">
-              <%= link_to "ログアウト",
-                          session_path,
-                          class: "btn btn-outline-success btn-sm px-3",
-                          data: { turbo_method: :delete } %>
+              <%= form_with url: logout_path, method: :delete, local: true do %>
+                <%= submit_tag "ログアウト", class: "btn btn-outline-success btn-sm px-3" %>
+              <% end %>
             </li>
 
           <% else %>
@@ -35,7 +34,7 @@
             </li>
 
             <li class="nav-item me-lg-2 mt-2 mt-lg-0">
-              <%= link_to "新規登録", sign_up_path, class: "btn btn-success btn-sm px-3", data: { turbo: false } %>
+              <%= link_to "新規登録", new_user_path, class: "btn btn-success btn-sm px-3", data: { turbo: false } %>
             </li>
 
             <li class="nav-item mt-2 mt-lg-0">

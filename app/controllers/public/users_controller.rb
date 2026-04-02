@@ -56,7 +56,7 @@ class Public::UsersController < ApplicationController
 
   def set_current_user
     # 現在ログインしているユーザーを取得
-    @user = current_user
+    @user = Current.user
   end
 
   def user_params
