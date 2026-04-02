@@ -1,8 +1,25 @@
-<header>
-  <% if authenticated? %>
-    <%= link_to "ログアウト", session_path, data: { turbo_method: :delete } %>
-  <% else %>
-    <%= link_to "新規登録", sign_up_path %>
-    <%= link_to "ログイン", new_session_path %>
-  <% end %>
-</header>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>StudyHub</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header>
+      <% if authenticated? %>
+        <%= link_to "ログアウト", session_path, data: { turbo_method: :delete } %>
+      <% else %>
+        <%= link_to "新規登録", sign_up_path, data: { turbo: false } %>
+        <%= link_to "ログイン", new_session_path, data: { turbo: false } %>
+      <% end %>
+    </header>
+
+    <%= yield %>
+  </body>
+</html>
