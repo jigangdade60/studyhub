@@ -1,17 +1,25 @@
 Rails.application.routes.draw do
-  scope module: :public do
-    # トップ・アバウト
-    root "homes#top"
-    get "about", to: "homes#about"
+  # topページ
+  root "homes#top"
 
-    # ユーザー登録
-    get "sign_up", to: "users#new"
-    post "sign_up", to: "users#create"
+  # aboutページ
+  get "/about", to: "homes#about"
 
-    # 投稿CRUD
-    resources :posts
-  end
+  # サインアップ関連
+  get "/sign_up", to: "users#new", as: :new_user
+  post "/sign_up", to: "users#create", as: :users
 
-  # セッション（ログイン）
-  resource :session, only: [:new, :create, :destroy]
+  # ログイン関連
+  get "/login", to: "sessions#new", as: :new_session
+  post "/login", to: "sessions#create", as: :session
+  delete "/logout", to: "sessions#destroy", as: :logout
+
+  # マイページ関連
+  get "/mypage", to: "users#mypage", as: :mypage
+
+  # ユーザー関連
+  resources :users, only: [ :new, :create, :edit, :update, :destroy ]
+
+  # 投稿関連
+  resources :posts
 end
