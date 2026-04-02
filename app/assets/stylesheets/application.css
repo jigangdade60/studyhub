@@ -1,10 +1,55 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* =========================
+   ヘッダー
+========================= */
+
+/* ヘッダー背景色 */
+.navbar {
+  background-color: #0d6efd !important; 
+}
+
+/* ロゴ文字 */
+.navbar-brand {
+  color: #ffffff !important;
+  letter-spacing: 0.5px;
+}
+
+/* ロゴhover */
+.navbar-brand:hover {
+  color: #e2e6ea !important;
+}
+
+/* ナビリンク */
+.header-link {
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* ナビリンクhover */
+.header-link:hover {
+  color: #dbeafe !important;
+}
+
+/* ログインボタン（白枠） */
+.btn-outline-success {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* ログインボタンhover */
+.btn-outline-success:hover {
+  background-color: #ffffff !important;
+  color: #0d6efd !important;
+}
+
+/* 新規登録ボタン */
+.btn-success {
+  background-color: #ffffff !important;
+  color: #0d6efd !important;
+  border: none;
+}
+
+/* 新規登録hover */
+.btn-success:hover {
+  background-color: #e2e6ea !important;
+  color: #0d6efd !important;
+}
