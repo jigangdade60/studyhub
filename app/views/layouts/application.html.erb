@@ -12,14 +12,15 @@
 
   <body>
     <header>
-      <% if authenticated? %>
-        <%= link_to "ログアウト", session_path, data: { turbo_method: :delete } %>
-      <% else %>
-        <%= link_to "新規登録", sign_up_path, data: { turbo: false } %>
-        <%= link_to "ログイン", new_session_path, data: { turbo: false } %>
-      <% end %>
+     <% if authenticated? %>
+       <%= link_to "マイページ", "#", data: { turbo: false } %>
+       <%= link_to "ログアウト", session_path, data: { turbo_method: :delete } %>
+     <% else %>
+       <%= link_to "About", about_path, data: { turbo: false } %>
+       <%= link_to "新規登録", sign_up_path, data: { turbo: false } %>
+       <%= link_to "ログイン", new_session_path, data: { turbo: false } %>
+     <% end %>
     </header>
-
     <%= yield %>
   </body>
 </html>
