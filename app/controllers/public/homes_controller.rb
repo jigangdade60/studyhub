@@ -1,7 +1,6 @@
 class Public::HomesController < ApplicationController
-  def top
-  end
+  allow_unauthenticated_access only: %i[top about]
 
-  def about
-  end
+  def top; end
+  def about; end
 end
