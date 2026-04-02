@@ -1,0 +1,50 @@
+<!-- 共通ヘッダー -->
+<header>
+  <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
+    <div class="container">
+
+      <!-- アプリ名（トップへ戻る） -->
+      <%= link_to "StudyHub", root_path, class: "navbar-brand fw-bold fs-3" %>
+
+      <!-- スマホ用ハンバーガーメニュー -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studyhubNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- ナビゲーション -->
+      <div class="collapse navbar-collapse justify-content-end" id="studyhubNavbar">
+        <ul class="navbar-nav align-items-lg-center ms-auto">
+
+          <% if authenticated? %>
+            <!-- ログイン後 -->
+            <li class="nav-item me-lg-2">
+              <%= link_to "マイページ", "#", class: "nav-link header-link", data: { turbo: false } %>
+            </li>
+
+            <li class="nav-item mt-2 mt-lg-0">
+              <%= link_to "ログアウト",
+                          session_path,
+                          class: "btn btn-outline-success btn-sm px-3",
+                          data: { turbo_method: :delete } %>
+            </li>
+
+          <% else %>
+            <!-- 未ログイン -->
+            <li class="nav-item me-lg-2">
+              <%= link_to "About", about_path, class: "nav-link header-link", data: { turbo: false } %>
+            </li>
+
+            <li class="nav-item me-lg-2 mt-2 mt-lg-0">
+              <%= link_to "新規登録", sign_up_path, class: "btn btn-success btn-sm px-3", data: { turbo: false } %>
+            </li>
+
+            <li class="nav-item mt-2 mt-lg-0">
+              <%= link_to "ログイン", new_session_path, class: "btn btn-outline-success btn-sm px-3", data: { turbo: false } %>
+            </li>
+          <% end %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

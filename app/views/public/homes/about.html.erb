@@ -1,2 +1,121 @@
-<h1>Public::Homes#about</h1>
-<p>Find me in app/views/public/homes/about.html.erb</p>
+<div class="container py-5">
+
+  <!-- ページタイトル -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold mb-3">StudyHubについて</h1>
+    <p class="text-secondary mb-0">
+      StudyHubは、学習記録を投稿し、継続を見える化できる学習SNSです。
+    </p>
+  </div>
+
+  <!-- アプリ説明セクション -->
+  <div class="row justify-content-center align-items-center mb-5">
+    <div class="col-lg-6 mb-4 mb-lg-0">
+      <!-- Aboutページ用画像 -->
+      <%= image_tag "about_studyhub.jpg",
+          class: "img-fluid rounded shadow-sm w-100",
+          alt: "StudyHubのアバウトページ用画像" %>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="h4 fw-bold mb-3">StudyHubとは？</h2>
+          <p class="text-secondary mb-3">
+            StudyHubは、日々の学習内容や学習時間を記録しながら、
+            自分の努力の積み重ねを見える形で残せるアプリです。
+          </p>
+          <p class="text-secondary mb-3">
+            学習は続けることが大切ですが、ひとりで継続するのは簡単ではありません。
+            そこで、記録を投稿し、振り返りや可視化ができる場として StudyHub を作成しています。
+          </p>
+          <p class="text-secondary mb-0">
+            自分の学習を記録するだけでなく、他の学習者の投稿を見ることで、
+            モチベーションアップや新しい気づきにもつながります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 特徴セクション ===== -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- 特徴1 -->
+          <h3 class="h5 fw-bold mb-3">学習を記録できる</h3>
+          <p class="text-secondary mb-0">
+            その日に取り組んだ内容や学習時間を投稿し、毎日の努力を記録できます。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- 特徴2 -->
+          <h3 class="h5 fw-bold mb-3">継続を見える化できる</h3>
+          <p class="text-secondary mb-0">
+            学習の積み重ねを振り返ることで、継続の実感を得やすくなります。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body p-4">
+          <!-- 特徴3 -->
+          <h3 class="h5 fw-bold mb-3">学習者同士で刺激を受けられる</h3>
+          <p class="text-secondary mb-0">
+            他のユーザーの投稿を見ることで、自分の学習意欲につなげることができます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== こんな人におすすめ ===== -->
+  <div class="bg-light rounded-4 p-4 p-md-5 mb-5">
+    <h2 class="h4 fw-bold mb-4 text-center">こんな人におすすめ</h2>
+
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3 h-100">
+          <p class="mb-0">学習習慣を身につけたい人</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3 h-100">
+          <p class="mb-0">努力の積み重ねを見える化したい人</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="bg-white border rounded-3 p-3 h-100">
+          <p class="mb-0">他の学習者とゆるくつながりたい人</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下部導線セクション -->
+  <div class="text-center">
+    <h2 class="h4 fw-bold mb-3">StudyHubで学習の積み重ねを残そう</h2>
+    <p class="text-secondary mb-4">
+      毎日の学習を記録して、継続を自分の強みに変えていきましょう。
+    </p>
+
+    <div class="d-flex justify-content-center flex-wrap gap-2">
+      <!-- 新規登録ボタン -->
+      <%= link_to "新規登録する", sign_up_path, class: "btn btn-primary px-4" %>
+
+      <!-- トップページに戻るボタン -->
+      <%= link_to "トップページへ戻る", root_path, class: "btn btn-outline-secondary px-4" %>
+    </div>
+  </div>
+
+</div>
