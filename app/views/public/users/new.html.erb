@@ -1,20 +1,41 @@
 <h2>新規登録</h2>
 
 <%= form_with model: @user, url: sign_up_path do |f| %>
-  <div>
-    <%= f.label :email_address, "メールアドレス" %>
-    <%= f.text_field :email_address %>
+  <!-- エラーメッセージ -->
+  <% if @user.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- ユーザー名 -->
+  <div class="mb-3">
+    <%= f.label :name, "ユーザー名", class: "form-label" %>
+    <%= f.text_field :name, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :password, "パスワード" %>
-    <%= f.password_field :password %>
+  <!-- メールアドレス -->
+  <div class="mb-3">
+    <%= f.label :email_address, "メールアドレス", class: "form-label" %>
+    <%= f.text_field :email_address, class: "form-control" %>
   </div>
 
-  <div>
-    <%= f.label :password_confirmation, "確認用パスワード" %>
-    <%= f.password_field :password_confirmation %>
+  <!-- パスワード -->
+  <div class="mb-3">
+    <%= f.label :password, "パスワード", class: "form-label" %>
+    <%= f.password_field :password, class: "form-control" %>
   </div>
 
-  <%= f.submit "登録" %>
+  <!-- 確認用パスワード -->
+  <div class="mb-3">
+    <%= f.label :password_confirmation, "確認用パスワード", class: "form-label" %>
+    <%= f.password_field :password_confirmation, class: "form-control" %>
+  </div>
+
+  <!-- 登録ボタン -->
+  <%= f.submit "登録", class: "btn btn-primary" %>
 <% end %>

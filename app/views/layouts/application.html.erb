@@ -28,6 +28,29 @@
     <!-- ヘッダーをpartialとして読み込む -->
     <%= render "layouts/header" %>
 
+    <!-- フラッシュメッセージ -->
+    <div class="container mt-3">
+      <% flash.each do |type, message| %>
+        <% alert_class =
+          case type.to_sym
+          when :notice
+            "alert-success"
+          when :alert
+            "alert-danger"
+          else
+            "alert-secondary"
+          end
+        %>
+
+        <div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
+          <%= message %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+        </div>
+      <% end %>
+    </div>
+
+    <% flash.discard %>
+
     <!-- 各ページの中身 -->
     <main>
       <%= yield %>

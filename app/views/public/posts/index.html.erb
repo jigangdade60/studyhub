@@ -1,0 +1,49 @@
+<div class="container py-4">
+  <!-- タイトルと新規投稿ボタン -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">投稿一覧</h2>
+
+    <% if Current.user.present? %>
+      <%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <!-- 投稿が0件のとき -->
+  <% if @posts.empty? %>
+    <div class="alert alert-secondary">
+      まだ投稿がありません。
+    </div>
+  <% else %>
+    <div class="row g-4">
+      <% @posts.each do |post| %>
+        <div class="col-md-6">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <!-- 投稿タイトル -->
+              <h5 class="card-title fw-bold">
+                <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
+              </h5>
+
+              <!-- 投稿者名 -->
+              <p class="text-muted mb-2">
+                投稿者：<%= post.user.name %>
+              </p>
+
+              <!-- 本文の一部 -->
+              <p class="card-text">
+                <%= truncate(post.body, length: 100) %>
+              </p>
+
+              <!-- 詳細リンク -->
+              <%= link_to "詳細を見る", post_path(post), class: "btn btn-outline-primary btn-sm" %>
+            </div>
+
+            <div class="card-footer text-muted small">
+              <%= l post.created_at, format: :short %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
