@@ -1,7 +1,7 @@
 <div class="container py-4" style="max-width: 720px;">
   <!-- タイトルと新規投稿ボタン -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">タイムライン</h2>
+    <h2 class="fw-bold mb-0">投稿一覧</h2>
 
     <% if Current.user.present? %>
       <%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
@@ -35,10 +35,19 @@
               <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
             </h5>
 
+            <!-- 学習時間 -->
+            <div class="mb-2">
+              <span class="badge bg-primary">
+                学習時間: <%= format_study_time(post.study_time) %>
+              </span>
+            </div>
+
             <!-- 投稿本文 -->
-            <p class="mb-3 text-secondary">
-              <%= truncate(post.body, length: 140) %>
-            </p>
+            <% if post.body.present? %>
+              <p class="mb-3 text-secondary">
+                <%= truncate(post.body, length: 140) %>
+              </p>
+            <% end %>
 
             <!-- アクション -->
             <div>
