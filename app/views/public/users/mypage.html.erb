@@ -52,6 +52,7 @@
                 <thead>
                   <tr>
                     <th>投稿ID</th>
+                    <th>学習時間</th>
                     <th>投稿日</th>
                     <th>詳細</th>
                   </tr>
@@ -60,6 +61,7 @@
                   <% @posts.each do |post| %>
                     <tr>
                       <td><%= post.id %></td>
+                      <td><%= format_study_time(post.study_time) %></td>
                       <td><%= post.created_at.strftime("%Y/%m/%d %H:%M") %></td>
                       <td>
                         <%= link_to "見る", post_path(post), class: "btn btn-sm btn-outline-secondary" %>

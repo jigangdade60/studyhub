@@ -63,7 +63,7 @@ class Public::PostsController < ApplicationController
 
   # パラメータ
   def post_params
-    params.require(:post).permit(:title, :body)
+    params.require(:post).permit(:title, :body, :study_time_hour, :study_time_minute)
   end
 
   # 本人チェック
