@@ -1,41 +1,55 @@
-<h2>新規登録</h2>
+<div class="container py-5">
+  <div class="mx-auto" style="max-width: 720px;">
+    <div class="card shadow-sm border-0 rounded-4">
+      <div class="card-body p-4 p-md-5">
+        <!-- ページタイトル -->
+        <div class="text-center mb-4">
+          <h2 class="fw-bold mb-2">新規登録</h2>
+          <p class="text-muted mb-0">StudyHubを始めるためのアカウントを作成します</p>
+        </div>
 
-<%= form_with model: @user, url: users_path do |f| %>
-  <!-- エラーメッセージ -->
-  <% if @user.errors.any? %>
-    <div class="alert alert-danger">
-      <ul class="mb-0">
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <%= form_with model: @user, url: users_path do |f| %>
+          <!-- エラーメッセージ -->
+          <% if @user.errors.any? %>
+            <div class="alert alert-danger rounded-3">
+              <ul class="mb-0 ps-3">
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <!-- ユーザー名 -->
+          <div class="mb-3">
+            <%= f.label :name, "ユーザー名", class: "form-label fw-semibold" %>
+            <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "ユーザー名を入力" %>
+          </div>
+
+          <!-- メールアドレス -->
+          <div class="mb-3">
+            <%= f.label :email_address, "メールアドレス", class: "form-label fw-semibold" %>
+            <%= f.text_field :email_address, class: "form-control form-control-lg", placeholder: "メールアドレスを入力" %>
+          </div>
+
+          <!-- パスワード -->
+          <div class="mb-3">
+            <%= f.label :password, "パスワード", class: "form-label fw-semibold" %>
+            <%= f.password_field :password, class: "form-control form-control-lg", placeholder: "パスワードを入力" %>
+          </div>
+
+          <!-- 確認用パスワード -->
+          <div class="mb-4">
+            <%= f.label :password_confirmation, "確認用パスワード", class: "form-label fw-semibold" %>
+            <%= f.password_field :password_confirmation, class: "form-control form-control-lg", placeholder: "もう一度パスワードを入力" %>
+          </div>
+
+          <!-- 登録ボタン -->
+          <div class="d-grid">
+            <%= f.submit "登録する", class: "btn btn-primary btn-lg" %>
+          </div>
         <% end %>
-      </ul>
+      </div>
     </div>
-  <% end %>
-
-  <!-- ユーザー名 -->
-  <div class="mb-3">
-    <%= f.label :name, "ユーザー名", class: "form-label" %>
-    <%= f.text_field :name, class: "form-control" %>
   </div>
-
-  <!-- メールアドレス -->
-  <div class="mb-3">
-    <%= f.label :email_address, "メールアドレス", class: "form-label" %>
-    <%= f.text_field :email_address, class: "form-control" %>
-  </div>
-
-  <!-- パスワード -->
-  <div class="mb-3">
-    <%= f.label :password, "パスワード", class: "form-label" %>
-    <%= f.password_field :password, class: "form-control" %>
-  </div>
-
-  <!-- 確認用パスワード -->
-  <div class="mb-3">
-    <%= f.label :password_confirmation, "確認用パスワード", class: "form-label" %>
-    <%= f.password_field :password_confirmation, class: "form-control" %>
-  </div>
-
-  <!-- 登録ボタン -->
-  <%= f.submit "登録", class: "btn btn-primary" %>
-<% end %>
+</div>
