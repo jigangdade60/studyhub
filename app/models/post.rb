@@ -16,6 +16,18 @@ class Post < ApplicationRecord
 
   before_validation :combine_study_time
 
+  scope :keyword_search, ->(keyword) {
+    return all if keyword.blank?
+
+    where("title LIKE ? OR body LIKE ?", "%#{keyword}%", "%#{keyword}%")
+  }
+
+  scope :tag_search, ->(tag_name) {
+    return all if tag_name.blank?
+
+    joins(:tags).where(tags: { name: tag_name }).distinct
+  }
+
   def study_time_hour
     return 0 if study_time.blank?
     study_time / 60

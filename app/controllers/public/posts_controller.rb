@@ -10,7 +10,12 @@ class Public::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    @posts = Post.includes(:user, :tags).order(created_at: :desc)
+    @tags = Tag.order(:name)
+
+    @posts = Post.includes(:user, :tags)
+                 .order(created_at: :desc)
+                 .keyword_search(params[:keyword])
+                 .tag_search(params[:tag_name])
   end
 
   # 投稿詳細
