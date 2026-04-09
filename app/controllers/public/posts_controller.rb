@@ -10,7 +10,7 @@ class Public::PostsController < ApplicationController
 
   # 投稿一覧
   def index
-    @posts = Post.includes(:user).order(created_at: :desc)
+    @posts = Post.includes(:user, :tags).order(created_at: :desc)
   end
 
   # 投稿詳細
@@ -27,6 +27,7 @@ class Public::PostsController < ApplicationController
     @post = Current.user.posts.build(post_params)
 
     if @post.save
+      @post.save_tags(post_params[:tag_names])
       redirect_to post_path(@post), notice: "投稿を作成しました。"
     else
       flash.now[:alert] = "投稿に失敗しました。"
@@ -41,6 +42,7 @@ class Public::PostsController < ApplicationController
   # 更新処理
   def update
     if @post.update(post_params)
+      @post.save_tags(post_params[:tag_names])
       redirect_to post_path(@post), notice: "投稿を更新しました。"
     else
       flash.now[:alert] = "更新に失敗しました。"
@@ -63,7 +65,7 @@ class Public::PostsController < ApplicationController
 
   # パラメータ
   def post_params
-    params.require(:post).permit(:title, :body, :study_time_hour, :study_time_minute)
+    params.require(:post).permit(:title, :body, :study_time_hour, :study_time_minute, :tag_names)
   end
 
   # 本人チェック

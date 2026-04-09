@@ -40,6 +40,16 @@
         </div>
       </div>
 
+      <!-- タグ入力欄 -->
+      <div class="mb-4">
+        <%= f.label :tag_names, "タグ", class: "form-label fw-semibold" %>
+        <%= f.text_field :tag_names,
+            value: post.tag_names,
+            class: "form-control",
+            placeholder: "例: Rails, Ruby, 学習記録" %>
+        <div class="form-text">カンマ区切りで複数入力できます</div>
+      </div>
+
       <!-- 本文入力欄 -->
       <div class="mb-4">
         <%= f.label :body, "学習内容", class: "form-label fw-semibold" %>
