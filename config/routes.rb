@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     get "/about", to: "homes#about"
 
     get "/sign_up", to: "users#new", as: :new_user
-    post "/sign_up", to: "users#create", as: :users
+    post "/sign_up", to: "users#create", as: :sign_up
 
     get "/login", to: "sessions#new", as: :new_session
     post "/login", to: "sessions#create", as: :session
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
     get "/mypage", to: "users#mypage", as: :mypage
 
-    resources :users, only: [ :edit, :update, :destroy ]
+    resources :users, only: [ :index, :show, :edit, :update, :destroy ]
     resources :posts
   end
 end
