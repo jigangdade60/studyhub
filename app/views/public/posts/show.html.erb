@@ -19,6 +19,17 @@
         学習時間：<%= format_study_time(@post.study_time) %>
       </p>
 
+      <!-- タグ -->
+      <div class="mb-3">
+        <strong>タグ：</strong>
+        <% if @post.tags.any? %>
+          <% @post.tags.each do |tag| %>
+            <span class="badge bg-secondary me-1"><%= tag.name %></span>
+          <% end %>
+        <% else %>
+          <span class="text-muted">なし</span>
+        <% end %>
+      </div>
 
       <!-- 本文 -->
       <div class="mb-4" style="white-space: pre-wrap;">

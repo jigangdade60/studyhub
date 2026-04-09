@@ -1,7 +1,10 @@
 class Post < ApplicationRecord
   belongs_to :user
 
-  attr_accessor :study_time_hour, :study_time_minute
+  has_many :post_tags, dependent: :destroy
+  has_many :tags, through: :post_tags
+
+  attr_accessor :study_time_hour, :study_time_minute, :tag_names
 
   validates :title, presence: true
   validates :body, presence: true
@@ -21,6 +24,20 @@ class Post < ApplicationRecord
   def study_time_minute
     return 0 if study_time.blank?
     study_time % 60
+  end
+
+  def tag_names
+    tags.pluck(:name).join(", ")
+  end
+
+  def save_tags(tag_names)
+    return if tag_names.nil?
+
+    tag_list = tag_names.split(",").map(&:strip).reject(&:blank?).uniq
+
+    self.tags = tag_list.map do |tag_name|
+      Tag.find_or_create_by!(name: tag_name)
+    end
   end
 
   private
