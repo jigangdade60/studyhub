@@ -4,7 +4,7 @@
     <h2 class="fw-bold">投稿詳細</h2>
   </div>
 
-  <div class="card shadow-sm">
+  <div class="card shadow-sm mb-4">
     <div class="card-body">
       <!-- タイトル -->
       <h3 class="fw-bold mb-3"><%= @post.title %></h3>
@@ -54,6 +54,69 @@
 
     <div class="card-footer text-muted small">
       投稿日時：<%= l @post.created_at, format: :long %>
+    </div>
+  </div>
+
+  <!-- コメント投稿フォーム -->
+  <% if current_user.present? %>
+  <%= form_with model: [@post, @comment] do |f| %>
+    <% if @comment.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% @comment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.text_area :body,
+                      class: "form-control",
+                      rows: 4,
+                      placeholder: "コメントを入力してください" %>
+    </div>
+
+    <%= f.submit "コメントする", class: "btn btn-primary" %>
+  <% end %>
+<% else %>
+  <p class="text-muted mb-2">コメントするにはログインが必要です。</p>
+  <%= link_to "ログインする", new_session_path, class: "btn btn-outline-primary btn-sm" %>
+<% end %>
+
+  <!-- コメント一覧 -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="fw-bold mb-3">コメント一覧（<%= @comments.count %>件）</h4>
+
+      <% if @comments.any? %>
+        <div class="d-flex flex-column gap-3">
+          <% @comments.each do |comment| %>
+            <div class="border rounded p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <div class="fw-bold"><%= comment.user.name %></div>
+                  <div class="text-muted small">
+                    <%= l comment.created_at, format: :long %>
+                  </div>
+                </div>
+
+                <% if current_user&.id == comment.user_id %>
+                  <%= button_to "削除",
+                                post_comment_path(@post, comment),
+                                method: :delete,
+                                class: "btn btn-sm btn-outline-danger",
+                                data: { turbo_confirm: "コメントを削除しますか？" } %>
+                <% end %>
+              </div>
+
+              <div style="white-space: pre-wrap;"><%= comment.body %></div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted mb-0">まだコメントはありません。</p>
+      <% end %>
     </div>
   </div>
 </div>

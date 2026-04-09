@@ -20,6 +20,9 @@ class Public::PostsController < ApplicationController
 
   # 投稿詳細
   def show
+    @post = Post.find(params[:id])
+    @comment = Comment.new
+    @comments = @post.comments.includes(:user).order(created_at: :desc)
   end
 
   # 新規投稿
