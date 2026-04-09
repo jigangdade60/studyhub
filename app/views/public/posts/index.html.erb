@@ -8,10 +8,37 @@
     <% end %>
   </div>
 
+  <!-- 検索フォーム -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <%= form_with url: posts_path, method: :get, local: true do |f| %>
+        <div class="row g-2">
+          <div class="col-md-5">
+            <%= f.text_field :keyword,
+                             value: params[:keyword],
+                             class: "form-control",
+                             placeholder: "タイトル・本文を検索" %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.select :tag_name,
+                         options_for_select(@tags.pluck(:name), params[:tag_name]),
+                         { include_blank: "タグを選択" },
+                         class: "form-select" %>
+          </div>
+
+          <div class="col-md-3 d-grid">
+            <%= f.submit "検索", class: "btn btn-outline-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
   <!-- 投稿が0件のとき -->
   <% if @posts.empty? %>
     <div class="alert alert-secondary">
-      まだ投稿がありません。
+      該当する投稿がありません。
     </div>
   <% else %>
     <div class="d-flex flex-column gap-3">
@@ -45,10 +72,14 @@
             <!-- タグ -->
             <div class="mb-2">
               <% if post.tags.any? %>
-                <% post.tags.each do |tag| %>
-                  <span class="badge bg-secondary me-1"><%= tag.name %></span>
-                <% end %>
+               <% post.tags.each do |tag| %>
+               <% active_class = params[:tag_name] == tag.name ? "bg-primary" : "bg-secondary" %>
+
+               <%= link_to tag.name,
+                  posts_path(tag_name: tag.name, keyword: params[:keyword]),
+                  class: "badge #{active_class} me-1 text-decoration-none" %>
               <% end %>
+             <% end %>
             </div>
 
             <!-- 投稿本文 -->
