@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     get "/mypage", to: "users#mypage", as: :mypage
 
     resources :users, only: [ :index, :show, :edit, :update, :destroy ]
-    resources :posts
+
+    resources :posts do
+      resources :comments, only: [:create, :destroy]
+    end
   end
 end
