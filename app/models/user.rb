@@ -7,4 +7,10 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 20 }
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  scope :search_by_name, ->(keyword) {
+    return all if keyword.blank?
+
+    where("name LIKE ?", "%#{keyword}%")
+  }
 end
