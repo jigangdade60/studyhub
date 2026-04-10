@@ -32,8 +32,31 @@
       </div>
 
       <!-- 本文 -->
-      <div class="mb-4" style="white-space: pre-wrap;">
+      <div class="mb-3" style="white-space: pre-wrap;">
         <%= @post.body %>
+      </div>
+
+      <!-- いいねボタン -->
+      <div class="mb-4">
+        <% if current_user.present? %>
+          <% if @post.liked_by?(current_user) %>
+            <%= button_to post_like_path(@post),
+                          method: :delete,
+                          class: "btn btn-outline-danger btn-sm" do %>
+              ♥ <%= @post.likes.count %>
+            <% end %>
+          <% else %>
+            <%= button_to post_like_path(@post),
+                          method: :post,
+                          class: "btn btn-outline-secondary btn-sm" do %>
+              ♡ <%= @post.likes.count %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <span class="btn btn-outline-secondary btn-sm disabled">
+            ♡ <%= @post.likes.count %>
+          </span>
+        <% end %>
       </div>
 
       <!-- 投稿者本人だけに編集・削除ボタンを表示 -->
@@ -59,30 +82,30 @@
 
   <!-- コメント投稿フォーム -->
   <% if current_user.present? %>
-  <%= form_with model: [@post, @comment] do |f| %>
-    <% if @comment.errors.any? %>
-      <div class="alert alert-danger">
-        <ul class="mb-0">
-          <% @comment.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+    <%= form_with model: [@post, @comment] do |f| %>
+      <% if @comment.errors.any? %>
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            <% @comment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.text_area :body,
+                        class: "form-control",
+                        rows: 4,
+                        placeholder: "コメントを入力してください" %>
       </div>
+
+      <%= f.submit "コメントする", class: "btn btn-primary" %>
     <% end %>
-
-    <div class="mb-3">
-      <%= f.text_area :body,
-                      class: "form-control",
-                      rows: 4,
-                      placeholder: "コメントを入力してください" %>
-    </div>
-
-    <%= f.submit "コメントする", class: "btn btn-primary" %>
+  <% else %>
+    <p class="text-muted mb-2">コメントするにはログインが必要です。</p>
+    <%= link_to "ログインする", new_session_path, class: "btn btn-outline-primary btn-sm" %>
   <% end %>
-<% else %>
-  <p class="text-muted mb-2">コメントするにはログインが必要です。</p>
-  <%= link_to "ログインする", new_session_path, class: "btn btn-outline-primary btn-sm" %>
-<% end %>
 
   <!-- コメント一覧 -->
   <div class="card shadow-sm">

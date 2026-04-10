@@ -72,14 +72,14 @@
             <!-- タグ -->
             <div class="mb-2">
               <% if post.tags.any? %>
-               <% post.tags.each do |tag| %>
-               <% active_class = params[:tag_name] == tag.name ? "bg-primary" : "bg-secondary" %>
+                <% post.tags.each do |tag| %>
+                  <% active_class = params[:tag_name] == tag.name ? "bg-primary" : "bg-secondary" %>
 
-               <%= link_to tag.name,
-                  posts_path(tag_name: tag.name, keyword: params[:keyword]),
-                  class: "badge #{active_class} me-1 text-decoration-none" %>
+                  <%= link_to tag.name,
+                      posts_path(tag_name: tag.name, keyword: params[:keyword]),
+                      class: "badge #{active_class} me-1 text-decoration-none" %>
+                <% end %>
               <% end %>
-             <% end %>
             </div>
 
             <!-- 投稿本文 -->
@@ -90,9 +90,32 @@
             <% end %>
 
             <!-- コメント数 -->
-              <p class="text-muted small mb-0">
-                コメント数：<%= post.comments.count %>件
-              </p>
+            <p class="text-muted small mb-2">
+              コメント数：<%= post.comments.count %>件
+            </p>
+
+            <!-- いいねボタン -->
+            <div class="mb-3">
+              <% if current_user.present? %>
+                <% if post.liked_by?(current_user) %>
+                  <%= button_to post_like_path(post),
+                                method: :delete,
+                                class: "btn btn-outline-danger btn-sm" do %>
+                    ♥ <%= post.likes.count %>
+                  <% end %>
+                <% else %>
+                  <%= button_to post_like_path(post),
+                                method: :post,
+                                class: "btn btn-outline-secondary btn-sm" do %>
+                    ♡ <%= post.likes.count %>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <span class="btn btn-outline-secondary btn-sm disabled">
+                  ♡ <%= post.likes.count %>
+                </span>
+              <% end %>
+            </div>
 
             <!-- アクション -->
             <div>

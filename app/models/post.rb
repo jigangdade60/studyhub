@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   has_many :post_tags, dependent: :destroy
   has_many :tags, through: :post_tags
   has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   attr_accessor :study_time_hour, :study_time_minute, :tag_names
 
@@ -41,6 +42,12 @@ class Post < ApplicationRecord
 
   def tag_names
     tags.pluck(:name).join(", ")
+  end
+
+  def liked_by?(user)
+    return false if user.blank?
+
+    likes.exists?(user_id: user.id)
   end
 
   def save_tags(tag_names)
