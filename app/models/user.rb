@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
+
   has_many :active_relationships,
            class_name: "Relationship",
            foreign_key: "follower_id",
@@ -24,6 +25,16 @@ class User < ApplicationRecord
            through: :passive_relationships,
            source: :follower
 
+  validates :name, presence: true, length: { maximum: 20 }
+  validates :email_address, presence: true, uniqueness: true
+
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  scope :search_by_name, ->(keyword) {
+    return all if keyword.blank?
+    where("name LIKE ?", "%#{keyword}%")
+  }
+
   def follow(user)
     active_relationships.create(followed_id: user.id)
   end
@@ -35,14 +46,4 @@ class User < ApplicationRecord
   def following?(user)
     following.include?(user)
   end
-
-  validates :name, presence: true, length: { maximum: 20 }
-
-  normalizes :email_address, with: ->(e) { e.strip.downcase }
-
-  scope :search_by_name, ->(keyword) {
-    return all if keyword.blank?
-
-    where("name LIKE ?", "%#{keyword}%")
-  }
 end
