@@ -1,5 +1,13 @@
 module Public
   class LikesController < ApplicationController
+    before_action :require_authentication
+
+    def index
+      @liked_posts = current_user.liked_posts
+                               .includes(:user)
+                               .order(created_at: :desc)
+    end
+    
     def create
       @post = Post.find(params[:post_id])
       @post.likes.find_or_create_by!(user: current_user)
