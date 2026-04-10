@@ -1,0 +1,43 @@
+<div class="container py-4" style="max-width: 900px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">いいね一覧</h2>
+    <%= link_to "投稿一覧へ戻る", posts_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <% if @liked_posts.empty? %>
+    <div class="alert alert-secondary">
+      まだいいねした投稿はありません。
+    </div>
+  <% else %>
+    <div class="d-flex flex-column gap-3">
+      <% @liked_posts.each do |post| %>
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h5 class="fw-bold mb-1">
+                  <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
+                </h5>
+                <p class="text-muted small mb-0">
+                  投稿者：<%= post.user.name %>
+                </p>
+              </div>
+            </div>
+
+            <p class="text-secondary mb-3">
+              <%= truncate(post.body, length: 120) %>
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                学習時間：<%= post.study_time / 60 %>時間<%= post.study_time % 60 %>分
+              </small>
+
+              <%= link_to "詳細を見る", post_path(post), class: "btn btn-sm btn-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
