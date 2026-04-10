@@ -1,0 +1,46 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">ユーザー一覧</h2>
+
+    <%= button_to "ログアウト", admin_logout_path,
+          method: :delete,
+          class: "btn btn-outline-secondary" %>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ユーザー名</th>
+              <th>メールアドレス</th>
+              <th>ステータス</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+              <tr>
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email_address %></td>
+                <td>
+                  <% if user.is_active? %>
+                    <span class="badge text-bg-success">有効</span>
+                  <% else %>
+                    <span class="badge text-bg-secondary">退会済み</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to "詳細", admin_user_path(user), class: "btn btn-sm btn-outline-primary" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
