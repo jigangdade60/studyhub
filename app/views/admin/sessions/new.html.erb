@@ -1,0 +1,27 @@
+<div class="container py-5" style="max-width: 480px;">
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h2 class="fw-bold text-center mb-4">管理者ログイン</h2>
+
+      <% if flash[:alert] %>
+        <div class="alert alert-danger"><%= flash[:alert] %></div>
+      <% end %>
+
+      <%= form_with url: admin_login_path, local: true do |f| %>
+        <div class="mb-3">
+          <%= f.label :email_address, "メールアドレス", class: "form-label" %>
+          <%= f.email_field :email_address, class: "form-control", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "パスワード", class: "form-label" %>
+          <%= f.password_field :password, class: "form-control", required: true %>
+        </div>
+
+        <div class="d-grid">
+          <%= f.submit "ログイン", class: "btn btn-dark" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container py-4" style="max-width: 720px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">ユーザー詳細</h2>
+    <%= link_to "一覧へ戻る", admin_users_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <p><strong>ID：</strong><%= @user.id %></p>
+      <p><strong>ユーザー名：</strong><%= @user.name %></p>
+      <p><strong>メールアドレス：</strong><%= @user.email_address %></p>
+      <p>
+        <strong>ステータス：</strong>
+        <% if @user.is_active? %>
+          <span class="badge text-bg-success">有効</span>
+        <% else %>
+          <span class="badge text-bg-secondary">退会済み</span>
+        <% end %>
+      </p>
+
+      <hr>
+
+      <% if @user.is_active? %>
+        <%= button_to "退会処理を行う",
+              withdraw_admin_user_path(@user),
+              method: :patch,
+              data: { turbo_confirm: "このユーザーを退会状態にしますか？" },
+              class: "btn btn-danger" %>
+      <% else %>
+        <%= button_to "有効化する",
+              activate_admin_user_path(@user),
+              method: :patch,
+              data: { turbo_confirm: "このユーザーを有効化しますか？" },
+              class: "btn btn-success" %>
+      <% end %>
+    </div>
+  </div>
+</div>

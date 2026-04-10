@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_09_125528) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_10_013609) do
+  create_table "admins", force: :cascade do |t|
+    t.string "email_address"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_admins_on_email_address", unique: true
+  end
+
   create_table "comments", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "post_id", null: false
@@ -41,11 +49,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_125528) do
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.string "ip_address"
     t.string "user_agent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "admin_id"
+    t.index ["admin_id"], name: "index_sessions_on_admin_id"
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
@@ -61,6 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_125528) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", default: "", null: false
+    t.boolean "is_active", default: true, null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
@@ -69,5 +80,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_125528) do
   add_foreign_key "post_tags", "posts"
   add_foreign_key "post_tags", "tags"
   add_foreign_key "posts", "users"
+  add_foreign_key "sessions", "admins"
   add_foreign_key "sessions", "users"
 end
