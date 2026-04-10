@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       member do
         patch :withdraw
         patch :activate
+        get :following
+        get :followers
       end
     end
   end
@@ -25,7 +27,12 @@ Rails.application.routes.draw do
 
     get "/mypage", to: "users#mypage", as: :mypage
 
-    resources :users, only: [:index, :show, :edit, :update, :destroy]
+    resources :users, only: [:index, :show, :edit, :update, :destroy] do
+      member do
+        get :following
+        get :followers
+      end
+    end
 
     resources :posts do
       resources :comments, only: [:create, :destroy]
@@ -33,5 +40,7 @@ Rails.application.routes.draw do
     end
 
     resources :likes, only: [:index]
+
+    resources :relationships, only: %i[create destroy]
   end
 end

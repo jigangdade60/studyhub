@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_10_031318) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_10_054222) do
   create_table "admins", force: :cascade do |t|
     t.string "email_address"
     t.string "password_digest"
@@ -58,6 +58,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_031318) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "relationships", force: :cascade do |t|
+    t.integer "follower_id", null: false
+    t.integer "followed_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id"
     t.string "ip_address"
@@ -92,6 +102,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_031318) do
   add_foreign_key "post_tags", "posts"
   add_foreign_key "post_tags", "tags"
   add_foreign_key "posts", "users"
+  add_foreign_key "relationships", "users", column: "followed_id"
+  add_foreign_key "relationships", "users", column: "follower_id"
   add_foreign_key "sessions", "admins"
   add_foreign_key "sessions", "users"
 end

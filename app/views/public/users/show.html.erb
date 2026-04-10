@@ -1,7 +1,27 @@
 <div class="container py-4" style="max-width: 900px;">
   <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
-      <h2 class="fw-bold mb-2"><%= @user.name %></h2>
+
+      <!-- ユーザー名 + フォローボタン -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="fw-bold mb-0"><%= @user.name %></h2>
+
+        <% if authenticated? %>
+          <%= render "public/relationships/btn", user: @user %>
+        <% end %>
+      </div>
+
+      <!-- フォロー数 -->
+      <p class="mb-2">
+        <%= link_to "フォロー中 #{@user.following.count}人",
+                    following_user_path(@user),
+                    class: "text-decoration-none me-3" %>
+
+        <%= link_to "フォロワー #{@user.followers.count}人",
+                    followers_user_path(@user),
+                    class: "text-decoration-none" %>
+      </p>
+
       <p class="text-muted mb-0">投稿一覧を表示しています。</p>
     </div>
   </div>
