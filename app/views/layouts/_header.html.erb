@@ -20,9 +20,25 @@
             <%= link_to "投稿一覧", posts_path, class: "nav-link header-link" %>
           </li>
 
-          <% if authenticated? %>
-            <!-- ログイン後 -->
+          <% if Current.admin.present? %>
+            <!-- 管理者ログイン後 -->
+            <li class="nav-item me-lg-2">
+              <%= link_to "ユーザー管理", admin_users_path, class: "nav-link header-link" %>
+            </li>
 
+            <li class="nav-item me-lg-2">
+              <%= link_to "コメント管理", admin_comments_path, class: "nav-link header-link" %>
+            </li>
+
+            <li class="nav-item mt-2 mt-lg-0">
+              <%= button_to "ログアウト",
+                            admin_logout_path,
+                            method: :delete,
+                            class: "btn btn-outline-danger btn-sm px-3" %>
+            </li>
+
+          <% elsif authenticated? %>
+            <!-- 一般ユーザーログイン後 -->
             <li class="nav-item me-lg-2">
               <%= link_to "ユーザー検索", users_path, class: "nav-link header-link" %>
             </li>

@@ -1,0 +1,55 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">コメント管理</h2>
+  </div>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if @comments.any? %>
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>投稿ID</th>
+                <th>投稿タイトル</th>
+                <th>コメント投稿者</th>
+                <th>コメント内容</th>
+                <th>投稿日</th>
+                <th class="text-center">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @comments.each do |comment| %>
+                <tr>
+                  <td><%= comment.post.id %></td>
+                  <td>
+                    <%= link_to comment.post.title, post_path(comment.post), class: "text-decoration-none" %>
+                  </td>
+                  <td><%= comment.user.name %></td>
+                  <td style="min-width: 240px;"><%= comment.body %></td>
+                  <td><%= l(comment.created_at, format: :short) %></td>
+                  <td class="text-center">
+                    <%= link_to "削除",
+                                admin_comment_path(comment),
+                                data: { turbo_method: :delete, turbo_confirm: "このコメントを削除しますか？" },
+                                class: "btn btn-sm btn-danger" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-secondary mb-0">
+      コメントはまだありません。
+    </div>
+  <% end %>
+</div>
