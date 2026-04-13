@@ -29,6 +29,14 @@ class Public::UsersController < ApplicationController
   def mypage
     @user = Current.user
     @posts = @user.posts.order(created_at: :desc)
+
+    @owned_groups = @user.owned_groups
+                         .includes(:members)
+                         .order(created_at: :desc)
+
+    @joined_groups = @user.joined_groups
+                          .includes(:owner, :members)
+                          .order(created_at: :desc)
   end
 
   def edit

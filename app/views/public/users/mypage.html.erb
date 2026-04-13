@@ -78,4 +78,95 @@
       </div>
     </div>
   </div>
+
+  <!-- もくもく会セクション -->
+  <div class="mt-5">
+    <div class="mb-4">
+      <h3 class="fw-bold text-primary">もくもく会情報</h3>
+      <p class="text-muted mb-0">作成したもくもく会と参加中のもくもく会を確認できます。</p>
+    </div>
+
+    <div class="row">
+      <!-- 作成したもくもく会 -->
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            作成したもくもく会
+          </div>
+          <div class="card-body">
+            <% if @owned_groups.any? %>
+              <div class="d-flex flex-column gap-3">
+                <% @owned_groups.each do |group| %>
+                  <div class="border rounded p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <h5 class="fw-bold mb-0"><%= group.name %></h5>
+                      <span class="badge text-bg-light border">
+                        <%= group.members.count %> / <%= group.max_members %>人
+                      </span>
+                    </div>
+
+                    <div class="mb-2">
+                      <span class="badge text-bg-primary"><%= group.study_theme %></span>
+                    </div>
+
+                    <p class="text-secondary mb-2">
+                      <%= truncate(group.description, length: 80) %>
+                    </p>
+
+                    <div class="d-flex gap-2 flex-wrap">
+                      <%= link_to "詳細", group_path(group), class: "btn btn-sm btn-outline-primary" %>
+                      <%= link_to "申請管理", requests_group_path(group), class: "btn btn-sm btn-outline-secondary" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted mb-0">まだ作成したもくもく会はありません。</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- 参加中のもくもく会 -->
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-success text-white">
+            参加中のもくもく会
+          </div>
+          <div class="card-body">
+            <% if @joined_groups.any? %>
+              <div class="d-flex flex-column gap-3">
+                <% @joined_groups.each do |group| %>
+                  <div class="border rounded p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <h5 class="fw-bold mb-0"><%= group.name %></h5>
+                      <span class="badge text-bg-light border">
+                        <%= group.members.count %> / <%= group.max_members %>人
+                      </span>
+                    </div>
+
+                    <div class="mb-2">
+                      <span class="badge text-bg-success"><%= group.study_theme %></span>
+                    </div>
+
+                    <p class="text-muted mb-1">
+                      作成者：<%= group.owner.name %>
+                    </p>
+
+                    <p class="text-secondary mb-2">
+                      <%= truncate(group.description, length: 80) %>
+                    </p>
+
+                    <%= link_to "詳細を見る", group_path(group), class: "btn btn-sm btn-outline-primary" %>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-muted mb-0">まだ参加中のもくもく会はありません。</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
