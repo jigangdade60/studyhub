@@ -5,6 +5,57 @@
     <p class="text-muted mb-0">ログイン中のユーザー情報と投稿一覧を確認できます。</p>
   </div>
 
+  <!-- 学習サマリー -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <p class="text-muted mb-1">投稿数</p>
+          <h4 class="fw-bold mb-0"><%= @posts_count %>件</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <p class="text-muted mb-1">累計学習時間</p>
+          <h4 class="fw-bold mb-0"><%= format_study_time(@total_study_time) %></h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <p class="text-muted mb-1">今週の学習時間</p>
+          <h4 class="fw-bold mb-0"><%= format_study_time(@weekly_study_time) %></h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <p class="text-muted mb-1">連続学習日数</p>
+          <h4 class="fw-bold mb-0"><%= @streak_days %>日</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学習グラフ -->
+  <div class="mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        直近7日間の学習時間
+      </div>
+      <div class="card-body">
+        <canvas id="studyTimeChart"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <!-- ユーザー情報 -->
     <div class="col-md-4 mb-4">
@@ -13,19 +64,16 @@
           ユーザー情報
         </div>
         <div class="card-body">
-          <!-- ユーザー名 -->
           <p>
             <strong>氏名：</strong>
             <%= @user.name %>
           </p>
 
-          <!-- メールアドレス -->
           <p>
             <strong>メールアドレス：</strong>
             <%= @user.email_address %>
           </p>
 
-          <!-- ボタンエリア -->
           <div class="d-grid gap-2 mt-4">
             <%= link_to "編集する", edit_user_path(@user), class: "btn btn-outline-primary" %>
 
@@ -170,3 +218,43 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("turbo:load", function () {
+    const canvas = document.getElementById("studyTimeChart");
+    if (!canvas) return;
+
+    if (window.studyTimeChartInstance) {
+      window.studyTimeChartInstance.destroy();
+    }
+
+    const labels = <%= raw @weekly_study_chart_data.map { |d| d[:label] }.to_json %>;
+    const data = <%= raw @weekly_study_chart_data.map { |d| d[:minutes] }.to_json %>;
+
+    window.studyTimeChartInstance = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "学習時間（分）",
+          data: data,
+          borderWidth: 1,
+          backgroundColor: "rgba(54, 162, 235, 0.5)",
+          borderColor: "rgba(54, 162, 235, 1)"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 30
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
