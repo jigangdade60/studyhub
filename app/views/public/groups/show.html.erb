@@ -1,0 +1,98 @@
+<div class="container py-4" style="max-width: 900px;">
+  <div class="mb-4">
+    <%= link_to "← もくもく会一覧へ戻る", groups_path, class: "text-decoration-none" %>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-3">
+        <div>
+          <h2 class="fw-bold mb-2"><%= @group.name %></h2>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="badge text-bg-primary"><%= @group.study_theme %></span>
+            <span class="badge text-bg-light border">
+              参加人数：<%= @group.members.count %> / <%= @group.max_members %>
+            </span>
+          </div>
+        </div>
+
+        <% if @group.full? %>
+          <span class="badge text-bg-danger fs-6">定員到達</span>
+        <% else %>
+          <span class="badge text-bg-success fs-6">募集中</span>
+        <% end %>
+      </div>
+
+      <div class="mb-3">
+        <p class="text-muted mb-0">作成者：<%= @group.owner.name %></p>
+      </div>
+
+      <hr>
+
+      <div class="mb-4">
+        <h5 class="fw-bold mb-2">説明</h5>
+        <p class="mb-0" style="white-space: pre-line;"><%= @group.description %></p>
+      </div>
+
+      <div class="mb-4">
+        <h5 class="fw-bold mb-2">ルール</h5>
+        <% if @group.rule.present? %>
+          <p class="mb-0" style="white-space: pre-line;"><%= @group.rule %></p>
+        <% else %>
+          <p class="text-muted mb-0">ルールはまだ設定されていません。</p>
+        <% end %>
+      </div>
+
+      <div class="border rounded p-3 bg-light">
+        <% if !authenticated? %>
+          <p class="mb-2">参加申請にはログインが必要です。</p>
+          <%= link_to "ログインする", new_session_path, class: "btn btn-primary" %>
+
+        <% elsif @group.owned_by?(current_user) %>
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <p class="mb-0 fw-semibold">あなたはこのもくもく会の作成者です。</p>
+            <%= link_to "参加申請を管理する", requests_group_path(@group), class: "btn btn-outline-primary" %>
+          </div>
+
+        <% elsif @group.joined_by?(current_user) %>
+          <p class="mb-0 text-success fw-semibold">あなたはこのもくもく会に参加しています。</p>
+
+        <% elsif @group.pending_request_by?(current_user) %>
+          <p class="mb-0 text-warning fw-semibold">参加申請中です。承認をお待ちください。</p>
+
+        <% elsif @group.full? %>
+          <p class="mb-0 text-danger fw-semibold">定員に達しているため参加申請できません。</p>
+
+        <% else %>
+          <%= form_with model: [@group, GroupJoinRequest.new], local: true do |f| %>
+            <%= f.submit "参加申請を送る", class: "btn btn-primary" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 参加メンバー -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h4 class="fw-bold mb-3">参加メンバー</h4>
+
+      <% if @group.members.any? %>
+        <div class="row g-3">
+          <% @group.members.each do |member| %>
+            <div class="col-md-6">
+              <div class="border rounded p-3 h-100">
+                <div class="fw-semibold"><%= member.name %></div>
+                <% if member == @group.owner %>
+                  <div class="small text-muted">作成者</div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted mb-0">まだ参加メンバーはいません。</p>
+      <% end %>
+    </div>
+  </div>
+</div>

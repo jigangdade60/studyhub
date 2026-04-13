@@ -25,6 +25,16 @@ class User < ApplicationRecord
            through: :passive_relationships,
            source: :follower
 
+  has_many :owned_groups,
+           class_name: "Group",
+           foreign_key: :owner_id,
+           dependent: :destroy
+
+  has_many :group_memberships, dependent: :destroy
+  has_many :joined_groups, through: :group_memberships, source: :group
+
+  has_many :group_join_requests, dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 20 }
   validates :email_address, presence: true, uniqueness: true
 

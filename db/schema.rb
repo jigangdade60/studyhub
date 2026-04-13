@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_10_054222) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_13_043404) do
   create_table "admins", force: :cascade do |t|
     t.string "email_address"
     t.string "password_digest"
@@ -27,6 +27,39 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_054222) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "group_join_requests", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id", "user_id"], name: "index_group_join_requests_on_group_id_and_user_id", unique: true
+    t.index ["group_id"], name: "index_group_join_requests_on_group_id"
+    t.index ["user_id"], name: "index_group_join_requests_on_user_id"
+  end
+
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id", "user_id"], name: "index_group_memberships_on_group_id_and_user_id", unique: true
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+    t.index ["user_id"], name: "index_group_memberships_on_user_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description", null: false
+    t.text "rule"
+    t.string "study_theme", null: false
+    t.integer "max_members", default: 10, null: false
+    t.integer "owner_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_groups_on_owner_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -97,6 +130,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_054222) do
 
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "group_join_requests", "groups"
+  add_foreign_key "group_join_requests", "users"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "users"
+  add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
   add_foreign_key "post_tags", "posts"

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     end
 
     resources :comments, only: %i[index destroy]
+    resources :groups, only: %i[index destroy]
   end
 
   scope module: :public do
@@ -43,7 +44,21 @@ Rails.application.routes.draw do
     end
 
     resources :likes, only: [:index]
-
     resources :relationships, only: %i[create destroy]
+
+    resources :groups, only: %i[index show new create] do
+      member do
+        get :requests
+      end
+
+      resources :group_join_requests, only: %i[create]
+    end
+
+    resources :group_join_requests, only: [] do
+      member do
+        patch :approve
+        patch :reject
+      end
+    end
   end
 end
