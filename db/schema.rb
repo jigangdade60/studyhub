@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_13_043404) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_13_061852) do
   create_table "admins", force: :cascade do |t|
     t.string "email_address"
     t.string "password_digest"
@@ -48,6 +48,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_043404) do
     t.index ["group_id", "user_id"], name: "index_group_memberships_on_group_id_and_user_id", unique: true
     t.index ["group_id"], name: "index_group_memberships_on_group_id"
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
+  end
+
+  create_table "group_messages", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_messages_on_group_id"
+    t.index ["user_id"], name: "index_group_messages_on_user_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -134,6 +144,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_043404) do
   add_foreign_key "group_join_requests", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "group_messages", "groups"
+  add_foreign_key "group_messages", "users"
   add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"

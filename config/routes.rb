@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       end
 
       resources :group_join_requests, only: %i[create]
+      resources :group_messages, only: %i[create]
     end
 
     resources :group_join_requests, only: [] do
