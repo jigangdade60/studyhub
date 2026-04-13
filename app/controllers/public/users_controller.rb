@@ -37,6 +37,25 @@ class Public::UsersController < ApplicationController
     @joined_groups = @user.joined_groups
                           .includes(:owner, :members)
                           .order(created_at: :desc)
+
+    # 学習サマリー
+    @posts_count = @posts.count
+    @total_study_time = @posts.sum(:study_time)
+    @weekly_study_time = @posts.where(created_at: Time.current.all_week).sum(:study_time)
+    @streak_days = calculate_streak_days(@posts)
+
+    # 直近7日分の学習時間データ
+    today = Date.current
+    days = (6.days.ago.to_date..today).to_a
+
+    @weekly_study_chart_data = days.map do |day|
+      total_minutes = @posts.where(created_at: day.all_day).sum(:study_time)
+
+      {
+        label: %w[日 月 火 水 木 金 土][day.wday],
+        minutes: total_minutes
+      }
+    end
   end
 
   def edit
@@ -73,5 +92,27 @@ class Public::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email_address, :password, :password_confirmation)
+  end
+
+  def calculate_streak_days(posts)
+    studied_dates = posts.pluck(:created_at)
+                         .map(&:to_date)
+                         .uniq
+                         .sort
+                         .reverse
+
+    streak = 0
+    current_day = Date.current
+
+    studied_dates.each do |date|
+      if date == current_day
+        streak += 1
+        current_day -= 1
+      else
+        break
+      end
+    end
+
+    streak
   end
 end
