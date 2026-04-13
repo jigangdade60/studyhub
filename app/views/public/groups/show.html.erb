@@ -48,16 +48,16 @@
           <p class="mb-2">参加申請にはログインが必要です。</p>
           <%= link_to "ログインする", new_session_path, class: "btn btn-primary" %>
 
-        <% elsif @group.owned_by?(current_user) %>
+        <% elsif @group.owned_by?(Current.user) %>
           <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
             <p class="mb-0 fw-semibold">あなたはこのもくもく会の作成者です。</p>
             <%= link_to "参加申請を管理する", requests_group_path(@group), class: "btn btn-outline-primary" %>
           </div>
 
-        <% elsif @group.joined_by?(current_user) %>
+        <% elsif @group.joined_by?(Current.user) %>
           <p class="mb-0 text-success fw-semibold">あなたはこのもくもく会に参加しています。</p>
 
-        <% elsif @group.pending_request_by?(current_user) %>
+        <% elsif @group.pending_request_by?(Current.user) %>
           <p class="mb-0 text-warning fw-semibold">参加申請中です。承認をお待ちください。</p>
 
         <% elsif @group.full? %>
@@ -73,7 +73,7 @@
   </div>
 
   <!-- 参加メンバー -->
-  <div class="card shadow-sm border-0">
+  <div class="card shadow-sm border-0 mb-4">
     <div class="card-body p-4">
       <h4 class="fw-bold mb-3">参加メンバー</h4>
 
@@ -92,6 +92,50 @@
         </div>
       <% else %>
         <p class="text-muted mb-0">まだ参加メンバーはいません。</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- グループチャット -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+      <h4 class="fw-bold mb-3">グループチャット</h4>
+
+      <% if authenticated? && @group.joined_by?(Current.user) %>
+        <!-- 投稿フォーム -->
+        <div class="mb-4">
+          <%= form_with model: [@group, @group_message], local: true do |f| %>
+            <div class="mb-2">
+              <%= f.text_area :content,
+                              class: "form-control",
+                              rows: 3,
+                              placeholder: "グループ参加者にメッセージを送る" %>
+            </div>
+            <%= f.submit "送信", class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+
+        <!-- チャット一覧 -->
+        <% if @group_messages.any? %>
+          <div class="d-flex flex-column gap-3">
+            <% @group_messages.each do |message| %>
+              <div class="border rounded p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="fw-semibold"><%= message.user.name %></div>
+                  <div class="text-muted small">
+                    <%= message.created_at.strftime("%Y/%m/%d %H:%M") %>
+                  </div>
+                </div>
+                <div style="white-space: pre-line;"><%= message.content %></div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted mb-0">まだメッセージはありません。</p>
+        <% end %>
+
+      <% else %>
+        <p class="text-muted mb-0">グループチャットは参加者のみ閲覧・投稿できます。</p>
       <% end %>
     </div>
   </div>

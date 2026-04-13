@@ -13,6 +13,8 @@ class Public::GroupsController < ApplicationController
   end
 
   def show
+    @group_messages = @group.group_messages.includes(:user).order(created_at: :asc)
+    @group_message = GroupMessage.new
   end
 
   def new

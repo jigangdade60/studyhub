@@ -5,6 +5,7 @@ class Group < ApplicationRecord
   has_many :members, through: :group_memberships, source: :user
 
   has_many :group_join_requests, dependent: :destroy
+  has_many :group_messages, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 500 }
