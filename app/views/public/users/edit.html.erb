@@ -31,6 +31,12 @@
           <%= f.email_field :email_address, class: "form-control" %>
         </div>
 
+        <!-- プロフィール画像 -->
+        <div class="mb-3">
+          <%= f.label :profile_image, "プロフィール画像", class: "form-label" %>
+          <%= f.file_field :profile_image, class: "form-control", accept: "image/*" %>
+        </div>
+
         <!-- パスワード -->
         <div class="mb-3">
           <%= f.label :password, "新しいパスワード", class: "form-label" %>

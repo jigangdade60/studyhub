@@ -64,6 +64,13 @@
           ユーザー情報
         </div>
         <div class="card-body">
+
+          <div class="text-center mb-3">
+            <%= image_tag(@user.profile_image.attached? ? @user.profile_image : "no_image.jpg",
+                          size: "120x120",
+                          class: "rounded-circle border") %>
+          </div>
+          
           <p>
             <strong>氏名：</strong>
             <%= @user.name %>
