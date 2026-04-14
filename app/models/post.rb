@@ -6,6 +6,9 @@ class Post < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
+  # 投稿一覧をリアルタイム更新
+  broadcasts_refreshes
+
   attr_accessor :study_time_hour, :study_time_minute, :tag_names
 
   validates :title, presence: true
@@ -32,6 +35,25 @@ class Post < ApplicationRecord
     return all if tag_name.blank?
 
     joins(:tags).where(tags: { name: tag_name }).distinct
+  }
+
+  scope :period_search, ->(period) {
+    return all if period.blank?
+
+    case period
+    when "today"
+      where(created_at: Time.zone.today.all_day)
+    when "3days"
+      where(created_at: 3.days.ago.beginning_of_day..Time.current)
+    when "7days"
+      where(created_at: 7.days.ago.beginning_of_day..Time.current)
+    when "30days"
+      where(created_at: 30.days.ago.beginning_of_day..Time.current)
+    when "this_month"
+      where(created_at: Time.zone.now.beginning_of_month..Time.current)
+    else
+      all
+    end
   }
 
   def study_time_hour
