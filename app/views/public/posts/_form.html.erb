@@ -20,6 +20,16 @@
         <%= f.text_field :title, class: "form-control form-control-lg", placeholder: "学習内容のタイトルを入力" %>
       </div>
 
+      <!-- 公開設定 -->
+      <div class="mb-4">
+        <%= f.label :status, "公開設定", class: "form-label fw-semibold" %>
+        <%= f.select :status,
+                     [["公開", "published"], ["非公開", "draft"]],
+                     {},
+                     class: "form-select" %>
+        <div class="form-text">非公開にした投稿は自分にのみ表示されます</div>
+      </div>
+
       <!-- 学習時間入力欄 -->
       <div class="mb-4">
         <%= f.label :study_time, "学習時間", class: "form-label fw-semibold" %>
@@ -58,7 +68,7 @@
 
       <!-- 送信ボタン -->
       <div class="d-flex gap-2">
-        <%= f.submit "投稿する", class: "btn btn-primary px-4" %>
+        <%= f.submit post.new_record? ? "投稿を保存する" : "変更を保存する", class: "btn btn-primary px-4" %>
         <%= link_to "一覧へ戻る", posts_path, class: "btn btn-outline-secondary px-4" %>
       </div>
     <% end %>

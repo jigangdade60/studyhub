@@ -62,9 +62,15 @@
             </div>
 
             <!-- 投稿タイトル -->
-            <h5 class="fw-bold mb-2">
-              <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
-            </h5>
+            <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+              <h5 class="fw-bold mb-0">
+                <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
+              </h5>
+
+              <% if Current.user.present? && post.user == Current.user && post.draft? %>
+                <span class="badge bg-secondary">非公開</span>
+              <% end %>
+            </div>
 
             <!-- 学習時間 -->
             <div class="mb-2">

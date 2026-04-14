@@ -18,6 +18,10 @@ class Post < ApplicationRecord
 
   before_validation :combine_study_time
 
+  enum :status, { published: 0, draft: 1 }
+
+  scope :published_posts, -> { where(status: :published) }
+
   scope :keyword_search, ->(keyword) {
     return all if keyword.blank?
 

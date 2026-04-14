@@ -7,13 +7,27 @@ class Public::PostsController < ApplicationController
   def index
     @tags = Tag.order(:name)
 
-    @posts = Post.includes(:user, :tags, :likes, :comments)
-                 .order(created_at: :desc)
-                 .keyword_search(params[:keyword])
-                 .tag_search(params[:tag_name])
+    @posts =
+      if authenticated?
+        Post.includes(:user, :tags, :likes, :comments)
+            .where("posts.status = ? OR posts.user_id = ?", Post.statuses[:published], Current.user.id)
+      else
+        Post.includes(:user, :tags, :likes, :comments)
+            .where(status: :published)
+      end
+
+    @posts = @posts.order(created_at: :desc)
+                   .keyword_search(params[:keyword])
+                   .tag_search(params[:tag_name])
+                   .distinct
   end
 
   def show
+    if @post.draft? && (!authenticated? || @post.user != Current.user)
+      redirect_to posts_path, alert: "この投稿は表示できません。"
+      return
+    end
+
     @comment = Comment.new
     @comments = @post.comments.includes(:user).order(created_at: :desc)
   end
@@ -27,7 +41,7 @@ class Public::PostsController < ApplicationController
 
     if @post.save
       @post.save_tags(post_params[:tag_names])
-      redirect_to post_path(@post), notice: "投稿を作成しました。"
+      redirect_to post_path(@post), notice: @post.draft? ? "下書きを保存しました。" : "投稿を作成しました。"
     else
       flash.now[:alert] = "投稿に失敗しました。"
       render :new, status: :unprocessable_entity
@@ -37,7 +51,7 @@ class Public::PostsController < ApplicationController
   def update
     if @post.update(post_params)
       @post.save_tags(post_params[:tag_names])
-      redirect_to post_path(@post), notice: "投稿を更新しました。"
+      redirect_to post_path(@post), notice: @post.draft? ? "下書きを更新しました。" : "投稿を更新しました。"
     else
       flash.now[:alert] = "更新に失敗しました。"
       render :edit, status: :unprocessable_entity
@@ -56,7 +70,7 @@ class Public::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :study_time_hour, :study_time_minute, :tag_names)
+    params.require(:post).permit(:title, :body, :study_time_hour, :study_time_minute, :tag_names, :status)
   end
 
   def ensure_correct_user
