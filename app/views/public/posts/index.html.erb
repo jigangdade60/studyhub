@@ -1,4 +1,6 @@
 <div class="container py-4" style="max-width: 720px;">
+  <%= turbo_stream_from "posts" %>
+
   <!-- タイトルと新規投稿ボタン -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold mb-0">投稿一覧</h2>
@@ -28,6 +30,22 @@
           </div>
 
           <div class="col-md-3">
+            <%= f.select :period,
+                         options_for_select(
+                           [
+                             ["今日", "today"],
+                             ["3日以内", "3days"],
+                             ["7日以内", "7days"],
+                             ["30日以内", "30days"],
+                             ["今月", "this_month"]
+                           ],
+                           params[:period]
+                         ),
+                         { include_blank: "期間を選択" },
+                         class: "form-select" %>
+          </div>
+
+          <div class="col-md-2">
             <%= f.select :sort,
                          options_for_select(
                            [
@@ -41,9 +59,14 @@
                          {},
                          class: "form-select" %>
           </div>
+        </div>
 
-          <div class="col-md-2 d-grid">
+        <div class="row g-2 mt-2">
+          <div class="col-md-6 d-grid">
             <%= f.submit "適用", class: "btn btn-outline-primary" %>
+          </div>
+          <div class="col-md-6 d-grid">
+            <%= link_to "クリア", posts_path, class: "btn btn-outline-secondary" %>
           </div>
         </div>
       <% end %>
@@ -101,7 +124,12 @@
                   <% active_class = params[:tag_name] == tag.name ? "bg-primary" : "bg-secondary" %>
 
                   <%= link_to tag.name,
-                      posts_path(tag_name: tag.name, keyword: params[:keyword], sort: params[:sort]),
+                      posts_path(
+                        tag_name: tag.name,
+                        keyword: params[:keyword],
+                        period: params[:period],
+                        sort: params[:sort]
+                      ),
                       class: "badge #{active_class} me-1 text-decoration-none" %>
                 <% end %>
               <% end %>

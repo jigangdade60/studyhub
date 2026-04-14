@@ -7,6 +7,7 @@ class Public::PostsController < ApplicationController
   def index
     @tags = Tag.order(:name)
     @sort = params[:sort]
+    @period = params[:period]
 
     base_posts =
       if authenticated?
@@ -20,6 +21,7 @@ class Public::PostsController < ApplicationController
     filtered_posts = base_posts
                      .keyword_search(params[:keyword])
                      .tag_search(params[:tag_name])
+                     .period_search(params[:period])
                      .distinct
 
     @posts =
