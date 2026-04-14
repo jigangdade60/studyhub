@@ -6,8 +6,9 @@ class Public::PostsController < ApplicationController
 
   def index
     @tags = Tag.order(:name)
+    @sort = params[:sort]
 
-    @posts =
+    base_posts =
       if authenticated?
         Post.includes(:user, :tags, :likes, :comments)
             .where("posts.status = ? OR posts.user_id = ?", Post.statuses[:published], Current.user.id)
@@ -16,10 +17,28 @@ class Public::PostsController < ApplicationController
             .where(status: :published)
       end
 
-    @posts = @posts.order(created_at: :desc)
-                   .keyword_search(params[:keyword])
-                   .tag_search(params[:tag_name])
-                   .distinct
+    filtered_posts = base_posts
+                     .keyword_search(params[:keyword])
+                     .tag_search(params[:tag_name])
+                     .distinct
+
+    @posts =
+      case @sort
+      when "old"
+        filtered_posts.order(created_at: :asc)
+      when "likes"
+        filtered_posts
+          .left_joins(:likes)
+          .group("posts.id")
+          .order(Arel.sql("COUNT(likes.id) DESC"), created_at: :desc)
+      when "comments"
+        filtered_posts
+          .left_joins(:comments)
+          .group("posts.id")
+          .order(Arel.sql("COUNT(comments.id) DESC"), created_at: :desc)
+      else
+        filtered_posts.order(created_at: :desc)
+      end
   end
 
   def show
