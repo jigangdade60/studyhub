@@ -1,6 +1,9 @@
 class Public::UsersController < ApplicationController
   allow_unauthenticated_access only: %i[new create]
 
+  before_action :set_user, only: %i[show following followers]
+  before_action :ensure_profile_visible, only: %i[show following followers]
+
   def new
     @user = User.new
   end
@@ -18,11 +21,17 @@ class Public::UsersController < ApplicationController
 
   def index
     @keyword = params[:keyword]
-    @users = User.search_by_name(@keyword).order(created_at: :desc)
+
+    @users = User.search_by_name(@keyword)
+                 .public_profiles
+                 .order(created_at: :desc)
+
+    if authenticated? && Current.user.present?
+      @users = @users.or(User.where(id: Current.user.id)).distinct
+    end
   end
 
   def show
-    @user = User.find(params[:id])
     @posts = @user.posts.order(created_at: :desc)
   end
 
@@ -38,13 +47,11 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    # 学習サマリー
     @posts_count = @posts.count
     @total_study_time = @posts.sum(:study_time)
     @weekly_study_time = @posts.where(created_at: Time.current.all_week).sum(:study_time)
     @streak_days = calculate_streak_days(@posts)
 
-    # 直近7日分の学習時間データ
     today = Date.current
     days = (6.days.ago.to_date..today).to_a
 
@@ -79,19 +86,42 @@ class Public::UsersController < ApplicationController
   end
 
   def following
-    @user = User.find(params[:id])
-    @users = @user.following
+    @users = @user.following.public_profiles
+
+    if authenticated? && Current.user.present? && @user == Current.user
+      @users = @user.following
+    end
   end
 
   def followers
-    @user = User.find(params[:id])
-    @users = @user.followers
+    @users = @user.followers.public_profiles
+
+    if authenticated? && Current.user.present? && @user == Current.user
+      @users = @user.followers
+    end
   end
 
   private
 
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def ensure_profile_visible
+    return if @user.visible_to?(Current.user)
+
+    redirect_to users_path, alert: "このユーザーのプロフィールは非公開です。"
+  end
+
   def user_params
-    params.require(:user).permit(:name, :email_address, :password, :password_confirmation, :profile_image)
+    params.require(:user).permit(
+      :name,
+      :email_address,
+      :password,
+      :password_confirmation,
+      :profile_image,
+      :is_public
+    )
   end
 
   def calculate_streak_days(posts)

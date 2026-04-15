@@ -37,6 +37,25 @@
           <%= f.file_field :profile_image, class: "form-control", accept: "image/*" %>
         </div>
 
+        <!-- プロフィール公開設定 -->
+        <div class="mb-3">
+          <label class="form-label">プロフィール公開設定</label>
+
+          <div class="form-check">
+            <%= f.radio_button :is_public, true, class: "form-check-input", id: "user_is_public_true" %>
+            <%= f.label :is_public_true, "公開", class: "form-check-label" %>
+          </div>
+
+          <div class="form-check">
+            <%= f.radio_button :is_public, false, class: "form-check-input", id: "user_is_public_false" %>
+            <%= f.label :is_public_false, "非公開", class: "form-check-label" %>
+          </div>
+
+          <div class="form-text">
+            非公開にすると、他のユーザーはあなたのプロフィールを閲覧できません。
+          </div>
+        </div>
+
         <!-- パスワード -->
         <div class="mb-3">
           <%= f.label :password, "新しいパスワード", class: "form-label" %>

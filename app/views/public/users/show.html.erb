@@ -4,9 +4,17 @@
 
       <!-- ユーザー名 + フォローボタン -->
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2 class="fw-bold mb-0"><%= @user.name %></h2>
+        <div>
+          <h2 class="fw-bold mb-1"><%= @user.name %></h2>
 
-        <% if authenticated? %>
+          <% if @user.is_public? %>
+            <span class="badge bg-success">公開中</span>
+          <% else %>
+            <span class="badge bg-secondary">非公開</span>
+          <% end %>
+        </div>
+
+        <% if authenticated? && Current.user != @user %>
           <%= render "public/relationships/btn", user: @user %>
         <% end %>
       </div>
