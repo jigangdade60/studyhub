@@ -8,6 +8,7 @@ class Public::PostsController < ApplicationController
     @tags = Tag.order(:name)
     @sort = params[:sort]
     @period = params[:period]
+    @mode = params[:mode] || "all"
 
     base_posts =
       if authenticated?
@@ -17,6 +18,15 @@ class Public::PostsController < ApplicationController
         Post.includes(:user, :tags, :likes, :comments)
             .where(status: :published)
       end
+
+    if @mode == "following"
+      base_posts =
+        if authenticated?
+          base_posts.where(user_id: Current.user.following_ids)
+        else
+          Post.none
+        end
+    end
 
     filtered_posts = base_posts
                      .keyword_search(params[:keyword])
