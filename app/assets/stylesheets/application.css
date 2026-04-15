@@ -121,6 +121,14 @@
   color: #0f1419 !important;
 }
 
+/* ===== Top Page Buttons ===== */
+.top-page .x-signup-btn,
+.top-page .x-login-btn {
+  width: auto;
+  min-width: 140px;
+  max-width: 200px;
+}
+
 .x-logout-btn {
   background-color: #fff;
   color: #0f1419;
