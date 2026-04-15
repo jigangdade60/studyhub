@@ -37,6 +37,21 @@ class User < ApplicationRecord
   has_many :group_join_requests, dependent: :destroy
   has_many :group_messages, dependent: :destroy
 
+  has_many :sent_dm_messages,
+           class_name: "DmMessage",
+           dependent: :destroy,
+           foreign_key: :user_id
+
+  has_many :dm_rooms_as_user1,
+           class_name: "DmRoom",
+           foreign_key: :user1_id,
+           dependent: :destroy
+
+  has_many :dm_rooms_as_user2,
+           class_name: "DmRoom",
+           foreign_key: :user2_id,
+           dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 20 }
   validates :email_address, presence: true, uniqueness: true
 
@@ -59,6 +74,10 @@ class User < ApplicationRecord
 
   def following?(user)
     following.include?(user)
+  end
+
+  def mutual_follow_with?(user)
+    following?(user) && user.following?(self)
   end
 
   def public_profile?

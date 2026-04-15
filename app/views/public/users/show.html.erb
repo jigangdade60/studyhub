@@ -15,7 +15,16 @@
         </div>
 
         <% if authenticated? && Current.user != @user %>
-          <%= render "public/relationships/btn", user: @user %>
+          <div class="d-flex flex-column align-items-end gap-2">
+            <%= render "public/relationships/btn", user: @user %>
+
+            <% if Current.user.mutual_follow_with?(@user) %>
+              <%= button_to "DMする",
+                            dm_rooms_path(user_id: @user.id),
+                            method: :post,
+                            class: "btn btn-outline-primary btn-sm rounded-pill px-4" %>
+            <% end %>
+          </div>
         <% end %>
       </div>
 
