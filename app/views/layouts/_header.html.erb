@@ -1,4 +1,3 @@
-<!-- app/views/layouts/_header.html.erb -->
 <header>
   <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
     <div class="container">
@@ -61,6 +60,19 @@
 
             <li class="nav-item me-lg-2">
               <%= link_to "いいね一覧", likes_path, class: "nav-link header-link" %>
+            </li>
+
+            <!-- 通知 -->
+            <li class="nav-item me-lg-2">
+              <%= link_to notifications_path,
+                          class: "nav-link position-relative header-link" do %>
+                <span>通知</span>
+                <% if unread_notifications_count.positive? %>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <%= unread_notifications_count %>
+                  </span>
+                <% end %>
+              <% end %>
             </li>
 
             <li class="nav-item me-lg-2">
