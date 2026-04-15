@@ -10,10 +10,25 @@
     <% end %>
   </div>
 
+  <!-- 表示切り替え -->
+  <div class="d-flex gap-2 mb-4">
+    <%= link_to "全投稿",
+                posts_path(mode: "all"),
+                class: "btn #{ @mode == 'following' ? 'btn-outline-primary' : 'btn-primary' } rounded-pill px-4" %>
+
+    <% if authenticated? %>
+      <%= link_to "フォロー中の投稿",
+                  posts_path(mode: "following"),
+                  class: "btn #{ @mode == 'following' ? 'btn-primary' : 'btn-outline-primary' } rounded-pill px-4" %>
+    <% end %>
+  </div>
+
   <!-- 検索・ソートフォーム -->
   <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
       <%= form_with url: posts_path, method: :get, local: true do |f| %>
+        <%= hidden_field_tag :mode, @mode %>
+
         <div class="row g-2">
           <div class="col-md-4">
             <%= f.text_field :keyword,
@@ -66,7 +81,7 @@
             <%= f.submit "適用", class: "btn btn-outline-primary" %>
           </div>
           <div class="col-md-6 d-grid">
-            <%= link_to "クリア", posts_path, class: "btn btn-outline-secondary" %>
+            <%= link_to "クリア", posts_path(mode: @mode), class: "btn btn-outline-secondary" %>
           </div>
         </div>
       <% end %>
@@ -76,7 +91,11 @@
   <!-- 投稿が0件のとき -->
   <% if @posts.empty? %>
     <div class="alert alert-secondary">
-      該当する投稿がありません。
+      <% if @mode == "following" %>
+        フォロー中ユーザーの投稿がありません。
+      <% else %>
+        該当する投稿がありません。
+      <% end %>
     </div>
   <% else %>
     <div class="d-flex flex-column gap-3">
@@ -128,7 +147,8 @@
                         tag_name: tag.name,
                         keyword: params[:keyword],
                         period: params[:period],
-                        sort: params[:sort]
+                        sort: params[:sort],
+                        mode: @mode
                       ),
                       class: "badge #{active_class} me-1 text-decoration-none" %>
                 <% end %>
