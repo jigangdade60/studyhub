@@ -47,6 +47,8 @@ class User < ApplicationRecord
     where("name LIKE ?", "%#{keyword}%")
   }
 
+  scope :public_profiles, -> { where(is_public: true) }
+
   def follow(user)
     active_relationships.create(followed_id: user.id)
   end
@@ -57,5 +59,13 @@ class User < ApplicationRecord
 
   def following?(user)
     following.include?(user)
+  end
+
+  def public_profile?
+    is_public
+  end
+
+  def visible_to?(viewer)
+    is_public || self == viewer
   end
 end
