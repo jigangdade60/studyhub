@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_15_060009) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_15_063512) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -55,6 +55,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_060009) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "dm_messages", force: :cascade do |t|
+    t.integer "dm_room_id", null: false
+    t.integer "user_id", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dm_room_id"], name: "index_dm_messages_on_dm_room_id"
+    t.index ["user_id"], name: "index_dm_messages_on_user_id"
+  end
+
+  create_table "dm_rooms", force: :cascade do |t|
+    t.integer "user1_id", null: false
+    t.integer "user2_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user1_id", "user2_id"], name: "index_dm_rooms_on_user1_id_and_user2_id", unique: true
+    t.index ["user1_id"], name: "index_dm_rooms_on_user1_id"
+    t.index ["user2_id"], name: "index_dm_rooms_on_user2_id"
   end
 
   create_table "group_join_requests", force: :cascade do |t|
@@ -172,6 +192,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_060009) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "dm_messages", "dm_rooms"
+  add_foreign_key "dm_messages", "users"
+  add_foreign_key "dm_rooms", "users", column: "user1_id"
+  add_foreign_key "dm_rooms", "users", column: "user2_id"
   add_foreign_key "group_join_requests", "groups"
   add_foreign_key "group_join_requests", "users"
   add_foreign_key "group_memberships", "groups"

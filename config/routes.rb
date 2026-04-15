@@ -61,5 +61,9 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
+
+    resources :dm_rooms, only: %i[show create] do
+      resources :dm_messages, only: :create
+    end
   end
 end
