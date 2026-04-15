@@ -1,106 +1,169 @@
-<header>
-  <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
+<header class="studyhub-header sticky-top bg-white border-bottom">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
 
-      <!-- アプリ名 -->
-      <%= link_to "StudyHub", root_path, class: "navbar-brand fw-bold fs-3" %>
+      <!-- ロゴ -->
+      <%= link_to root_path, class: "navbar-brand studyhub-logo d-flex align-items-center gap-2" do %>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>StudyHub</span>
+      <% end %>
 
       <!-- ハンバーガー -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#studyhubNavbar">
+      <button class="navbar-toggler border-0 shadow-none"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#studyhubNavbar"
+              aria-controls="studyhubNavbar"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <!-- ナビ -->
       <div class="collapse navbar-collapse justify-content-end" id="studyhubNavbar">
-        <ul class="navbar-nav align-items-lg-center ms-auto">
-
-          <!-- ★ログイン関係なく表示 -->
-          <li class="nav-item me-lg-2">
-            <%= link_to "投稿一覧", posts_path, class: "nav-link header-link" %>
-          </li>
-
-          <li class="nav-item me-lg-2">
-            <%= link_to "もくもく会一覧", groups_path, class: "nav-link header-link" %>
-          </li>
+        <ul class="navbar-nav align-items-lg-center gap-lg-1">
 
           <% if Current.admin.present? %>
             <!-- 管理者ログイン後 -->
-            <li class="nav-item me-lg-2">
-              <%= link_to "ユーザー管理", admin_users_path, class: "nav-link header-link" %>
+            <li class="nav-item">
+              <%= link_to admin_users_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-user"></i>
+                <span>ユーザー管理</span>
+              <% end %>
             </li>
 
-            <li class="nav-item me-lg-2">
-              <%= link_to "コメント管理", admin_comments_path, class: "nav-link header-link" %>
+            <li class="nav-item">
+              <%= link_to admin_comments_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-comment"></i>
+                <span>コメント管理</span>
+              <% end %>
             </li>
 
-            <li class="nav-item me-lg-2">
-              <%= link_to "もくもく会管理", admin_groups_path, class: "nav-link header-link" %>
+            <li class="nav-item">
+              <%= link_to admin_groups_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-users me-2"></i>
+                <span>もくもく会管理</span>
+              <% end %>
             </li>
 
-            <li class="nav-item mt-2 mt-lg-0">
-              <%= button_to "ログアウト",
-                            admin_logout_path,
-                            method: :delete,
-                            class: "btn btn-outline-danger btn-sm px-3" %>
+            <li class="nav-item mt-2 mt-lg-0 ms-lg-2">
+              <%= link_to admin_logout_path,
+                          data: { turbo_method: :delete },
+                          class: "btn x-logout-btn" do %>
+                <i class="fa-solid fa-right-from-bracket me-1"></i>ログアウト
+              <% end %>
             </li>
 
           <% elsif authenticated? %>
             <!-- 一般ユーザーログイン後 -->
-            <li class="nav-item me-lg-2">
-              <%= link_to "ユーザー検索", users_path, class: "nav-link header-link" %>
-            </li>
-
-            <li class="nav-item me-lg-2">
-              <%= link_to "新規投稿", new_post_path, class: "nav-link header-link" %>
-            </li>
-
-            <li class="nav-item me-lg-2">
-              <%= link_to "もくもく会作成", new_group_path, class: "nav-link header-link" %>
-            </li>
-
-            <li class="nav-item me-lg-2">
-              <%= link_to "いいね一覧", likes_path, class: "nav-link header-link" %>
-            </li>
-
-            <!-- 通知 -->
-            <li class="nav-item me-lg-2">
-              <%= link_to notifications_path,
-                          class: "nav-link position-relative header-link" do %>
-                <span>通知</span>
-                <% if unread_notifications_count.positive? %>
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    <%= unread_notifications_count %>
-                  </span>
-                <% end %>
+            <li class="nav-item">
+              <%= link_to root_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-house"></i>
+                <span>ホーム</span>
               <% end %>
             </li>
 
-            <li class="nav-item me-lg-2">
-              <%= link_to mypage_path, class: "nav-link d-flex align-items-center gap-2 header-link" do %>
+            <li class="nav-item">
+              <%= link_to posts_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-file-lines"></i>
+                <span>投稿一覧</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to users_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>ユーザー検索</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to notifications_path, class: "nav-link x-nav-link" do %>
+                <span class="notification-icon-wrap">
+                  <i class="fa-regular fa-bell"></i>
+                  <% if unread_notifications_count.to_i.positive? %>
+                    <span class="notification-badge"><%= unread_notifications_count %></span>
+                  <% end %>
+                </span>
+                <span>通知</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to likes_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-heart"></i>
+                <span>いいね一覧</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to groups_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-users me-2"></i>
+                <span>もくもく会</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to mypage_path, class: "nav-link x-nav-link profile-link d-flex align-items-center gap-2" do %>
                 <%= user_avatar(Current.user, size: 34) %>
                 <span>マイページ</span>
               <% end %>
             </li>
 
-            <li class="nav-item mt-2 mt-lg-0">
-              <%= button_to "ログアウト",
-                            logout_path,
-                            method: :delete,
-                            class: "btn btn-outline-success btn-sm px-3" %>
+            <li class="nav-item">
+              <%= link_to new_post_path, class: "btn x-signup-btn" do %>
+                <i class="fa-solid fa-pen-to-square me-1"></i>新規投稿
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to logout_path,
+                          data: { turbo_method: :delete },
+                          class: "btn x-logout-btn" do %>
+                <i class="fa-solid fa-right-from-bracket me-1"></i>ログアウト
+              <% end %>
             </li>
 
           <% else %>
             <!-- 未ログイン -->
-            <li class="nav-item me-lg-2">
-              <%= link_to "About", about_path, class: "nav-link header-link" %>
+            <li class="nav-item">
+              <%= link_to root_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-house"></i>
+                <span>ホーム</span>
+              <% end %>
             </li>
 
-            <li class="nav-item me-lg-2 mt-2 mt-lg-0">
-              <%= link_to "新規登録", new_user_path, class: "btn btn-success btn-sm px-3" %>
+            <li class="nav-item">
+              <%= link_to posts_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-file-lines"></i>
+                <span>投稿一覧</span>
+              <% end %>
             </li>
 
-            <li class="nav-item mt-2 mt-lg-0">
-              <%= link_to "ログイン", new_session_path, class: "btn btn-outline-success btn-sm px-3" %>
+            <li class="nav-item">
+              <%= link_to groups_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-solid fa-users me-2"></i>
+                <span>もくもく会</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to about_path, class: "nav-link x-nav-link" do %>
+                <i class="fa-regular fa-circle-question"></i>
+                <span>About</span>
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to new_user_path, class: "btn x-signup-btn" do %>
+                <i class="fa-solid fa-user-plus me-1"></i>新規登録
+              <% end %>
+            </li>
+
+            <li class="nav-item">
+              <%= link_to new_session_path, class: "btn x-login-btn" do %>
+                <i class="fa-solid fa-right-to-bracket me-1"></i>ログイン
+              <% end %>
             </li>
           <% end %>
 

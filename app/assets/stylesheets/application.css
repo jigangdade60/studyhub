@@ -1,61 +1,348 @@
-/* =========================
-   ヘッダー
-========================= */
-
-/* ヘッダー背景色 */
-.navbar {
-  background-color: #0d6efd !important; 
+/* ===== Bootstrap Color Override ===== */
+/* すべての青色をヘッダーの青色(#1d9bf0)に統一 */
+:root {
+  --bs-primary: #1d9bf0;
+  --bs-primary-rgb: 29, 155, 240;
+  --bs-primary-hover: #1a8cd8;
 }
 
-/* ロゴ文字 */
-.navbar-brand {
+/* ===== Header ===== */
+.studyhub-header {
+  background-color: #ffffff;
+  z-index: 1030;
+}
+
+.studyhub-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f1419;
+  text-decoration: none;
+}
+
+.studyhub-logo i {
+  font-size: 1.5rem;
+  color: #1d9bf0;
+}
+
+.studyhub-logo:hover {
+  color: #0f1419;
+  opacity: 0.9;
+}
+
+/* ===== Nav Link ===== */
+.x-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px !important;
+  border-radius: 9999px;
+  color: #0f1419 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.x-nav-link i {
+  font-size: 1.1rem;
+  width: 18px;
+  text-align: center;
+}
+
+.x-nav-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+.profile-link img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ===== Notification Badge ===== */
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  transform: translate(50%, -50%); 
+  
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background-color: #1d9bf0;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid #fff;
+}
+
+/* ===== Buttons ===== */
+.x-signup-btn {
+  background-color: #1d9bf0 !important;
   color: #ffffff !important;
-  letter-spacing: 0.5px;
+  border: none !important;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
 }
 
-/* ロゴhover */
-.navbar-brand:hover {
-  color: #e2e6ea !important;
-}
-
-/* ナビリンク */
-.header-link {
+.x-signup-btn:hover {
+  background-color: #1a8cd8 !important;
   color: #ffffff !important;
-  font-weight: 500;
 }
 
-/* ナビリンクhover */
-.header-link:hover {
-  color: #dbeafe !important;
+.x-login-btn {
+  background-color: #fff;
+  color: #0f1419 !important;
+  border: 1px solid #cfd9de;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
 }
 
-/* ログインボタン（白枠） */
-.btn-outline-success {
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+.x-login-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
 }
 
-/* ログインボタンhover */
-.btn-outline-success:hover {
-  background-color: #ffffff !important;
-  color: #0d6efd !important;
+.x-logout-btn {
+  background-color: #fff;
+  color: #0f1419;
+  border: 1px solid #cfd9de;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
 }
 
-/* 新規登録ボタン */
-.btn-success {
-  background-color: #ffffff !important;
-  color: #0d6efd !important;
-  border: none;
+.x-logout-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419;
+  border-color: #cfd9de;
 }
 
-/* 新規登録hover */
-.btn-success:hover {
-  background-color: #e2e6ea !important;
-  color: #0d6efd !important;
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+  .x-nav-link {
+    border-radius: 14px;
+    padding: 10px 12px !important;
+  }
+
+  .navbar-nav {
+    padding-top: 10px;
+  }
+
+  .x-signup-btn,
+  .x-login-btn,
+  .x-logout-btn {
+    width: 100%;
+    margin-top: 8px;
+  }
 }
 
 .avatar-icon {
   object-fit: cover;
   border-radius: 50%;
   display: block;
+}
+
+/* ===== Layout ===== */
+.app-shell {
+  display: block;
+}
+
+.app-main-area {
+  min-width: 0;
+}
+
+.app-main {
+  min-width: 0;
+}
+
+@media (min-width: 992px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    min-height: 100vh;
+    background-color: #ffffff;
+  }
+
+  .app-sidebar {
+    border-right: 1px solid #e6ecf0;
+    background-color: #ffffff;
+    min-height: 100vh;
+  }
+
+  .app-main-area {
+    background-color: #ffffff;
+  }
+
+  .app-main {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-shell {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}
+
+/* ===== Sidebar ===== */
+.x-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 12px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.x-logo-link {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  color: #0f1419;
+  text-decoration: none;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.x-logo-link i {
+  font-size: 1.35rem;
+  color: #1d9bf0;
+}
+
+.x-logo-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419;
+}
+
+.x-side-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 50px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  color: #0f1419 !important;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.x-side-link i {
+  font-size: 1.2rem;
+  width: 22px;
+  text-align: center;
+}
+
+.x-side-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+.x-side-link.active {
+  font-weight: 700;
+}
+
+.profile-side-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-side-link img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.x-post-btn {
+  background-color: #1d9bf0;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 9999px;
+  height: 50px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+}
+
+.x-post-btn:hover {
+  background-color: #1a8cd8;
+  color: #ffffff !important;
+}
+
+.x-logout-side-btn {
+  background-color: #fff;
+  color: #0f1419 !important;
+  border: 1px solid #cfd9de;
+  border-radius: 9999px;
+  height: 44px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+}
+
+.x-logout-side-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+/* ===== Right Column ===== */
+.app-right {
+  padding: 16px;
+}
+
+.right-panel {
+  position: sticky;
+  top: 16px;
+}
+
+.right-box {
+  background-color: #f7f9f9;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
 }

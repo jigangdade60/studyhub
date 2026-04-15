@@ -1,0 +1,162 @@
+<div class="x-sidebar d-none d-lg-flex flex-column justify-content-between">
+  <div>
+    <!-- ロゴ -->
+    <div class="mb-3">
+      <%= link_to root_path, class: "x-logo-link" do %>
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>StudyHub</span>
+      <% end %>
+    </div>
+
+    <!-- ナビ -->
+    <nav>
+      <ul class="list-unstyled mb-0">
+
+        <% if Current.admin.present? %>
+          <!-- 管理者ログイン後 -->
+          <li class="mb-2">
+            <%= link_to admin_users_path, class: "x-side-link #{'active' if current_page?(admin_users_path)}" do %>
+              <i class="fa-regular fa-user"></i>
+              <span>ユーザー管理</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to admin_comments_path, class: "x-side-link #{'active' if current_page?(admin_comments_path)}" do %>
+              <i class="fa-regular fa-comment"></i>
+              <span>コメント管理</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to admin_groups_path, class: "x-side-link #{'active' if current_page?(admin_groups_path)}" do %>
+              <i class="fa-solid fa-layer-group"></i>
+              <span>もくもく会管理</span>
+            <% end %>
+          </li>
+
+        <% elsif authenticated? %>
+          <!-- 一般ユーザーログイン後 -->
+          <li class="mb-2">
+            <%= link_to root_path, class: "x-side-link #{'active' if current_page?(root_path)}" do %>
+              <i class="fa-solid fa-house"></i>
+              <span>ホーム</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to posts_path, class: "x-side-link #{'active' if current_page?(posts_path)}" do %>
+              <i class="fa-regular fa-file-lines"></i>
+              <span>投稿一覧</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to users_path, class: "x-side-link #{'active' if current_page?(users_path)}" do %>
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span>ユーザー検索</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to notifications_path, class: "x-side-link #{'active' if current_page?(notifications_path)}" do %>
+              <span class="notification-icon-wrap">
+                <i class="fa-regular fa-bell"></i>
+                <% if unread_notifications_count.to_i.positive? %>
+                  <span class="notification-badge"><%= unread_notifications_count %></span>
+                <% end %>
+              </span>
+              <span>通知</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to likes_path, class: "x-side-link #{'active' if current_page?(likes_path)}" do %>
+              <i class="fa-regular fa-heart"></i>
+              <span>いいね一覧</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to groups_path, class: "x-side-link #{'active' if current_page?(groups_path)}" do %>
+              <i class="fa-solid fa-users"></i>
+              <span>もくもく会</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to mypage_path, class: "x-side-link #{'active' if current_page?(mypage_path)} profile-side-link" do %>
+              <%= user_avatar(Current.user, size: 34) %>
+              <span>マイページ</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to new_post_path, class: "x-post-btn #{'active' if current_page?(new_post_path)}" do %>
+              <i class="fa-solid fa-pen-to-square me-2"></i>新規投稿
+            <% end %>
+          </li>
+
+        <% else %>
+          <!-- 未ログイン -->
+          <li class="mb-2">
+            <%= link_to root_path, class: "x-side-link #{'active' if current_page?(root_path)}" do %>
+              <i class="fa-solid fa-house"></i>
+              <span>ホーム</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to posts_path, class: "x-side-link #{'active' if current_page?(posts_path)}" do %>
+              <i class="fa-regular fa-file-lines"></i>
+              <span>投稿一覧</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to groups_path, class: "x-side-link #{'active' if current_page?(groups_path)}" do %>
+              <i class="fa-solid fa-users"></i>
+              <span>もくもく会</span>
+            <% end %>
+          </li>
+
+          <li class="mb-2">
+            <%= link_to about_path, class: "x-side-link #{'active' if current_page?(about_path)}" do %>
+              <i class="fa-regular fa-circle-question"></i>
+              <span>About</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 下部 -->
+  <div class="mt-4">
+    <% if authenticated? %>
+      <%= link_to logout_path,
+                  data: { turbo_method: :delete },
+                  class: "x-logout-side-btn" do %>
+        <i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト
+      <% end %>
+
+    <% elsif Current.admin.present? %>
+      <%= link_to admin_logout_path,
+                  data: { turbo_method: :delete },
+                  class: "x-logout-side-btn" do %>
+        <i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト
+      <% end %>
+
+    <% else %>
+      <div class="d-flex flex-column gap-2">
+        <%= link_to new_user_path, class: "x-signup-btn text-center" do %>
+          <i class="fa-solid fa-user-plus me-2"></i>新規登録
+        <% end %>
+
+        <%= link_to new_session_path, class: "x-login-btn text-center" do %>
+          <i class="fa-solid fa-right-to-bracket me-2"></i>ログイン
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
