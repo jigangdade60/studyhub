@@ -65,5 +65,15 @@ Rails.application.routes.draw do
     resources :dm_rooms, only: %i[show create] do
       resources :dm_messages, only: :create
     end
+
+    resources :notifications, only: [:index] do
+      member do
+        patch :read
+      end
+
+      collection do
+        patch :read_all
+      end
+    end
   end
 end

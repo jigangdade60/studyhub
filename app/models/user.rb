@@ -52,6 +52,16 @@ class User < ApplicationRecord
            foreign_key: :user2_id,
            dependent: :destroy
 
+  has_many :received_notifications,
+           class_name: "Notification",
+           foreign_key: :recipient_id,
+           dependent: :destroy
+
+  has_many :sent_notifications,
+           class_name: "Notification",
+           foreign_key: :actor_id,
+           dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 20 }
   validates :email_address, presence: true, uniqueness: true
 

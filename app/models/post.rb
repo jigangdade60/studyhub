@@ -1,10 +1,13 @@
 class Post < ApplicationRecord
+  include Notifiable
+
   belongs_to :user
 
   has_many :post_tags, dependent: :destroy
   has_many :tags, through: :post_tags
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :notifications, as: :notifiable, dependent: :destroy
 
   # 投稿一覧をリアルタイム更新
   broadcasts_refreshes
@@ -56,6 +59,8 @@ class Post < ApplicationRecord
     end
   }
 
+  after_create_commit :notify_followers_if_published
+
   def study_time_hour
     return 0 if study_time.blank?
     study_time / 60
@@ -104,5 +109,18 @@ class Post < ApplicationRecord
     return if minute.between?(0, 59)
 
     errors.add(:study_time_minute, "は0〜59の間で入力してください")
+  end
+
+  def notify_followers_if_published
+    return unless published?
+
+    user.followers.find_each do |follower|
+      create_notification!(
+        recipient: follower,
+        actor: user,
+        action: :posted,
+        notifiable: self
+      )
+    end
   end
 end
