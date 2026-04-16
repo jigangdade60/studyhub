@@ -1,182 +1,179 @@
-<div class="container py-4" style="max-width: 760px;">
-  <div class="mb-4">
-    <%= link_to "← もくもく会一覧へ戻る", groups_path, class: "text-decoration-none small", style: "color: #1D9BF0;" %>
+<div class="container py-3" style="max-width: 700px;">
+
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">もくもく会詳細</h5>
   </div>
 
-  <!-- グループ情報 -->
-  <div class="border-bottom pb-4 mb-4">
-    <div class="d-flex justify-content-between align-items-start mb-3">
-      <div>
-        <h3 class="fw-bold mb-2"><%= @group.name %></h3>
-        <div class="text-secondary mb-2">
-          作成者：<%= @group.owner.name %>
+  <!-- 本体カード -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <div class="d-flex gap-3">
+
+        <!-- アイコン -->
+        <div>
+          <%= user_avatar(@group.owner, size: 48) %>
         </div>
 
-        <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
-          <span class="badge rounded-pill px-3 py-2"
-                style="background-color: #1D9BF0;">
-            <%= @group.study_theme %>
-          </span>
+        <!-- コンテンツ -->
+        <div class="flex-grow-1">
 
-          <span class="text-secondary fw-semibold">
-            <%= @group.members.count %> / <%= @group.max_members %> 人
-          </span>
+          <!-- 名前＋状態 -->
+          <div class="mb-1">
+            <span class="fw-bold text-dark"><%= @group.owner.name %></span>
+          </div>
+
+          <!-- グループ名 -->
+          <div class="fw-bold text-dark mb-2">
+            <%= @group.name %>
+          </div>
+
+          <!-- テーマ・人数 -->
+          <div class="mb-2 d-flex align-items-center flex-wrap gap-2">
+            <span class="badge bg-light text-primary border rounded-pill px-3 py-2">
+              <%= @group.study_theme %>
+            </span>
+
+            <span class="text-muted small">
+              <%= @group.members.count %> / <%= @group.max_members %> 人
+            </span>
+
+            <% if @group.full? %>
+              <span class="badge bg-success rounded-pill">定員到達</span>
+            <% else %>
+              <span class="badge bg-primary rounded-pill">募集中</span>
+            <% end %>
+          </div>
+
+          <!-- 説明 -->
+          <% if @group.description.present? %>
+            <div class="text-dark mb-2">
+              <%= simple_format(@group.description) %>
+            </div>
+          <% end %>
+
+          <!-- ルール -->
+          <% if @group.rule.present? %>
+            <div class="text-dark mb-2">
+              <%= simple_format(@group.rule) %>
+            </div>
+          <% end %>
+
         </div>
       </div>
-
-      <% if @group.full? %>
-        <span class="badge rounded-pill px-3 py-2" style="background-color: #198754;">
-          定員到達
-        </span>
-      <% else %>
-        <span class="badge rounded-pill px-3 py-2" style="background-color: #1D9BF0;">
-          募集中
-        </span>
-      <% end %>
-    </div>
-
-    <div class="mb-4">
-      <div class="fw-bold mb-2">説明</div>
-      <div class="lh-lg" style="white-space: pre-line;"><%= @group.description %></div>
-    </div>
-
-    <div>
-      <div class="fw-bold mb-2">ルール</div>
-      <% if @group.rule.present? %>
-        <div class="lh-lg" style="white-space: pre-line;"><%= @group.rule %></div>
-      <% else %>
-        <div class="text-secondary">ルールはまだ設定されていません。</div>
-      <% end %>
     </div>
   </div>
 
-  <!-- 参加申請エリア -->
-  <div class="border-bottom pb-4 mb-4">
+  <!-- 参加エリア -->
+  <div class="bg-white border rounded-4 p-3 mb-3">
+
     <% if !authenticated? %>
-      <p class="mb-3">参加申請にはログインが必要です。</p>
+      <p class="mb-2">参加申請にはログインが必要です。</p>
       <%= link_to "ログインする",
                   new_session_path,
-                  class: "btn rounded-pill px-4 fw-semibold text-white",
-                  style: "background-color: #1D9BF0;" %>
+                  class: "btn btn-outline-primary rounded-pill px-4" %>
 
     <% elsif @group.owned_by?(Current.user) %>
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-        <p class="mb-0 fw-semibold">あなたはこのもくもく会の作成者です。</p>
-        <%= link_to "参加申請を管理する",
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <p class="mb-0">あなたは作成者です</p>
+        <%= link_to "申請管理",
                     requests_group_path(@group),
-                    class: "btn rounded-pill px-4 fw-semibold",
-                    style: "border: 1px solid #1D9BF0; color: #1D9BF0; background-color: white;" %>
+                    class: "x-main-btn rounded-pill px-4" %>
       </div>
 
     <% elsif @group.joined_by?(Current.user) %>
-      <p class="mb-0 fw-semibold" style="color: #1D9BF0;">あなたはこのもくもく会に参加しています。</p>
+      <p class="mb-0 text-primary fw-semibold">参加中</p>
 
     <% elsif @group.pending_request_by?(Current.user) %>
-      <p class="mb-0 text-warning fw-semibold">参加申請中です。承認をお待ちください。</p>
+      <p class="mb-0 text-warning fw-semibold">申請中</p>
 
     <% elsif @group.full? %>
-      <p class="mb-0 text-danger fw-semibold">定員に達しているため参加申請できません。</p>
+      <p class="mb-0 text-danger fw-semibold">定員に達しています</p>
 
     <% else %>
       <%= form_with model: [@group, GroupJoinRequest.new], local: true do |f| %>
-        <%= f.submit "参加申請を送る",
-                     class: "btn rounded-pill px-4 fw-semibold text-white",
-                     style: "background-color: #1D9BF0; border: none;" %>
+        <%= f.submit "参加申請する",
+                     class: "x-main-btn rounded-pill px-4" %>
       <% end %>
     <% end %>
+
   </div>
 
-  <!-- 参加メンバー -->
-  <div class="border-bottom pb-4 mb-4">
-    <h5 class="fw-bold mb-3">参加メンバー</h5>
+  <!-- メンバー -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <h5 class="fw-bold mb-3">参加メンバー</h5>
 
-    <% if @group.members.any? %>
       <% @group.members.each do |member| %>
-        <div class="d-flex align-items-center py-3 border-top">
-          <div class="me-3">
-            <% if member.profile_image.attached? %>
-              <%= image_tag member.profile_image, class: "rounded-circle", size: "52x52" %>
-            <% else %>
-              <%= image_tag "no_image.jpg", class: "rounded-circle", size: "52x52" %>
-            <% end %>
+        <div class="d-flex gap-3 py-2 border-top">
+
+          <div>
+            <%= user_avatar(member, size: 40) %>
           </div>
 
           <div>
             <div class="fw-bold"><%= member.name %></div>
             <% if member == @group.owner %>
-              <div class="text-secondary small">作成者</div>
+              <div class="text-muted small">作成者</div>
             <% end %>
           </div>
+
         </div>
       <% end %>
-    <% else %>
-      <p class="text-secondary mb-0">まだ参加メンバーはいません。</p>
-    <% end %>
+
+    </div>
   </div>
 
-  <!-- グループチャット -->
-  <div class="pb-3">
-    <h5 class="fw-bold mb-3">グループチャット</h5>
+  <!-- チャット -->
+  <div class="bg-white border rounded-4">
+    <div class="p-3">
+      <h5 class="fw-bold mb-3">グループチャット</h5>
 
-    <% if authenticated? && @group.joined_by?(Current.user) %>
-      <!-- 投稿フォーム -->
-      <div class="border-bottom pb-4 mb-3">
-        <%= form_with model: [@group, @group_message], local: true do |f| %>
-          <div class="d-flex align-items-start gap-3">
-            <div class="flex-shrink-0">
-              <% if Current.user.profile_image.attached? %>
-                <%= image_tag Current.user.profile_image, class: "rounded-circle", size: "52x52" %>
-              <% else %>
-                <%= image_tag "no_image.jpg", class: "rounded-circle", size: "52x52" %>
-              <% end %>
+      <% if authenticated? && @group.joined_by?(Current.user) %>
+
+        <!-- 投稿フォーム -->
+        <div class="mb-3">
+          <%= form_with model: [@group, @group_message], local: true do |f| %>
+            <%= f.text_area :content,
+                            class: "form-control rounded-4",
+                            rows: 3,
+                            placeholder: "メッセージを入力" %>
+
+            <div class="text-end mt-2">
+              <%= f.submit "送信", class: "x-main-btn rounded-pill px-4" %>
             </div>
+          <% end %>
+        </div>
 
-            <div class="flex-grow-1">
-              <%= f.text_area :content,
-                              class: "form-control",
-                              rows: 3,
-                              placeholder: "グループ参加者にメッセージを送る" %>
-
-              <div class="text-end mt-3">
-                <%= f.submit "送信",
-                             class: "btn rounded-pill px-4 fw-semibold text-white",
-                             style: "background-color: #1D9BF0; border: none;" %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <!-- チャット一覧 -->
-      <% if @group_messages.any? %>
+        <!-- メッセージ -->
         <% @group_messages.each do |message| %>
-          <div class="d-flex gap-3 py-3 border-bottom">
-            <div class="flex-shrink-0">
-              <% if message.user.profile_image.attached? %>
-                <%= image_tag message.user.profile_image, class: "rounded-circle", size: "52x52" %>
-              <% else %>
-                <%= image_tag "no_image.jpg", class: "rounded-circle", size: "52x52" %>
-              <% end %>
+          <div class="d-flex gap-3 py-3 border-top">
+
+            <div>
+              <%= user_avatar(message.user, size: 40) %>
             </div>
 
             <div class="flex-grow-1">
-              <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
+              <div class="mb-1">
                 <span class="fw-bold"><%= message.user.name %></span>
-                <span class="text-secondary small">
-                  <%= message.created_at.strftime("%Y/%m/%d %H:%M") %>
+                <span class="text-muted small ms-2">
+                  <%= l message.created_at, format: :short %>
                 </span>
               </div>
 
-              <div class="lh-lg" style="white-space: pre-line;"><%= message.content %></div>
+              <div class="text-dark">
+                <%= simple_format(message.content) %>
+              </div>
             </div>
+
           </div>
         <% end %>
+
       <% else %>
-        <p class="text-secondary mb-0">まだメッセージはありません。</p>
+        <p class="text-muted mb-0">参加者のみ利用できます</p>
       <% end %>
 
-    <% else %>
-      <p class="text-secondary mb-0">グループチャットは参加者のみ閲覧・投稿できます。</p>
-    <% end %>
+    </div>
   </div>
+
 </div>

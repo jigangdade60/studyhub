@@ -11,7 +11,9 @@ class Comment < ApplicationRecord
   private
 
   def notify_post_owner
-    create_notification!(
+    return if post.user == user
+
+    Notification.create!(
       recipient: post.user,
       actor: user,
       action: :commented,
