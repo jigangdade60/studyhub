@@ -7,7 +7,8 @@ class Notification < ApplicationRecord
     liked: 0,
     commented: 1,
     posted: 2,
-    message: 3
+    message: 3,
+    followed: 4
   }
 
   scope :recent, -> { order(created_at: :desc) }
@@ -33,6 +34,8 @@ class Notification < ApplicationRecord
       "#{actor.name}さんが新しく投稿しました"
     when "message"
       "#{actor.name}さんから新しいDMがあります"
+    when "followed"
+      "#{actor.name}さんがあなたをフォローしました"
     else
       "新しい通知があります"
     end
@@ -48,6 +51,8 @@ class Notification < ApplicationRecord
       Rails.application.routes.url_helpers.post_path(notifiable.post)
     when DmMessage
       Rails.application.routes.url_helpers.dm_room_path(notifiable.dm_room)
+    when Relationship
+      Rails.application.routes.url_helpers.user_path(actor)
     else
       Rails.application.routes.url_helpers.notifications_path
     end

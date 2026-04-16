@@ -1,155 +1,198 @@
-<div class="container py-4">
+<div class="container py-3" style="max-width: 700px;">
+
   <!-- タイトル -->
-  <div class="mb-4">
-    <h2 class="fw-bold">投稿詳細</h2>
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">投稿詳細</h5>
   </div>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <!-- 投稿者情報 -->
-      <div class="d-flex align-items-center mb-3">
-        <%= user_avatar(@post.user, size: 52) %>
+  <!-- 投稿詳細本体 -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <div class="d-flex gap-3">
 
-        <div class="ms-3">
-          <div class="fw-bold"><%= @post.user.name %></div>
-          <div class="text-muted small">
-            <%= l @post.created_at, format: :long %>
+        <!-- アイコン -->
+        <div>
+          <%= link_to user_path(@post.user) do %>
+            <%= user_avatar(@post.user, size: 48) %>
+          <% end %>
+        </div>
+
+        <!-- コンテンツ -->
+        <div class="flex-grow-1">
+
+          <!-- 名前＋日時 -->
+          <div class="mb-1">
+            <%= link_to @post.user.name,
+                        user_path(@post.user),
+                        class: "fw-bold text-dark text-decoration-none" %>
+            <span class="text-muted small ms-2">
+              <%= l @post.created_at, format: :short %>
+            </span>
           </div>
+
+          <!-- タイトル -->
+          <div class="fw-bold text-dark mb-2">
+            <%= @post.title %>
+            <% if Current.user.present? && @post.user == Current.user && @post.draft? %>
+              <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
+            <% elsif Current.user.present? && @post.user == Current.user && @post.published? %>
+              <span class="badge bg-primary rounded-pill ms-2">公開中</span>
+            <% end %>
+          </div>
+
+          <!-- 本文 -->
+<% if @post.body.present? %>
+  <div class="text-dark mb-2 text-start w-100">
+  <%= simple_format(@post.body, {}, sanitize: true) %>
+</div>
+<% end %>
+
+          <!-- 学習時間 -->
+          <div class="mb-2">
+            <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+              <i class="fa-solid fa-pen me-1"></i><%= format_study_time(@post.study_time) %>
+            </span>
+          </div>
+
+          <!-- タグ -->
+          <div class="mb-3">
+            <% if @post.tags.any? %>
+              <% @post.tags.each do |tag| %>
+                <%= link_to tag.name,
+                            posts_path(tag_name: tag.name),
+                            class: "badge bg-light text-primary border me-1 text-decoration-none rounded-pill px-3 py-2" %>
+              <% end %>
+            <% end %>
+          </div>
+
+          <!-- 下アイコン -->
+          <% if @post.published? %>
+            <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+              <div>
+                <%= render "public/likes/button", post: @post %>
+              </div>
+
+              <div class="d-flex align-items-center gap-1">
+                <i class="fa-regular fa-comment"></i>
+                <span><%= @comments.count %></span>
+              </div>
+            </div>
+          <% end %>
+
         </div>
       </div>
-
-      <!-- タイトル + 公開状態 -->
-      <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-        <h3 class="fw-bold mb-0"><%= @post.title %></h3>
-
-        <% if Current.user.present? && @post.user == Current.user %>
-          <% if @post.draft? %>
-            <span class="badge bg-secondary">非公開</span>
-          <% else %>
-            <span class="badge bg-primary">公開中</span>
-          <% end %>
-        <% end %>
-      </div>
-
-      <!-- 学習時間 -->
-      <p class="text-muted mb-3">
-        学習時間：<%= format_study_time(@post.study_time) %>
-      </p>
-
-      <!-- タグ -->
-      <div class="mb-3">
-        <strong>タグ：</strong>
-        <% if @post.tags.any? %>
-          <% @post.tags.each do |tag| %>
-            <span class="badge bg-secondary me-1"><%= tag.name %></span>
-          <% end %>
-        <% else %>
-          <span class="text-muted">なし</span>
-        <% end %>
-      </div>
-
-      <!-- 本文 -->
-      <div class="mb-3" style="white-space: pre-wrap;">
-        <%= @post.body %>
-      </div>
-
-      <!-- いいねボタン（公開投稿のみ表示） -->
-      <% if @post.published? %>
-        <div class="mb-4">
-          <%= render "public/likes/button", post: @post %>
-        </div>
-      <% end %>
-
-      <!-- 投稿者本人だけに編集・削除ボタンを表示 -->
-      <div class="d-flex gap-2">
-        <%= link_to "一覧へ戻る", posts_path, class: "btn btn-outline-secondary" %>
-
-        <% if Current.user&.id == @post.user_id %>
-          <%= link_to "編集する", edit_post_path(@post), class: "btn btn-success" %>
-
-          <%= button_to "削除する",
-                        post_path(@post),
-                        method: :delete,
-                        class: "btn btn-danger",
-                        data: { turbo_confirm: "本当に削除しますか？" } %>
-        <% end %>
-      </div>
     </div>
+  </div>
 
-    <div class="card-footer text-muted small">
-      投稿日時：<%= l @post.created_at, format: :long %>
-    </div>
+  <!-- ボタン -->
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    <%= link_to "一覧へ戻る", posts_path, class: "btn btn-outline-secondary rounded-pill px-4" %>
+
+    <% if Current.user&.id == @post.user_id %>
+      <%= link_to "編集する", edit_post_path(@post), class: "x-main-btn rounded-pill px-4 text-decoration-none" %>
+
+      <%= button_to "削除する",
+                    post_path(@post),
+                    method: :delete,
+                    class: "btn btn-outline-danger rounded-pill px-4",
+                    data: { turbo_confirm: "本当に削除しますか？" } %>
+    <% end %>
   </div>
 
   <% if @post.published? %>
     <!-- コメント投稿フォーム -->
     <% if Current.user.present? %>
-      <%= form_with model: [@post, @comment] do |f| %>
-        <% if @comment.errors.any? %>
-          <div class="alert alert-danger">
-            <ul class="mb-0">
-              <% @comment.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-              <% end %>
-            </ul>
+      <div class="bg-white border rounded-4 p-3 mb-3">
+        <%= form_with model: [@post, @comment] do |f| %>
+          <% if @comment.errors.any? %>
+            <div class="alert alert-danger rounded-4">
+              <ul class="mb-0 ps-3">
+                <% @comment.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= f.text_area :body,
+                            class: "form-control rounded-4",
+                            rows: 4,
+                            placeholder: "コメントを入力してください" %>
+          </div>
+
+          <div class="text-end">
+            <%= f.submit "コメントする", class: "x-main-btn rounded-pill px-4" %>
           </div>
         <% end %>
-
-        <div class="mb-3">
-          <%= f.text_area :body,
-                          class: "form-control",
-                          rows: 4,
-                          placeholder: "コメントを入力してください" %>
-        </div>
-
-        <%= f.submit "コメントする", class: "btn btn-primary" %>
-      <% end %>
+      </div>
     <% else %>
-      <p class="text-muted mb-2">コメントするにはログインが必要です。</p>
-      <%= link_to "ログインする", new_session_path, class: "btn btn-outline-primary btn-sm" %>
+      <div class="bg-white border rounded-4 p-3 mb-3">
+        <p class="text-muted mb-2">コメントするにはログインが必要です。</p>
+        <%= link_to "ログインする", new_session_path, class: "btn btn-outline-primary rounded-pill px-4" %>
+      </div>
     <% end %>
 
     <!-- コメント一覧 -->
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h4 class="fw-bold mb-3">コメント一覧（<%= @comments.count %>件）</h4>
+<div class="bg-white border rounded-4">
+  <div class="p-3">
+    <h5 class="fw-bold mb-3">コメント一覧（<%= @comments.count %>件）</h5>
 
-        <% if @comments.any? %>
-          <div class="d-flex flex-column gap-3">
-            <% @comments.each do |comment| %>
-              <div class="border rounded p-3">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                  <div class="d-flex align-items-center">
-                    <%= user_avatar(comment.user, size: 40) %>
+    <% if @comments.any? %>
+      <% @comments.each do |comment| %>
+        <div class="<%= 'border-bottom pb-3 mb-3' unless comment == @comments.last %>">
 
-                    <div class="ms-2">
-                      <div class="fw-bold"><%= comment.user.name %></div>
-                      <div class="text-muted small">
-                        <%= l comment.created_at, format: :long %>
-                      </div>
-                    </div>
-                  </div>
+          <div class="d-flex gap-3">
 
-                  <% if Current.user&.id == comment.user_id %>
-                    <%= button_to "削除",
-                                  post_comment_path(@post, comment),
-                                  method: :delete,
-                                  class: "btn btn-sm btn-outline-danger",
-                                  data: { turbo_confirm: "コメントを削除しますか？" } %>
-                  <% end %>
-                </div>
+            <!-- アイコン -->
+            <div>
+              <%= link_to user_path(comment.user) do %>
+                <%= user_avatar(comment.user, size: 48) %>
+              <% end %>
+            </div>
 
-                <div style="white-space: pre-wrap;"><%= comment.body %></div>
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 名前＋日時（投稿と完全一致） -->
+              <div class="mb-1">
+                <%= link_to comment.user.name,
+                            user_path(comment.user),
+                            class: "fw-bold text-dark text-decoration-none" %>
+                <span class="text-muted small ms-2">
+                  <%= l comment.created_at, format: :short %>
+                </span>
               </div>
-            <% end %>
+
+              <!-- 本文（ここが一番重要） -->
+              <div class="text-dark mb-2 text-start w-100">
+                <%= simple_format(comment.body, {}, sanitize: true) %>
+              </div>
+
+              <!-- 削除ボタン -->
+              <% if Current.user&.id == comment.user_id %>
+                <div>
+                  <%= button_to "削除",
+                                post_comment_path(@post, comment),
+                                method: :delete,
+                                class: "btn btn-sm btn-outline-danger rounded-pill px-3",
+                                data: { turbo_confirm: "コメントを削除しますか？" } %>
+                </div>
+              <% end %>
+
+            </div>
           </div>
-        <% else %>
-          <p class="text-muted mb-0">まだコメントはありません。</p>
-        <% end %>
-      </div>
-    </div>
+
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted mb-0">まだコメントはありません。</p>
+    <% end %>
+  </div>
+</div>
+
   <% elsif Current.user.present? && @post.user == Current.user %>
-    <div class="alert alert-secondary">
+    <div class="bg-white border rounded-4 p-3 text-muted">
       この投稿は非公開です。公開するまで、いいねやコメントは表示されません。
     </div>
   <% end %>

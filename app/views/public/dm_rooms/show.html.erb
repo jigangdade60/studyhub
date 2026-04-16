@@ -1,60 +1,117 @@
-<div class="container py-4" style="max-width: 800px;">
-  <div class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-      <h2 class="fw-bold mb-1">DM</h2>
-      <p class="text-muted mb-0"><%= @other_user.name %> さんとのメッセージ</p>
+<div class="dm-page">
+  <div class="container px-0" style="max-width: 820px;">
+    <!-- ヘッダー -->
+    <div class="dm-header px-3 px-md-4">
+      <div class="d-flex align-items-center justify-content-between h-100">
+        <div class="d-flex align-items-center gap-3">
+          <%= link_to user_path(@other_user), class: "dm-back-link" do %>
+            <i class="fa-solid fa-arrow-left"></i>
+          <% end %>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="dm-header-avatar">
+              <% if @other_user.profile_image.attached? %>
+                <%= image_tag @other_user.profile_image, class: "dm-user-avatar-img" %>
+              <% else %>
+                <%= image_tag "no_image.jpg", class: "dm-user-avatar-img" %>
+              <% end %>
+            </div>
+
+            <div>
+              <h2 class="dm-title mb-0"><%= @other_user.name %></h2>
+              <p class="dm-subtitle mb-0">メッセージ</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <%= link_to "← 戻る", user_path(@other_user), class: "btn btn-outline-secondary btn-sm" %>
-  </div>
+    <!-- DM本体 -->
+    <div class="dm-card d-flex flex-column">
+      <!-- メッセージ一覧 -->
+      <div class="dm-messages px-3 px-md-4 pb-4">
+        <% if @dm_messages.any? %>
+          <div class="d-flex flex-column gap-4">
+            <% @dm_messages.each do |message| %>
+              <% mine = message.user_id == Current.user.id %>
+              <% message_user = mine ? Current.user : message.user %>
 
-  <div class="card shadow-sm border-0 rounded-4">
-    <div class="card-body p-4" style="background-color: #f8f9fa;">
-      <% if @dm_messages.any? %>
-        <div class="d-flex flex-column gap-3 mb-4">
-          <% @dm_messages.each do |message| %>
-            <% mine = message.user_id == Current.user.id %>
+              <div class="d-flex <%= mine ? 'justify-content-end' : 'justify-content-start' %>">
+                <div class="dm-message-row <%= mine ? 'mine' : 'other' %>">
+                  <% unless mine %>
+                    <div class="dm-avatar">
+                      <% if message_user.profile_image.attached? %>
+                        <%= image_tag message_user.profile_image, class: "dm-user-avatar-img" %>
+                      <% else %>
+                        <%= image_tag "no_image.jpg", class: "dm-user-avatar-img" %>
+                      <% end %>
+                    </div>
+                  <% end %>
 
-            <div class="d-flex <%= mine ? 'justify-content-end' : 'justify-content-start' %>">
-              <div class="<%= mine ? 'bg-primary text-white' : 'bg-white border' %> px-3 py-2 rounded-4 shadow-sm"
-                   style="max-width: 75%;">
-                <div class="small <%= mine ? 'text-white-50' : 'text-muted' %> mb-1">
-                  <%= mine ? "あなた" : message.user.name %>
-                  ・
-                  <%= message.created_at.strftime("%Y/%m/%d %H:%M") %>
+                  <div class="dm-bubble-wrap d-flex flex-column <%= mine ? 'align-items-end' : 'align-items-start' %>">
+                    <div class="dm-meta">
+                      <span class="dm-name"><%= mine ? "あなた" : message_user.name %></span>
+                      <span class="dm-time"><%= message.created_at.in_time_zone.strftime("%Y/%m/%d %H:%M") %></span>
+                    </div>
+
+                    <div class="dm-bubble <%= mine ? 'mine' : 'other' %>">
+                      <div class="dm-content"><%= message.content %></div>
+                    </div>
+                  </div>
+
+                  <% if mine %>
+                    <div class="dm-avatar">
+                      <% if Current.user.profile_image.attached? %>
+                        <%= image_tag Current.user.profile_image, class: "dm-user-avatar-img" %>
+                      <% else %>
+                        <%= image_tag "no_image.jpg", class: "dm-user-avatar-img" %>
+                      <% end %>
+                    </div>
+                  <% end %>
                 </div>
-                <div style="white-space: pre-wrap;"><%= message.content %></div>
               </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="dm-empty text-center py-5">
+            <div class="dm-empty-icon mb-3">
+              <i class="fa-regular fa-envelope"></i>
             </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="alert alert-light border text-muted">
-          まだメッセージはありません。最初のDMを送ってみましょう。
-        </div>
-      <% end %>
+            <h4 class="fw-bold mb-2">まだメッセージはありません</h4>
+            <p class="text-muted mb-0">最初のDMを送ってみましょう。</p>
+          </div>
+        <% end %>
+      </div>
 
-      <div class="border-top pt-4">
+      <!-- 入力欄 -->
+      <div class="dm-form-area px-3 px-md-4 py-3">
         <% if @dm_message.errors.any? %>
-          <div class="alert alert-danger">
+          <div class="alert alert-danger rounded-4">
             <ul class="mb-0 ps-3">
-              <% @dm_message.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
+              <% @dm_message.errors.full_messages.each do |error_message| %>
+                <li><%= error_message %></li>
               <% end %>
             </ul>
           </div>
         <% end %>
 
         <%= form_with model: [@dm_room, @dm_message], local: true do |f| %>
-          <div class="mb-3">
-            <%= f.text_area :content,
-                            rows: 3,
-                            class: "form-control rounded-3",
-                            placeholder: "メッセージを入力" %>
-          </div>
+          <div class="dm-input-wrap">
+            <div class="d-flex align-items-start gap-2">
+              <div class="flex-grow-1">
+                <%= f.text_area :content,
+                                rows: 2,
+                                class: "form-control dm-textarea",
+                                placeholder: "新しいメッセージを作成",
+                                style: "resize: none;" %>
+              </div>
 
-          <div class="text-end">
-            <%= f.submit "送信", class: "btn btn-primary rounded-pill px-4" %>
+              <div>
+                <%= button_tag type: "submit", class: "btn dm-submit-icon-btn" do %>
+                 <i class="fa-regular fa-paper-plane"></i>
+                <% end %>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
