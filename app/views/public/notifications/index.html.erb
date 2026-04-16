@@ -1,38 +1,54 @@
-<div class="container py-4" style="max-width: 800px;">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h2 class="fw-bold mb-1">通知一覧</h2>
-      <p class="text-muted mb-0">最新の通知を確認できます。</p>
-    </div>
+<div class="container py-3" style="max-width: 700px;">
+
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">通知一覧</h5>
   </div>
 
   <% if @notifications.empty? %>
-    <div class="alert alert-secondary rounded-4">
-      通知はまだありません。
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      通知はまだありません
     </div>
   <% else %>
-    <div class="d-flex flex-column gap-3">
-      <% @notifications.each do |notification| %>
-        <div class="card shadow-sm border-0 rounded-4 <%= 'border-start border-4 border-primary' unless notification.read? %>">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start gap-3">
-              <div>
-                <p class="mb-1 fw-semibold"><%= notification.message %></p>
-                <small class="text-muted">
-                  <%= l notification.created_at, format: :short %>
-                </small>
-              </div>
 
-              <div>
-                <%= link_to "開く",
-                            read_notification_path(notification),
-                            data: { turbo_method: :patch },
-                            class: "btn btn-outline-primary btn-sm rounded-pill" %>
-              </div>
+    <% @notifications.each do |notification| %>
+      <div class="rounded-4 mb-3 x-hover"
+           style="<%= notification.read? ? 'background-color: #ffffff; border: 1px solid #dee2e6;' : 'background-color: #eff6ff; border: 1px solid #1d9bf0;' %>">
+
+        <%= link_to read_notification_path(notification),
+                    data: { turbo_method: :patch },
+                    class: "d-flex gap-3 text-decoration-none text-reset p-3" do %>
+
+          <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <% if notification.action == "message" %>
+              <i class="fa-solid fa-envelope" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "commented" %>
+              <i class="fa-regular fa-comment" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "liked" %>
+              <i class="fa-solid fa-heart" style="color: #e0245e;"></i>
+            <% elsif notification.action == "posted" %>
+              <i class="fa-regular fa-pen-to-square" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "followed" %>
+              <i class="fa-solid fa-user-plus" style="color: #17bf63;"></i>
+            <% else %>
+              <i class="fa-regular fa-bell" style="color: #6c757d;"></i>
+            <% end %>
+          </div>
+
+          <div class="flex-grow-1">
+            <div class="mb-1">
+              <span class="fw-bold"><%= notification.message %></span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                <%= l notification.created_at, format: :short %>
+              </small>
             </div>
           </div>
-        </div>
-      <% end %>
-    </div>
+
+        <% end %>
+      </div>
+    <% end %>
+
   <% end %>
 </div>
