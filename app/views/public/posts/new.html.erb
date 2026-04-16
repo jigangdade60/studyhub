@@ -1,20 +1,11 @@
-<div class="container py-4">
-  <!-- 画面タイトル -->
-  <div class="mb-4">
-    <h2 class="fw-bold">新規投稿</h2>
-  </div>
+<div class="container py-0.5" style="max-width: 640px;">
 
-  <!-- フラッシュメッセージ -->
   <% if flash[:alert].present? %>
     <div class="alert alert-danger">
       <%= flash[:alert] %>
     </div>
   <% end %>
 
-  <!-- 投稿フォーム -->
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <%= render "form", post: @post %>
-    </div>
-  </div>
+  <%= render "form", post: @post %>
+
 </div>

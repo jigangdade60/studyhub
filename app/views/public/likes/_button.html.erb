@@ -3,19 +3,24 @@
     <% if post.liked_by?(current_user) %>
       <%= button_to post_like_path(post),
                     method: :delete,
-                    class: "btn btn-outline-danger btn-sm" do %>
-        ♥ <%= post.likes.count %>
+                    class: "x-like-btn liked",
+                    form: { class: "x-like-form" } do %>
+        <i class="fa-solid fa-heart"></i>
+        <span><%= post.likes.count %></span>
       <% end %>
     <% else %>
       <%= button_to post_like_path(post),
                     method: :post,
-                    class: "btn btn-outline-secondary btn-sm" do %>
-        ♡ <%= post.likes.count %>
+                    class: "x-like-btn",
+                    form: { class: "x-like-form" } do %>
+        <i class="fa-regular fa-heart"></i>
+        <span><%= post.likes.count %></span>
       <% end %>
     <% end %>
   <% else %>
-    <span class="btn btn-outline-secondary btn-sm disabled">
-      ♡ <%= post.likes.count %>
+    <span class="x-like-btn disabled-like">
+      <i class="fa-regular fa-heart"></i>
+      <span><%= post.likes.count %></span>
     </span>
   <% end %>
 <% end %>

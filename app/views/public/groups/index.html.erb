@@ -19,7 +19,7 @@
   <% if authenticated? %>
     <div class="mb-3 text-end">
       <%= link_to new_group_path, class: "x-create-group-btn" do %>
-        <i class="fa-solid fa-plus me-2"></i>作成
+        <i class="fa-solid fa-plus"></i>作成
       <% end %>
     </div>
   <% end %>
@@ -32,50 +32,82 @@
   <% else %>
 
     <% @groups.each do |group| %>
-      <div class="bg-white border rounded-4 mb-3 x-hover">
-        <%= link_to group_path(group), class: "d-flex gap-3 text-decoration-none text-reset p-3" do %>
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= group_path(group) %>'">
 
-          <!-- アイコン -->
-          <div>
-            <%= image_tag(group.owner.profile_image.attached? ? group.owner.profile_image : "no_image.jpg",
-                          class: "rounded-circle",
-                          style: "width: 48px; height: 48px; object-fit: cover;") %>
-          </div>
+        <div class="p-3">
+          <div class="d-flex gap-3">
 
-          <!-- コンテンツ -->
-          <div class="flex-grow-1">
-
-            <!-- 名前＋人数 -->
-            <div class="d-flex justify-content-between">
-              <div>
-                <span class="fw-bold"><%= group.name %></span>
-                <span class="text-muted small ms-2">
-                  参加人数：<%= group.members.count %>/<%= group.max_members %>
-                </span>
-              </div>
-            </div>
-
-            <!-- テーマ -->
-            <div class="text-primary small mb-1">
-              #<%= group.study_theme %>
-            </div>
-
-            <!-- 説明 -->
-            <div class="text-dark mb-2">
-              <%= truncate(group.description, length: 80) %>
-            </div>
-
-            <!-- フッター -->
-            <div class="d-flex justify-content-between align-items-center">
-              <% if group.full? %>
-                <span class="text-danger small">満員</span>
-              <% else %>
-                <span class="text-success small">募集中</span>
+            <!-- アイコン -->
+            <div onclick="event.stopPropagation();">
+              <%= link_to user_path(group.owner) do %>
+                <%= user_avatar(group.owner, size: 48) %>
               <% end %>
             </div>
 
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 作成者名＋作成日時 -->
+              <div class="mb-1">
+                <span onclick="event.stopPropagation();">
+                  <%= link_to group.owner.name,
+                              user_path(group.owner),
+                              class: "fw-bold text-dark text-decoration-none" %>
+                </span>
+                <span class="text-muted small ms-2">
+                  <%= l group.created_at, format: :short %>
+                </span>
+              </div>
+
+              <!-- タイトル -->
+              <div class="fw-bold text-dark mb-2">
+                <%= group.name %>
+              </div>
+
+              <!-- 説明 -->
+              <% if group.description.present? %>
+                <div class="text-dark mb-2">
+                  <%= truncate(group.description, length: 100) %>
+                </div>
+              <% end %>
+
+              <!-- テーマ・参加人数 -->
+              <div class="mb-3 d-flex flex-wrap gap-2" onclick="event.stopPropagation();">
+                <% if group.study_theme.present? %>
+                  <span class="badge bg-light text-primary border rounded-pill px-3 py-2">
+                    #<%= group.study_theme %>
+                  </span>
+                <% end %>
+
+                <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                  <i class="fa-solid fa-user-group me-1"></i>
+                  <%= group.members.count %>/<%= group.max_members %>人
+                </span>
+              </div>
+
+              <!-- 下アイコン風の情報 -->
+              <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa-solid fa-user-group"></i>
+                  <span><%= group.members.count %>人参加中</span>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+                  <% if group.full? %>
+                    <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                    <span class="text-danger">満員</span>
+                  <% else %>
+                    <i class="fa-regular fa-circle-check text-success"></i>
+                    <span class="text-success">募集中</span>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
           </div>
-        <% end %>
+        </div>
       </div>
     <% end %>
 

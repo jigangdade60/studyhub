@@ -12,43 +12,83 @@
   <% else %>
 
     <% @liked_posts.each do |post| %>
-      <div class="bg-white border rounded-4 mb-3 x-hover">
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= post_path(post) %>'">
 
-        <%= link_to post_path(post), class: "d-flex gap-3 text-decoration-none text-reset p-3" do %>
+        <div class="p-3">
+          <div class="d-flex gap-3">
 
-          <!-- アイコン -->
-          <div>
-            <%= image_tag(post.user.profile_image.attached? ? post.user.profile_image : "no_image.jpg",
-                          class: "rounded-circle",
-                          style: "width: 48px; height: 48px; object-fit: cover;") %>
+            <!-- アイコン -->
+            <div onclick="event.stopPropagation();">
+              <%= link_to user_path(post.user) do %>
+                <%= user_avatar(post.user, size: 48) %>
+              <% end %>
+            </div>
+
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 名前＋日時 -->
+              <div class="mb-1">
+                <span onclick="event.stopPropagation();">
+                  <%= link_to post.user.name,
+                              user_path(post.user),
+                              class: "fw-bold text-dark text-decoration-none" %>
+                </span>
+                <span class="text-muted small ms-2">
+                  <%= l post.created_at, format: :short %>
+                </span>
+              </div>
+
+              <!-- タイトル -->
+              <div class="fw-bold text-dark mb-2">
+                <%= post.title %>
+                <% if Current.user.present? && post.user == Current.user && post.draft? %>
+                  <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
+                <% end %>
+              </div>
+
+              <!-- 本文 -->
+              <% if post.body.present? %>
+                <div class="text-dark mb-2">
+                  <%= truncate(post.body, length: 100) %>
+                </div>
+              <% end %>
+
+              <!-- 学習時間 -->
+              <div class="mb-2">
+                <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                  <i class="fa-solid fa-pen me-1"></i><%= format_study_time(post.study_time) %>
+                </span>
+              </div>
+
+              <!-- タグ -->
+              <div class="mb-3" onclick="event.stopPropagation();">
+                <% if post.tags.any? %>
+                  <% post.tags.each do |tag| %>
+                    <%= link_to tag.name,
+                                posts_path(tag_name: tag.name),
+                                class: "badge bg-light text-primary border me-1 text-decoration-none rounded-pill px-3 py-2" %>
+                  <% end %>
+                <% end %>
+              </div>
+
+              <!-- 下アイコン -->
+              <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+                <div onclick="event.stopPropagation();">
+                  <%= render "public/likes/button", post: post %>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa-regular fa-comment"></i>
+                  <span><%= post.comments.count %></span>
+                </div>
+              </div>
+
+            </div>
           </div>
-
-          <!-- コンテンツ -->
-          <div class="flex-grow-1">
-
-            <!-- タイトル + ユーザー -->
-            <div class="mb-1">
-              <span class="fw-bold"><%= post.title %></span>
-              <span class="text-muted small ms-2">
-                @<%= post.user.name %>
-              </span>
-            </div>
-
-            <!-- 本文 -->
-            <div class="text-dark mb-2">
-              <%= truncate(post.body, length: 80) %>
-            </div>
-
-            <!-- フッター -->
-            <div class="d-flex justify-content-between align-items-center">
-              <small class="text-muted">
-                学習時間：<%= post.study_time / 60 %>時間<%= post.study_time % 60 %>分
-              </small>
-            </div>
-
-          </div>
-
-        <% end %>
+        </div>
       </div>
     <% end %>
 
