@@ -14,7 +14,6 @@
   <!-- アプリ説明セクション -->
   <div class="row justify-content-center align-items-center mb-5">
     <div class="col-lg-6 mb-4 mb-lg-0">
-      <!-- Aboutページ用画像 -->
       <%= image_tag "about_studyhub.jpg",
           class: "img-fluid rounded shadow-sm w-100",
           alt: "StudyHubのアバウトページ用画像" %>
@@ -46,7 +45,6 @@
     <div class="col-md-4">
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body p-4">
-          <!-- 特徴1 -->
           <h3 class="h5 fw-bold mb-3">学習を記録できる</h3>
           <p class="text-secondary mb-0">
             その日に取り組んだ内容や学習時間を投稿し、毎日の努力を記録できます。
@@ -58,7 +56,6 @@
     <div class="col-md-4">
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body p-4">
-          <!-- 特徴2 -->
           <h3 class="h5 fw-bold mb-3">継続を見える化できる</h3>
           <p class="text-secondary mb-0">
             学習の積み重ねを振り返ることで、継続の実感を得やすくなります。
@@ -70,7 +67,6 @@
     <div class="col-md-4">
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body p-4">
-          <!-- 特徴3 -->
           <h3 class="h5 fw-bold mb-3">学習者同士で刺激を受けられる</h3>
           <p class="text-secondary mb-0">
             他のユーザーの投稿を見ることで、自分の学習意欲につなげることができます。
@@ -113,16 +109,13 @@
     </p>
 
     <div class="d-flex justify-content-center flex-wrap gap-2">
-      <!-- 新規登録ボタン -->
       <%= link_to new_user_path, class: "x-signup-btn text-center" do %>
         <i class="fa-solid fa-user-plus me-2"></i>新規登録する
       <% end %>
 
-      <!-- トップページに戻るボタン -->
       <%= link_to root_path, class: "x-login-btn text-center" do %>
         <i class="fa-solid fa-house me-2"></i>トップページへ戻る
       <% end %>
-    </div>
     </div>
   </div>
 
