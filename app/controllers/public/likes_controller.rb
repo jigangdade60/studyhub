@@ -6,6 +6,7 @@ module Public
       @liked_posts = current_user.liked_posts
                                .includes(:user)
                                .order(created_at: :desc)
+      @liked_posts = @liked_posts.page(params[:page]).per(10)
     end
     
     def create

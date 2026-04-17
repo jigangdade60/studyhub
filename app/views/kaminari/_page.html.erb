@@ -1,0 +1,9 @@
+<% if page.current? %>
+  <li class="studyhub-page-item active">
+    <span class="studyhub-page-link"><%= page %></span>
+  </li>
+<% else %>
+  <li class="studyhub-page-item">
+    <%= link_to page, url, remote: remote, rel: page.rel, class: "studyhub-page-link" %>
+  </li>
+<% end %>
