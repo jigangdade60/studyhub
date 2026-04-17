@@ -4,6 +4,7 @@ class Admin::CommentsController < ApplicationController
 
   def index
     @comments = Comment.includes(:user, :post).order(created_at: :desc)
+                        .page(params[:page]).per(10)
   end
 
   def destroy

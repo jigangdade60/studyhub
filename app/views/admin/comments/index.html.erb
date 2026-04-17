@@ -1,6 +1,7 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">コメント管理</h2>
+<div class="container py-3" style="max-width: 700px;">
+
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">コメント管理</h5>
   </div>
 
   <% if flash[:notice] %>
@@ -9,47 +10,64 @@
     </div>
   <% end %>
 
-  <% if @comments.any? %>
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>投稿ID</th>
-                <th>投稿タイトル</th>
-                <th>コメント投稿者</th>
-                <th>コメント内容</th>
-                <th>投稿日</th>
-                <th class="text-center">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @comments.each do |comment| %>
-                <tr>
-                  <td><%= comment.post.id %></td>
-                  <td>
-                    <%= link_to comment.post.title, post_path(comment.post), class: "text-decoration-none" %>
-                  </td>
-                  <td><%= comment.user.name %></td>
-                  <td style="min-width: 240px;"><%= comment.body %></td>
-                  <td><%= l(comment.created_at, format: :short) %></td>
-                  <td class="text-center">
-                    <%= link_to "削除",
-                                admin_comment_path(comment),
-                                data: { turbo_method: :delete, turbo_confirm: "このコメントを削除しますか？" },
-                                class: "btn btn-sm btn-danger" %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  <% else %>
-    <div class="alert alert-secondary mb-0">
+  <% if @comments.empty? %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
       コメントはまだありません。
     </div>
+  <% else %>
+    <% @comments.each do |comment| %>
+      <div class="bg-white border rounded-4 mb-3 x-hover">
+        <div class="p-3">
+          <div class="d-flex gap-3">
+
+            <div>
+              <%= link_to user_path(comment.user) do %>
+                <%= user_avatar(comment.user, size: 48) %>
+              <% end %>
+            </div>
+
+            <div class="flex-grow-1">
+
+              <div class="mb-1">
+                <%= link_to comment.user.name,
+                            user_path(comment.user),
+                            class: "fw-bold text-dark text-decoration-none" %>
+                <span class="text-muted small ms-2">
+                  <%= l comment.created_at, format: :short %>
+                </span>
+              </div>
+
+              <div class="fw-bold text-dark mb-2">
+                <%= link_to comment.post.title,
+                            post_path(comment.post),
+                            class: "text-dark text-decoration-none" %>
+              </div>
+
+              <div class="text-dark mb-3">
+                <%= truncate(comment.body, length: 120) %>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center text-muted small pt-2 border-top">
+                <div>
+                  投稿ID: <%= comment.post.id %>
+                </div>
+
+                <%= button_to "削除",
+              admin_comment_path(comment),
+              method: :delete,
+              data: { turbo_confirm: "このコメントを削除しますか？" },
+              form_class: "d-inline",
+              class: "btn btn-sm btn-danger rounded-pill px-3" %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
   <% end %>
+</div>
+
+<div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @comments %>
 </div>
