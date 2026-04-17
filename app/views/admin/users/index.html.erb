@@ -1,46 +1,71 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">ユーザー一覧</h2>
+<div class="container py-3" style="max-width: 700px;">
 
-    <%= button_to "ログアウト", admin_logout_path,
-          method: :delete,
-          class: "btn btn-outline-secondary" %>
-  </div>
-
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table align-middle mb-0">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>ユーザー名</th>
-              <th>メールアドレス</th>
-              <th>ステータス</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @users.each do |user| %>
-              <tr>
-                <td><%= user.id %></td>
-                <td><%= user.name %></td>
-                <td><%= user.email_address %></td>
-                <td>
-                  <% if user.is_active? %>
-                    <span class="badge text-bg-success">有効</span>
-                  <% else %>
-                    <span class="badge text-bg-secondary">退会済み</span>
-                  <% end %>
-                </td>
-                <td>
-                  <%= link_to "詳細", admin_user_path(user), class: "btn btn-sm btn-outline-primary" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+  <!-- タイトル -->
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <div>
+      <h5 class="fw-bold mb-0">ユーザー一覧</h5>
+      <p class="text-muted small mt-2">登録ユーザーを確認できます。</p>
     </div>
+
   </div>
+
+  <!-- 一覧 -->
+  <% if @users.any? %>
+    <% @users.each do |user| %>
+
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= admin_user_path(user) %>'">
+
+        <div class="p-3 w-100">
+          <div class="d-flex gap-3 align-items-center">
+
+            <!-- アイコン -->
+            <div>
+              <%= user_avatar(user, size: 48) %>
+            </div>
+
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- ：名前 + ID -->
+              <div class="mb-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="fw-bold text-dark">
+                  <%= user.name %>
+                  <span class="text-muted small ms-2">ID: <%= user.id %></span>
+                </div>
+
+                <!-- ステータス -->
+                <% if user.is_active? %>
+                  <span class="badge bg-dark rounded-pill">有効</span>
+                <% else %>
+                  <span class="badge bg-secondary rounded-pill">退会済み</span>
+                <% end %>
+              </div>
+
+              <!-- メール -->
+              <div class="text-muted small mb-2">
+                <%= user.email_address %>
+              </div>
+              
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    <% end %>
+  <% else %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      ユーザーがいません。
+    </div>
+  <% end %>
+
+</div>
+
+<!-- ページネーション -->
+<div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @users %>
 </div>

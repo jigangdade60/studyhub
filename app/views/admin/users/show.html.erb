@@ -1,9 +1,15 @@
-<div class="container py-4" style="max-width: 720px;">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">ユーザー詳細</h2>
-    <%= link_to "一覧へ戻る", admin_users_path, class: "btn btn-outline-secondary" %>
+<div class="container py-3" style="max-width: 700px;">
+
+  <!-- タイトル -->
+  <div class="mb-3 d-flex justify-content-between align-items-center">
+    <h5 class="fw-bold mb-0">ユーザー詳細</h5>
+
+    <%= link_to "一覧へ戻る",
+        admin_users_path,
+        class: "btn btn-sm btn-outline-dark rounded-pill" %>
   </div>
 
+  <!-- フラッシュ -->
   <% if flash[:notice] %>
     <div class="alert alert-success">
       <%= flash[:notice] %>
@@ -16,35 +22,58 @@
     </div>
   <% end %>
 
-  <div class="card shadow-sm border-0">
-    <div class="card-body">
-      <p><strong>ID：</strong><%= @user.id %></p>
-      <p><strong>ユーザー名：</strong><%= @user.name %></p>
-      <p><strong>メールアドレス：</strong><%= @user.email_address %></p>
-      <p>
-        <strong>ステータス：</strong>
-        <% if @user.is_active? %>
-          <span class="badge text-bg-success">有効</span>
-        <% else %>
-          <span class="badge text-bg-secondary">退会済み</span>
-        <% end %>
-      </p>
+  <!-- ユーザー情報 -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <div class="d-flex gap-3 align-items-start">
 
-      <hr>
+        <!-- アイコン -->
+        <div>
+          <%= user_avatar(@user, size: 56) %>
+        </div>
 
-      <% if @user.is_active? %>
-        <%= button_to "退会処理を行う",
-              withdraw_admin_user_path(@user),
-              method: :patch,
-              data: { turbo_confirm: "このユーザーを退会状態にしますか？" },
-              class: "btn btn-danger" %>
-      <% else %>
-        <%= button_to "有効化する",
-              activate_admin_user_path(@user),
-              method: :patch,
-              data: { turbo_confirm: "このユーザーを有効化しますか？" },
-              class: "btn btn-success" %>
-      <% end %>
+        <!-- 情報 -->
+        <div class="flex-grow-1">
+
+          <!-- 名前 -->
+          <div class="mb-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="fw-bold text-dark">
+              <%= @user.name %>
+              <span class="text-muted small ms-2">ID: <%= @user.id %></span>
+            </div>
+
+            <!-- ステータス -->
+            <% if @user.is_active? %>
+              <span class="badge bg-dark rounded-pill">有効</span>
+            <% else %>
+              <span class="badge bg-secondary rounded-pill">退会済み</span>
+            <% end %>
+          </div>
+
+          <!-- メール -->
+          <div class="text-muted small mb-3">
+            <%= @user.email_address %>
+          </div>
+
+          <!-- アクション -->
+          <div class="d-flex gap-2 flex-wrap">
+            <% if @user.is_active? %>
+              <%= button_to "退会処理",
+                    withdraw_admin_user_path(@user),
+                    method: :patch,
+                    data: { turbo_confirm: "このユーザーを退会状態にしますか？" },
+                    class: "btn btn-outline-danger rounded-pill px-4" %>
+            <% else %>
+              <%= button_to "有効化",
+                    activate_admin_user_path(@user),
+                    method: :patch,
+                    data: { turbo_confirm: "このユーザーを有効化しますか？" },
+                    class: "btn btn-outline-dark rounded-pill px-4" %>
+            <% end %>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 </div>
