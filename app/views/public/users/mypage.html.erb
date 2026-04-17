@@ -1,233 +1,304 @@
-<div class="container py-4">
-  <!-- ページタイトル -->
-  <div class="mb-4">
-    <h2 class="fw-bold text-primary">マイページ</h2>
-    <p class="text-muted mb-0">ログイン中のユーザー情報と投稿一覧を確認できます。</p>
+<div class="container py-3" style="max-width: 700px;">
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">マイページ</h5>
+  </div>
+
+  <!-- ユーザー情報 -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <div class="d-flex gap-3 align-items-start">
+        <div>
+          <%= user_avatar(@user, size: 56) %>
+        </div>
+
+        <div class="flex-grow-1">
+          <div class="mb-1">
+            <span class="fw-bold text-dark"><%= @user.name %></span>
+          </div>
+
+          <div class="text-muted small mb-2">
+            <%= @user.email_address %>
+          </div>
+
+          <!-- フォロー情報 -->
+          <div class="d-flex align-items-center gap-4 text-muted small flex-wrap mb-3">
+            <div>
+              <%= link_to following_user_path(@user), class: "text-decoration-none text-muted" do %>
+                <i class="fa-solid fa-user-plus me-1"></i>
+                <span><%= @user.following.count %> フォロー中</span>
+              <% end %>
+            </div>
+
+            <div>
+              <%= link_to followers_user_path(@user), class: "text-decoration-none text-muted" do %>
+                <i class="fa-solid fa-users me-1"></i>
+                <span><%= @user.followers.count %> フォロワー</span>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <%= link_to "編集する",
+                        edit_user_path(@user),
+                        class: "btn btn-outline-secondary rounded-pill btn-sm px-4" %>
+
+            <%= button_to "退会する",
+                          user_path(@user),
+                          method: :delete,
+                          data: { turbo_confirm: "本当に退会しますか？この操作は取り消せません。" },
+                          class: "btn btn-outline-danger rounded-pill btn-sm px-4" %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 学習サマリー -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-3">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <p class="text-muted mb-1">投稿数</p>
-          <h4 class="fw-bold mb-0"><%= @posts_count %>件</h4>
-        </div>
+  <div class="bg-white border rounded-4 p-4 mb-4 study-summary-main">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <div>
+        <h5 class="fw-bold mb-1">学習サマリー</h5>
+        <p class="text-muted small mb-0">あなたの学習状況をひと目で確認できます</p>
+      </div>
+
+      <div class="study-summary-head-icon">
+        <i class="fa-solid fa-chart-line"></i>
       </div>
     </div>
 
-    <div class="col-md-3">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <p class="text-muted mb-1">累計学習時間</p>
-          <h4 class="fw-bold mb-0"><%= format_study_time(@total_study_time) %></h4>
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-posts">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div class="study-summary-label">投稿数</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= @posts_count %><span class="study-summary-unit">件</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-3">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <p class="text-muted mb-1">今週の学習時間</p>
-          <h4 class="fw-bold mb-0"><%= format_study_time(@weekly_study_time) %></h4>
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-total">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="study-summary-label">累計時間</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= format_study_time(@total_study_time) %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-3">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <p class="text-muted mb-1">連続学習日数</p>
-          <h4 class="fw-bold mb-0"><%= @streak_days %>日</h4>
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-weekly">
+              <i class="fa-solid fa-fire"></i>
+            </div>
+            <div class="study-summary-label">今週の時間</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= format_study_time(@weekly_study_time) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-streak">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="study-summary-label">連続日数</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= @streak_days %><span class="study-summary-unit">日</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- 学習グラフ -->
-  <div class="mb-4">
-    <div class="card shadow-sm">
-      <div class="card-header bg-light">
-        直近7日間の学習時間
-      </div>
-      <div class="card-body">
-        <canvas id="studyTimeChart"></canvas>
-      </div>
-    </div>
+  <div class="bg-white border rounded-4 p-3 mb-4">
+    <div class="fw-bold mb-2">直近7日間の学習時間</div>
+    <canvas id="studyTimeChart"></canvas>
   </div>
 
-  <div class="row">
-    <!-- ユーザー情報 -->
-    <div class="col-md-4 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          ユーザー情報
-        </div>
-        <div class="card-body">
+  <!-- タブ -->
+  <div class="d-flex gap-2 mb-3">
+    <button type="button"
+            id="posts-tab-btn"
+            class="x-main-btn rounded-pill px-4"
+            onclick="showMyPageTab('posts')">
+      投稿
+    </button>
 
-          <div class="text-center mb-3">
-            <%= image_tag(@user.profile_image.attached? ? @user.profile_image : "no_image.jpg",
-                          size: "120x120",
-                          class: "rounded-circle border") %>
-          </div>
-          
-          <p>
-            <strong>氏名：</strong>
-            <%= @user.name %>
-          </p>
+    <button type="button"
+            id="groups-tab-btn"
+            class="btn btn-outline-secondary rounded-pill px-4"
+            onclick="showMyPageTab('groups')">
+      もくもく会
+    </button>
+  </div>
 
-          <p>
-            <strong>メールアドレス：</strong>
-            <%= @user.email_address %>
-          </p>
-
-          <div class="d-grid gap-2 mt-4">
-            <%= link_to "編集する", edit_user_path(@user), class: "btn btn-outline-primary" %>
-
-            <%= button_to "退会する",
-                          user_path(@user),
-                          method: :delete,
-                          data: { turbo_confirm: "本当に退会しますか？この操作は取り消せません。" },
-                          class: "btn btn-outline-danger" %>
-          </div>
-        </div>
-      </div>
+  <!-- 投稿タブ -->
+  <div id="posts-tab-content">
+    <div class="mb-3">
+      <h5 class="fw-bold mb-0">自分の投稿一覧</h5>
     </div>
 
-    <!-- 自分の投稿一覧 -->
-    <div class="col-md-8">
-      <div class="card shadow-sm">
-        <div class="card-header bg-light">
-          自分の投稿一覧
-        </div>
-        <div class="card-body">
-          <% if @posts.any? %>
-            <div class="table-responsive">
-              <table class="table table-hover align-middle">
-                <thead>
-                  <tr>
-                    <th>投稿ID</th>
-                    <th>学習時間</th>
-                    <th>投稿日</th>
-                    <th>詳細</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @posts.each do |post| %>
-                    <tr>
-                      <td><%= post.id %></td>
-                      <td><%= format_study_time(post.study_time) %></td>
-                      <td><%= post.created_at.strftime("%Y/%m/%d %H:%M") %></td>
-                      <td>
-                        <%= link_to "見る", post_path(post), class: "btn btn-sm btn-outline-secondary" %>
-                      </td>
-                    </tr>
+    <% if @posts.empty? %>
+      <div class="bg-white border rounded-4 p-4 text-muted text-center">
+        まだ投稿がありません。
+      </div>
+    <% else %>
+      <% @posts.each do |post| %>
+        <div class="bg-white border rounded-4 mb-3 x-hover"
+             style="cursor: pointer;"
+             onclick="window.location='<%= post_path(post) %>'">
+
+          <div class="p-3">
+            <div class="d-flex gap-3">
+              <div onclick="event.stopPropagation();">
+                <%= link_to user_path(post.user) do %>
+                  <%= user_avatar(post.user, size: 48) %>
+                <% end %>
+              </div>
+
+              <div class="flex-grow-1">
+                <div class="mb-1">
+                  <span onclick="event.stopPropagation();">
+                    <%= link_to post.user.name,
+                                user_path(post.user),
+                                class: "fw-bold text-dark text-decoration-none" %>
+                  </span>
+                  <span class="text-muted small ms-2">
+                    <%= l post.created_at, format: :short %>
+                  </span>
+                </div>
+
+                <div class="fw-bold text-dark mb-2">
+                  <%= post.title %>
+                  <% if Current.user.present? && post.user == Current.user && post.draft? %>
+                    <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
                   <% end %>
-                </tbody>
-              </table>
+                </div>
+
+                <% if post.body.present? %>
+                  <div class="text-dark mb-2">
+                    <%= truncate(post.body, length: 80) %>
+                  </div>
+                <% end %>
+
+                <div class="mb-2">
+                  <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                    <i class="fa-solid fa-pen me-1"></i><%= format_study_time(post.study_time) %>
+                  </span>
+                </div>
+
+                <% if post.tags.any? %>
+                  <div class="mb-2" onclick="event.stopPropagation();">
+                    <% post.tags.each do |tag| %>
+                      <%= link_to tag.name,
+                                  posts_path(tag_name: tag.name),
+                                  class: "badge bg-light text-primary border me-1 text-decoration-none rounded-pill px-3 py-2" %>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+                  <div onclick="event.stopPropagation();">
+                    <%= render "public/likes/button", post: post %>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-1">
+                    <i class="fa-regular fa-comment"></i>
+                    <span><%= post.comments.count %></span>
+                  </div>
+                </div>
+              </div>
             </div>
-          <% else %>
-            <p class="text-muted mb-0">まだ投稿がありません。</p>
-          <% end %>
+          </div>
         </div>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
   </div>
 
-  <!-- もくもく会セクション -->
-  <div class="mt-5">
-    <div class="mb-4">
-      <h3 class="fw-bold text-primary">もくもく会情報</h3>
-      <p class="text-muted mb-0">作成したもくもく会と参加中のもくもく会を確認できます。</p>
+  <!-- もくもく会タブ -->
+  <div id="groups-tab-content" style="display: none;">
+    <div class="mb-3">
+      <h5 class="fw-bold mb-0">参加中のもくもく会</h5>
     </div>
 
-    <div class="row">
-      <!-- 作成したもくもく会 -->
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm h-100">
-          <div class="card-header bg-primary text-white">
-            作成したもくもく会
-          </div>
-          <div class="card-body">
-            <% if @owned_groups.any? %>
-              <div class="d-flex flex-column gap-3">
-                <% @owned_groups.each do |group| %>
-                  <div class="border rounded p-3">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h5 class="fw-bold mb-0"><%= group.name %></h5>
-                      <span class="badge text-bg-light border">
-                        <%= group.members.count %> / <%= group.max_members %>人
-                      </span>
-                    </div>
+    <% if @joined_groups.empty? %>
+      <div class="bg-white border rounded-4 p-4 text-muted text-center">
+        まだ参加中のもくもく会はありません
+      </div>
+    <% else %>
+      <% @joined_groups.each do |group| %>
+        <div class="bg-white border rounded-4 mb-3 x-hover"
+             style="cursor: pointer;"
+             onclick="window.location='<%= group_path(group) %>'">
 
-                    <div class="mb-2">
-                      <span class="badge text-bg-primary"><%= group.study_theme %></span>
-                    </div>
-
-                    <p class="text-secondary mb-2">
-                      <%= truncate(group.description, length: 80) %>
-                    </p>
-
-                    <div class="d-flex gap-2 flex-wrap">
-                      <%= link_to "詳細", group_path(group), class: "btn btn-sm btn-outline-primary" %>
-                      <%= link_to "申請管理", requests_group_path(group), class: "btn btn-sm btn-outline-secondary" %>
-                    </div>
-                  </div>
-                <% end %>
+          <div class="p-3">
+            <div class="d-flex gap-3">
+              <div>
+                <%= user_avatar(group.owner, size: 48) %>
               </div>
-            <% else %>
-              <p class="text-muted mb-0">まだ作成したもくもく会はありません。</p>
-            <% end %>
+
+              <div class="flex-grow-1">
+                <div class="fw-bold mb-2"><%= group.name %></div>
+
+                <div class="text-muted small">
+                  <i class="fa-solid fa-user-group me-1"></i>
+                  <%= group.members.count %>人参加中
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- 参加中のもくもく会 -->
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm h-100">
-          <div class="card-header bg-success text-white">
-            参加中のもくもく会
-          </div>
-          <div class="card-body">
-            <% if @joined_groups.any? %>
-              <div class="d-flex flex-column gap-3">
-                <% @joined_groups.each do |group| %>
-                  <div class="border rounded p-3">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                      <h5 class="fw-bold mb-0"><%= group.name %></h5>
-                      <span class="badge text-bg-light border">
-                        <%= group.members.count %> / <%= group.max_members %>人
-                      </span>
-                    </div>
-
-                    <div class="mb-2">
-                      <span class="badge text-bg-success"><%= group.study_theme %></span>
-                    </div>
-
-                    <p class="text-muted mb-1">
-                      作成者：<%= group.owner.name %>
-                    </p>
-
-                    <p class="text-secondary mb-2">
-                      <%= truncate(group.description, length: 80) %>
-                    </p>
-
-                    <%= link_to "詳細を見る", group_path(group), class: "btn btn-sm btn-outline-primary" %>
-                  </div>
-                <% end %>
-              </div>
-            <% else %>
-              <p class="text-muted mb-0">まだ参加中のもくもく会はありません。</p>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
 
 <script>
+  function showMyPageTab(tab) {
+    const postsTab = document.getElementById("posts-tab-content");
+    const groupsTab = document.getElementById("groups-tab-content");
+    const postsBtn = document.getElementById("posts-tab-btn");
+    const groupsBtn = document.getElementById("groups-tab-btn");
+
+    if (!postsTab || !groupsTab || !postsBtn || !groupsBtn) return;
+
+    if (tab === "posts") {
+      postsTab.style.display = "block";
+      groupsTab.style.display = "none";
+      postsBtn.className = "x-main-btn rounded-pill px-4";
+      groupsBtn.className = "btn btn-outline-secondary rounded-pill px-4";
+    } else {
+      postsTab.style.display = "none";
+      groupsTab.style.display = "block";
+      postsBtn.className = "btn btn-outline-secondary rounded-pill px-4";
+      groupsBtn.className = "x-main-btn rounded-pill px-4";
+    }
+  }
+
   document.addEventListener("turbo:load", function () {
+    showMyPageTab("posts");
+
     const canvas = document.getElementById("studyTimeChart");
     if (!canvas) return;
 
@@ -246,8 +317,8 @@
           label: "学習時間（分）",
           data: data,
           borderWidth: 1,
-          backgroundColor: "rgba(54, 162, 235, 0.5)",
-          borderColor: "rgba(54, 162, 235, 1)"
+          backgroundColor: "rgba(29, 155, 240, 0.2)",
+          borderColor: "rgba(29, 155, 240, 1)"
         }]
       },
       options: {
