@@ -874,3 +874,122 @@ turbo-frame {
 .studyhub-page-next {
   padding: 0 16px;
 }
+
+.studyhub-footer {
+  margin-top: 64px;
+  padding: 32px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+}
+
+/* ロゴ部分 */
+.studyhub-logo-text {
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: #212529;
+}
+
+/* リンク */
+.footer-links a {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin: 0 4px;
+  transition: 0.2s;
+}
+
+.footer-links a:hover {
+  color: #1d9bf0;
+  text-decoration: underline;
+}
+
+/* 区切り */
+.footer-links span {
+  color: #adb5bd;
+  font-size: 0.8rem;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.app-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.studyhub-footer {
+  margin-top: 64px;
+  padding: 32px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+}
+
+.app-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.studyhub-footer {
+  margin-top: 64px;
+  padding: 32px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+}
+
+.studyhub-logo-text {
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  color: #212529;
+}
+
+.studyhub-icon {
+  color: #1da1f2;
+  font-size: 1.4rem;
+}
+
+.footer-links a {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin: 0 4px;
+  transition: 0.2s;
+}
+
+.footer-links a:hover {
+  color: #1da1f2;
+  text-decoration: underline;
+}
+
+.footer-links span {
+  color: #adb5bd;
+  font-size: 0.8rem;
+}
