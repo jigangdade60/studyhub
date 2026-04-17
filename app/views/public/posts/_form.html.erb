@@ -1,12 +1,15 @@
-<div class="container pt-1 pb-4" style="max-width: 640px;">
-  <div class="bg-white">
+<div class="container py-4" style="max-width: 640px;">
+  <div class="border rounded-4 bg-white">
     <div class="p-4">
 
       <!-- タイトル -->
       <div class="mb-4">
-        <h5 class="fw-bold mb-1">投稿を作成</h5>
+        <h5 class="fw-bold mb-1">
+          <%= post.new_record? ? "投稿を作成" : "投稿を編集" %>
+        </h5>
         <p class="text-muted small mb-0">
-          今日学習した内容を記録して、あとから振り返れるようにしましょう。
+          <%= post.new_record? ? "今日学習した内容を記録して、あとから振り返れるようにしましょう。" :
+                                  "投稿内容を編集して、より良い記録にしましょう。" %>
         </p>
       </div>
 

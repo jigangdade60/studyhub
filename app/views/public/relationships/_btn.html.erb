@@ -1,15 +1,18 @@
 <% unless current_user == user %>
   <% relationship = current_user.active_relationships.find_by(followed_id: user.id) %>
 
-  <% if relationship.present? %>
-    <%= button_to "フォロー解除",
-                  relationship_path(relationship, followed_id: user.id),
-                  method: :delete,
-                  class: "btn btn-outline-secondary btn-sm" %>
-  <% else %>
-    <%= button_to "フォローする",
-                  relationships_path(followed_id: user.id),
-                  method: :post,
-                  class: "btn btn-primary btn-sm" %>
-  <% end %>
+  <div class="d-inline-block">
+    <% if relationship.present? %>
+      <%= button_to "フォロー解除",
+                    relationship_path(relationship, followed_id: user.id),
+                    method: :delete,
+                    class: "btn btn-light rounded-pill px-4 fw-bold border" %>
+    <% else %>
+      <%= button_to "フォローする",
+                    relationships_path(followed_id: user.id),
+                    method: :post,
+                    class: "btn rounded-pill px-4 fw-bold text-white border-0",
+                    style: "background-color: #1d9bf0;" %>
+    <% end %>
+  </div>
 <% end %>

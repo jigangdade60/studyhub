@@ -78,7 +78,7 @@
         <p class="mb-0">あなたは作成者です</p>
         <%= link_to "申請管理",
                     requests_group_path(@group),
-                    class: "x-main-btn rounded-pill px-4" %>
+                    class: "x-main-btn rounded-pill px-4 text-decoration-none" %>
       </div>
 
     <% elsif @group.joined_by?(Current.user) %>
