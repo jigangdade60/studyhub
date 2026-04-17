@@ -993,3 +993,21 @@ turbo-frame {
   color: #adb5bd;
   font-size: 0.8rem;
 }
+
+/* 画面全体を縦に伸ばす */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+/* メインエリアを縦構造にする */
+.app-main-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* コンテンツが余白を埋める */
+.app-main {
+  flex: 1;
+}
