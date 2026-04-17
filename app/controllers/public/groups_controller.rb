@@ -10,6 +10,7 @@ class Public::GroupsController < ApplicationController
     @groups = Group.includes(:owner, :members)
                    .search_by_keyword(@keyword)
                    .order(created_at: :desc)
+    @groups = @groups.page(params[:page]).per(10)
   end
 
   def show

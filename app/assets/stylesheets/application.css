@@ -809,3 +809,68 @@ turbo-frame {
     font-size: 0.75rem;
   }
 }
+/* =========================
+   StudyHub Pagination
+========================= */
+.studyhub-pagination-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.studyhub-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.studyhub-page-item {
+  margin: 0;
+}
+
+.studyhub-page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #dbe1e8;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.studyhub-page-link:hover {
+  background: #f3f8ff;
+  border-color: #bcd8ff;
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.studyhub-page-item.active .studyhub-page-link {
+  background: #1d9bf0;
+  border-color: #1d9bf0;
+  color: #ffffff;
+}
+
+.studyhub-page-item.disabled .studyhub-page-link {
+  background: #f8f9fa;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.studyhub-page-prev,
+.studyhub-page-next {
+  padding: 0 16px;
+}

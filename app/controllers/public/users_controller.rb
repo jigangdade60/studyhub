@@ -29,25 +29,28 @@ class Public::UsersController < ApplicationController
     if authenticated? && Current.user.present?
       @users = @users.or(User.where(id: Current.user.id)).distinct
     end
+
+    @users = @users.page(params[:page]).per(10)
   end
 
   def show
-    @posts = @user.posts.order(created_at: :desc)
+    all_posts = @user.posts.order(created_at: :desc)
+    @posts = all_posts.page(params[:page]).per(10)
 
     @joined_groups = @user.joined_groups
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    @posts_count = @posts.count
-    @total_study_time = @posts.sum(:study_time)
-    @weekly_study_time = @posts.where(created_at: Time.current.all_week).sum(:study_time)
-    @streak_days = calculate_streak_days(@posts)
+    @posts_count = all_posts.count
+    @total_study_time = all_posts.sum(:study_time)
+    @weekly_study_time = all_posts.where(created_at: Time.current.all_week).sum(:study_time)
+    @streak_days = calculate_streak_days(all_posts)
 
     today = Date.current
     days = (6.days.ago.to_date..today).to_a
 
     @weekly_study_chart_data = days.map do |day|
-      total_minutes = @posts.where(created_at: day.all_day).sum(:study_time)
+      total_minutes = all_posts.where(created_at: day.all_day).sum(:study_time)
 
       {
         label: %w[日 月 火 水 木 金 土][day.wday],
@@ -58,7 +61,8 @@ class Public::UsersController < ApplicationController
 
   def mypage
     @user = Current.user
-    @posts = @user.posts.order(created_at: :desc)
+    all_posts = @user.posts.order(created_at: :desc)
+    @posts = all_posts.page(params[:page]).per(10)
 
     @owned_groups = @user.owned_groups
                          .includes(:members)
@@ -68,16 +72,16 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    @posts_count = @posts.count
-    @total_study_time = @posts.sum(:study_time)
-    @weekly_study_time = @posts.where(created_at: Time.current.all_week).sum(:study_time)
-    @streak_days = calculate_streak_days(@posts)
+    @posts_count = all_posts.count
+    @total_study_time = all_posts.sum(:study_time)
+    @weekly_study_time = all_posts.where(created_at: Time.current.all_week).sum(:study_time)
+    @streak_days = calculate_streak_days(all_posts)
 
     today = Date.current
     days = (6.days.ago.to_date..today).to_a
 
     @weekly_study_chart_data = days.map do |day|
-      total_minutes = @posts.where(created_at: day.all_day).sum(:study_time)
+      total_minutes = all_posts.where(created_at: day.all_day).sum(:study_time)
 
       {
         label: %w[日 月 火 水 木 金 土][day.wday],
@@ -112,6 +116,8 @@ class Public::UsersController < ApplicationController
     if authenticated? && Current.user.present? && @user == Current.user
       @users = @user.following
     end
+
+    @users = @users.page(params[:page]).per(10)
   end
 
   def followers
@@ -120,6 +126,8 @@ class Public::UsersController < ApplicationController
     if authenticated? && Current.user.present? && @user == Current.user
       @users = @user.followers
     end
+
+    @users = @users.page(params[:page]).per(10)
   end
 
   private

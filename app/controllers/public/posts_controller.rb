@@ -51,6 +51,8 @@ class Public::PostsController < ApplicationController
       else
         filtered_posts.order(created_at: :desc)
       end
+      
+    @posts = @posts.page(params[:page]).per(10)
   end
 
   def show

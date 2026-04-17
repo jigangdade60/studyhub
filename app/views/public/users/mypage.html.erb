@@ -235,6 +235,9 @@
       <% end %>
     <% end %>
   </div>
+  <div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @posts %>
+  </div>
 
   <!-- もくもく会タブ -->
   <div id="groups-tab-content" style="display: none;">
@@ -273,6 +276,7 @@
     <% end %>
   </div>
 </div>
+
 
 <script>
   function showMyPageTab(tab) {

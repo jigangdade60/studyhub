@@ -3,6 +3,7 @@ class Public::NotificationsController < ApplicationController
 
   def index
     @notifications = Current.user.received_notifications.recent
+    @notifications = @notifications.page(params[:page]).per(10)
   end
 
   def read
