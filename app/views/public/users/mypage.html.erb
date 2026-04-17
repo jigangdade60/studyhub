@@ -41,13 +41,13 @@
           <div class="d-flex gap-2 flex-wrap">
             <%= link_to "編集する",
                         edit_user_path(@user),
-                        class: "btn btn-outline-secondary rounded-pill btn-sm px-4" %>
+                        class: "btn btn-outline-secondary rounded-pill px-4" %>
 
             <%= button_to "退会する",
                           user_path(@user),
                           method: :delete,
                           data: { turbo_confirm: "本当に退会しますか？この操作は取り消せません。" },
-                          class: "btn btn-outline-danger rounded-pill btn-sm px-4" %>
+                          class: "btn btn-outline-danger rounded-pill px-4" %>
           </div>
         </div>
       </div>

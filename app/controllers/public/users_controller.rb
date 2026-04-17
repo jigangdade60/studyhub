@@ -33,6 +33,27 @@ class Public::UsersController < ApplicationController
 
   def show
     @posts = @user.posts.order(created_at: :desc)
+
+    @joined_groups = @user.joined_groups
+                          .includes(:owner, :members)
+                          .order(created_at: :desc)
+
+    @posts_count = @posts.count
+    @total_study_time = @posts.sum(:study_time)
+    @weekly_study_time = @posts.where(created_at: Time.current.all_week).sum(:study_time)
+    @streak_days = calculate_streak_days(@posts)
+
+    today = Date.current
+    days = (6.days.ago.to_date..today).to_a
+
+    @weekly_study_chart_data = days.map do |day|
+      total_minutes = @posts.where(created_at: day.all_day).sum(:study_time)
+
+      {
+        label: %w[日 月 火 水 木 金 土][day.wday],
+        minutes: total_minutes
+      }
+    end
   end
 
   def mypage
