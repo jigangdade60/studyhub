@@ -1,17 +1,19 @@
-<div class="container py-4" style="max-width: 700px;">
-  <!-- ページタイトル -->
-  <div class="mb-4">
-    <h2 class="fw-bold text-primary">ユーザー情報編集</h2>
-    <p class="text-muted mb-0">登録情報を更新できます。</p>
-  </div>
+<div class="container py-4" style="max-width: 640px;">
+  <div class="border rounded-4 bg-white">
+    <div class="p-4">
 
-  <div class="card shadow-sm">
-    <div class="card-body">
+      <!-- タイトル -->
+      <div class="mb-4 text-center">
+        <h5 class="fw-bold mb-1">ユーザー情報編集</h5>
+        <p class="text-muted small mb-0">登録情報を更新できます。</p>
+      </div>
+
       <%= form_with model: @user, local: true do |f| %>
-        <!-- エラーメッセージ表示 -->
+        <!-- エラーメッセージ -->
         <% if @user.errors.any? %>
-          <div class="alert alert-danger">
-            <ul class="mb-0">
+          <div class="alert alert-danger py-2 small rounded-3">
+            <h6 class="fw-bold mb-2"><%= @user.errors.count %>件のエラーがあります</h6>
+            <ul class="mb-0 ps-3">
               <% @user.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
               <% end %>
@@ -19,62 +21,78 @@
           </div>
         <% end %>
 
-        <!-- 氏名 -->
+        <!-- ユーザー名 -->
         <div class="mb-3">
-          <%= f.label :name, "氏名", class: "form-label" %>
-          <%= f.text_field :name, class: "form-control" %>
+          <%= f.label :name, "氏名", class: "form-label fw-semibold small text-muted" %>
+          <%= f.text_field :name,
+                           class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                           placeholder: "氏名を入力" %>
         </div>
 
         <!-- メールアドレス -->
         <div class="mb-3">
-          <%= f.label :email_address, "メールアドレス", class: "form-label" %>
-          <%= f.email_field :email_address, class: "form-control" %>
+          <%= f.label :email_address, "メールアドレス", class: "form-label fw-semibold small text-muted" %>
+          <%= f.email_field :email_address,
+                            class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                            placeholder: "メールアドレスを入力" %>
         </div>
 
         <!-- プロフィール画像 -->
         <div class="mb-3">
-          <%= f.label :profile_image, "プロフィール画像", class: "form-label" %>
-          <%= f.file_field :profile_image, class: "form-control", accept: "image/*" %>
+          <%= f.label :profile_image, "プロフィール画像", class: "form-label fw-semibold small text-muted" %>
+          <%= f.file_field :profile_image,
+                           class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                           accept: "image/*" %>
         </div>
 
         <!-- プロフィール公開設定 -->
         <div class="mb-3">
-          <label class="form-label">プロフィール公開設定</label>
+          <label class="form-label fw-semibold small text-muted">プロフィール公開設定</label>
 
-          <div class="form-check">
-            <%= f.radio_button :is_public, true, class: "form-check-input", id: "user_is_public_true" %>
-            <%= f.label :is_public_true, "公開", class: "form-check-label" %>
+          <div class="bg-light rounded-4 px-4 py-3">
+            <div class="form-check mb-2">
+              <%= f.radio_button :is_public, true, class: "form-check-input", id: "user_is_public_true" %>
+              <%= f.label :is_public_true, "公開", class: "form-check-label" %>
+            </div>
+
+            <div class="form-check mb-0">
+              <%= f.radio_button :is_public, false, class: "form-check-input", id: "user_is_public_false" %>
+              <%= f.label :is_public_false, "非公開", class: "form-check-label" %>
+            </div>
           </div>
 
-          <div class="form-check">
-            <%= f.radio_button :is_public, false, class: "form-check-input", id: "user_is_public_false" %>
-            <%= f.label :is_public_false, "非公開", class: "form-check-label" %>
-          </div>
-
-          <div class="form-text">
-            非公開にすると、他のユーザーはあなたのプロフィールを閲覧できません。
-          </div>
+          <div class="form-text">非公開にすると、他のユーザーはあなたのプロフィールを閲覧できません。</div>
         </div>
 
         <!-- パスワード -->
         <div class="mb-3">
-          <%= f.label :password, "新しいパスワード", class: "form-label" %>
-          <%= f.password_field :password, class: "form-control" %>
+          <%= f.label :password, "新しいパスワード", class: "form-label fw-semibold small text-muted" %>
+          <%= f.password_field :password,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "変更する場合のみ入力" %>
           <div class="form-text">変更しない場合は空欄のままで大丈夫です。</div>
         </div>
 
         <!-- パスワード確認 -->
-        <div class="mb-3">
-          <%= f.label :password_confirmation, "新しいパスワード（確認用）", class: "form-label" %>
-          <%= f.password_field :password_confirmation, class: "form-control" %>
+        <div class="mb-4">
+          <%= f.label :password_confirmation, "新しいパスワード（確認用）", class: "form-label fw-semibold small text-muted" %>
+          <%= f.password_field :password_confirmation,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "もう一度入力" %>
         </div>
 
         <!-- ボタン -->
-        <div class="d-flex gap-2">
-          <%= f.submit "更新する", class: "btn btn-primary" %>
-          <%= link_to "戻る", mypage_path, class: "btn btn-outline-secondary" %>
+        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+          <%= link_to mypage_path, class: "btn btn-light rounded-pill px-4" do %>
+            <i class="fa-solid fa-arrow-left me-2"></i>戻る
+          <% end %>
+
+          <%= f.submit "更新する",
+                       class: "btn rounded-pill px-4 fw-bold text-white",
+                       style: "background-color: #1d9bf0;" %>
         </div>
       <% end %>
+
     </div>
   </div>
 </div>
