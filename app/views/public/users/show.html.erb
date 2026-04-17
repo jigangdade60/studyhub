@@ -180,7 +180,7 @@
     </button>
   </div>
 
-  <!-- 投稿タブ -->
+    <!-- 投稿タブ -->
   <div id="posts-tab-content">
     <div class="mb-3">
       <h5 class="fw-bold mb-0"><%= @user.name %>さんの投稿一覧</h5>
@@ -257,10 +257,11 @@
           </div>
         </div>
       <% end %>
+
+      <div class="mt-0 mb-5 d-flex justify-content-center">
+        <%= paginate @posts %>
+      </div>
     <% end %>
-  </div>
-  <div class="mt-0 mb-5 d-flex justify-content-center">
-  <%= paginate @posts %>
   </div>
   
 
