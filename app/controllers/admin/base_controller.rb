@@ -1,12 +1,13 @@
 class Admin::BaseController < ApplicationController
-    include Authentication
-    before_action :require_admin_authentication
+  skip_before_action :require_authentication
+  before_action :require_admin_authentication
 
-    private
+  private
 
-    def require_admin_authentication
-      resume_session
-      redirect_to admin_login_path, alert: "管理者ログインが必要です。" unless current_admin.present?
-    end
-  
+  def require_admin_authentication
+    resume_session
+    return if current_admin.present?
+
+    redirect_to admin_login_path, alert: "管理者ログインが必要です。"
+  end
 end
