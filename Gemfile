@@ -68,3 +68,7 @@ group :production do
 end
 
 gem "kaminari"
+
+group :development do
+  gem 'faker'
+end
