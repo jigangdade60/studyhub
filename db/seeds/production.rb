@@ -18,8 +18,8 @@ demo_user = User.find_or_create_by!(email_address: "demo@studyhub.com") do |user
   user.demo = true
 end
 
-unless demo_user.avatar.attached?
-  demo_user.avatar.attach(
+unless demo_user.profile_image.attached?
+  demo_user.profile_image.attach(
     io: File.open(Rails.root.join("db/seed_images/demo_user.png")),
     filename: "demo_user.png",
     content_type: "image/png"
@@ -67,7 +67,7 @@ if Post.where(demo: true).empty?
   # タグ紐付け
   if defined?(Tag) && post1.respond_to?(:tags)
     [post1, post2, post3].each do |post|
-      post.tags << tags.sample(1..2)
+      post.tags = tags.sample(rand(1..2))
     end
   end
 
