@@ -100,7 +100,7 @@ posts.each do |post|
     Comment.create!(
       user: users.sample,
       post: post,
-      content: Faker::Lorem.sentence(word_count: 12),
+      body: Faker::Lorem.sentence(word_count: 12),
       created_at: rand(1..5).days.ago
     )
   end
@@ -113,7 +113,7 @@ Like.all.each do |like|
   Notification.find_or_create_by!(
     recipient: like.post.user,
     actor: like.user,
-    action: "like",
+    action: "liked",
     notifiable: like
   )
 end
@@ -125,7 +125,7 @@ Relationship.all.each do |rel|
   Notification.find_or_create_by!(
     recipient: rel.followed,
     actor: rel.follower,
-    action: "follow",
+    action: "followed",
     notifiable: rel
   )
 end
@@ -139,7 +139,7 @@ Comment.all.each do |comment|
   Notification.find_or_create_by!(
     recipient: comment.post.user,
     actor: comment.user,
-    action: "comment",
+    action: "commented",
     notifiable: comment
   )
 end
