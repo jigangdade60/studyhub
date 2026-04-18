@@ -1,0 +1,79 @@
+<div class="container py-3" style="max-width: 700px;">
+
+  <!-- 戻る -->
+  <div class="mb-3">
+    <%= link_to group_path(@group), class: "text-decoration-none text-muted" do %>
+      ← 戻る
+    <% end %>
+  </div>
+
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-1">参加申請</h5>
+    <p class="text-muted small mb-0">
+      「<%= @group.name %>」の申請を管理
+    </p>
+  </div>
+
+  <!-- 人数 -->
+  <div class="mb-3">
+    <span class="badge text-bg-light border">
+      <%= @group.members.count %> / <%= @group.max_members %> 人
+    </span>
+  </div>
+
+  <% if @requests.empty? %>
+    <div class="text-center text-muted py-5">
+      申請はまだありません
+    </div>
+  <% else %>
+
+    <div class="bg-white border rounded-4">
+
+      <% @requests.each do |request| %>
+        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+
+          <!-- 左：ユーザー情報 -->
+          <div class="d-flex align-items-center gap-3">
+
+            <!-- アイコン -->
+            <%= user_avatar(request.user, size: 45) %>
+
+            <!-- 名前 + 日時 -->
+            <div>
+              <div class="fw-bold">
+                <%= request.user.name %>
+              </div>
+              <div class="text-muted small">
+                <%= l request.created_at, format: :short %>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右：ボタン -->
+          <div class="d-flex gap-2">
+
+            <% if @group.full? %>
+              <button class="btn btn-sm btn-secondary" disabled>
+                定員
+              </button>
+            <% else %>
+              <%= button_to "承認",
+                            approve_group_join_request_path(request),
+                            method: :patch,
+                            class: "btn btn-sm btn-primary rounded-pill" %>
+            <% end %>
+
+            <%= button_to "拒否",
+                          reject_group_join_request_path(request),
+                          method: :patch,
+                          class: "btn btn-sm btn-outline-danger rounded-pill" %>
+          </div>
+
+        </div>
+      <% end %>
+
+    </div>
+
+  <% end %>
+</div>

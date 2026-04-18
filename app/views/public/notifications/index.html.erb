@@ -1,0 +1,57 @@
+<div class="container py-3" style="max-width: 700px;">
+
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">通知一覧</h5>
+  </div>
+
+  <% if @notifications.empty? %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      通知はまだありません
+    </div>
+  <% else %>
+
+    <% @notifications.each do |notification| %>
+      <div class="rounded-4 mb-3 x-hover"
+           style="<%= notification.read? ? 'background-color: #ffffff; border: 1px solid #dee2e6;' : 'background-color: #eff6ff; border: 1px solid #1d9bf0;' %>">
+
+        <%= link_to read_notification_path(notification),
+                    data: { turbo_method: :patch },
+                    class: "d-flex gap-3 text-decoration-none text-reset p-3" do %>
+
+          <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+            <% if notification.action == "message" %>
+              <i class="fa-solid fa-envelope" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "commented" %>
+              <i class="fa-regular fa-comment" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "liked" %>
+              <i class="fa-solid fa-heart" style="color: #e0245e;"></i>
+            <% elsif notification.action == "posted" %>
+              <i class="fa-regular fa-pen-to-square" style="color: #1d9bf0;"></i>
+            <% elsif notification.action == "followed" %>
+              <i class="fa-solid fa-user-plus" style="color: #17bf63;"></i>
+            <% else %>
+              <i class="fa-regular fa-bell" style="color: #6c757d;"></i>
+            <% end %>
+          </div>
+
+          <div class="flex-grow-1">
+            <div class="mb-1">
+              <span class="fw-bold"><%= notification.message %></span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                <%= l notification.created_at, format: :short %>
+              </small>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>
+<div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @notifications %>
+</div>

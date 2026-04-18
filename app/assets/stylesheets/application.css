@@ -1,55 +1,887 @@
+/* ===== Bootstrap Color Override ===== */
+:root {
+  --bs-primary: #1d9bf0;
+  --bs-primary-rgb: 29, 155, 240;
+  --bs-primary-hover: #1a8cd8;
+}
+
+/* ===== Header ===== */
+.studyhub-header {
+  background-color: #ffffff;
+  z-index: 1030;
+}
+
+.studyhub-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f1419;
+  text-decoration: none;
+}
+
+.studyhub-logo i {
+  font-size: 1.5rem;
+  color: #1d9bf0;
+}
+
+.studyhub-logo:hover {
+  color: #0f1419;
+  opacity: 0.9;
+}
+
+/* ===== Nav Link ===== */
+.x-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px !important;
+  border-radius: 9999px;
+  color: #0f1419 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.x-nav-link i {
+  font-size: 1.1rem;
+  width: 18px;
+  text-align: center;
+}
+
+.x-nav-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+.profile-link img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ===== Notification Badge ===== */
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  transform: translate(50%, -50%);
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background-color: #1d9bf0;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid #fff;
+}
+
+/* ===== Buttons ===== */
+.x-signup-btn,
+.x-post-btn,
+.x-create-group-btn {
+  background-color: #1d9bf0;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 9999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.x-signup-btn:hover,
+.x-post-btn:hover,
+.x-create-group-btn:hover {
+  background-color: #1a8cd8;
+  color: #ffffff !important;
+}
+
+.x-signup-btn {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+}
+
+.x-login-btn,
+.x-logout-btn {
+  background-color: #fff;
+  color: #0f1419 !important;
+  border: 1px solid #cfd9de;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.x-login-btn:hover,
+.x-logout-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+/* ===== Top Page Buttons ===== */
+.top-page .x-signup-btn,
+.top-page .x-login-btn {
+  width: auto;
+  min-width: 140px;
+  max-width: 200px;
+}
+
+.avatar-icon {
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ===== Layout ===== */
+.app-shell {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  flex-shrink: 0;
+}
+
+.app-main-area {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.app-main {
+  min-width: 0;
+  flex: 1;
+}
+
+@media (min-width: 992px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    background-color: #ffffff;
+  }
+
+  .app-sidebar {
+    width: 260px;
+    border-right: 1px solid #e6ecf0;
+    background-color: #ffffff;
+    min-height: 100vh;
+  }
+
+  .app-main-area {
+    background-color: #ffffff;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-shell {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+}
+
+/* ===== Sidebar ===== */
+.x-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 12px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.x-logo-link {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  color: #0f1419;
+  text-decoration: none;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.x-logo-link i {
+  font-size: 1.35rem;
+  color: #1d9bf0;
+}
+
+.x-logo-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419;
+}
+
+.x-side-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 50px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  color: #0f1419 !important;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.x-side-link i {
+  font-size: 1.2rem;
+  width: 22px;
+  text-align: center;
+}
+
+.x-side-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+.x-side-link.active {
+  font-weight: 700;
+  background-color: #e8f5fe;
+}
+
+.profile-side-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-side-link img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.x-post-btn {
+  width: 100%;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 1rem;
+}
+
+.x-create-group-btn {
+  width: auto;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 1rem;
+}
+
+.x-logout-side-btn {
+  background-color: #fff;
+  color: #0f1419 !important;
+  border: 1px solid #cfd9de;
+  border-radius: 9999px;
+  height: 44px;
+  padding: 0 18px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 100%;
+}
+
+.x-logout-side-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419 !important;
+}
+
+/* ===== Right Column ===== */
+.app-right {
+  padding: 16px;
+}
+
+.right-panel {
+  position: sticky;
+  top: 16px;
+}
+
+.right-box {
+  background-color: #f7f9f9;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
 /* =========================
-   ヘッダー
+   DM Page
 ========================= */
-
-/* ヘッダー背景色 */
-.navbar {
-  background-color: #0d6efd !important; 
+.dm-page {
+  background-color: #f7f9f9;
+  min-height: 100vh;
 }
 
-/* ロゴ文字 */
-.navbar-brand {
-  color: #ffffff !important;
-  letter-spacing: 0.5px;
+/* =========================
+   Header
+========================= */
+.dm-header {
+  height: 72px;
+  background-color: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid #eff3f4;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
 }
 
-/* ロゴhover */
-.navbar-brand:hover {
-  color: #e2e6ea !important;
+.dm-back-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #0f1419;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: 0.2s ease;
+  flex-shrink: 0;
 }
 
-/* ナビリンク */
-.header-link {
-  color: #ffffff !important;
-  font-weight: 500;
+.dm-back-link:hover {
+  background-color: #eff3f4;
+  color: #0f1419;
 }
 
-/* ナビリンクhover */
-.header-link:hover {
-  color: #dbeafe !important;
+.dm-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f1419;
 }
 
-/* ログインボタン（白枠） */
-.btn-outline-success {
-  color: #ffffff !important;
-  border-color: #ffffff !important;
+.dm-subtitle {
+  font-size: 0.85rem;
+  color: #536471;
 }
 
-/* ログインボタンhover */
-.btn-outline-success:hover {
-  background-color: #ffffff !important;
-  color: #0d6efd !important;
+/* =========================
+   Card
+========================= */
+.dm-card {
+  background-color: #ffffff;
+  border-left: 1px solid #eff3f4;
+  border-right: 1px solid #eff3f4;
+  border-bottom: 1px solid #eff3f4;
+  min-height: calc(100vh - 72px);
 }
 
-/* 新規登録ボタン */
-.btn-success {
-  background-color: #ffffff !important;
-  color: #0d6efd !important;
+/* =========================
+   Messages
+========================= */
+.dm-messages {
+  flex: 1;
+}
+
+.dm-message-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: 85%;
+}
+
+.dm-message-row.mine,
+.dm-message-row.other {
+  flex-direction: row;
+}
+
+.dm-bubble-wrap {
+  max-width: 100%;
+}
+
+.dm-meta {
+  font-size: 0.78rem;
+  color: #536471;
+  margin-bottom: 5px;
+}
+
+.dm-name {
+  font-weight: 700;
+  color: #0f1419;
+  margin-right: 6px;
+}
+
+.dm-time {
+  color: #536471;
+}
+
+.dm-bubble {
+  padding: 12px 14px;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.dm-bubble.other {
+  background-color: #eff3f4;
+  color: #0f1419;
+  border-bottom-left-radius: 6px;
+}
+
+.dm-bubble.mine {
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border-bottom-right-radius: 6px;
+}
+
+.dm-content {
+  white-space: pre-wrap;
+}
+
+/* =========================
+   Avatar
+========================= */
+.dm-avatar,
+.dm-header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #e5e7eb;
+  border: 1px solid #e5e7eb;
+}
+
+.dm-header-avatar {
+  width: 44px;
+  height: 44px;
+}
+
+.dm-user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =========================
+   Empty
+========================= */
+.dm-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: #eff3f4;
+  color: #536471;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* =========================
+   Form area
+========================= */
+.dm-form-area {
+  position: sticky;
+  bottom: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #eff3f4;
+}
+
+.dm-input-wrap {
+  background-color: #ffffff;
+}
+
+.dm-textarea {
+  border-radius: 22px;
+  border: 1px solid #cfd9de;
+  background-color: #f7f9f9;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  box-shadow: none !important;
+}
+
+.dm-textarea:focus {
+  border-color: #1d9bf0;
+  background-color: #ffffff;
+}
+
+.dm-submit-btn {
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dm-submit-btn:hover {
+  background-color: #188cd8;
+  color: #ffffff;
+}
+
+.dm-submit-icon-btn {
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  line-height: 1;
+  transition: background-color 0.2s ease;
+}
+
+.dm-submit-icon-btn:hover {
+  background-color: #188cd8;
+  color: #ffffff;
+}
+
+/* ===== Like ===== */
+.x-like-form {
+  display: inline-block;
+  margin: 0;
+}
+
+.x-like-btn {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #6c757d;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.x-like-btn:hover {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #e0245e;
+}
+
+.x-like-btn:focus,
+.x-like-btn:active {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
   border: none;
 }
 
-/* 新規登録hover */
-.btn-success:hover {
-  background-color: #e2e6ea !important;
-  color: #0d6efd !important;
+.x-like-btn i {
+  font-size: 0.95rem;
+}
+
+.x-like-btn.liked {
+  color: #e0245e;
+}
+
+.disabled-like {
+  pointer-events: none;
+  opacity: 1;
+}
+
+turbo-frame {
+  display: inline-block;
+}
+
+/* ===== Main Buttons ===== */
+.x-main-btn {
+  background-color: #1d9bf0;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 20px;
+  font-weight: 600;
+}
+
+.x-main-btn.outline {
+  background-color: transparent;
+  color: #1d9bf0;
+  border: 1px solid #1d9bf0;
+}
+
+.x-main-btn:hover {
+  background-color: #1a8cd8;
+  color: #ffffff;
+}
+
+.x-main-btn.outline:hover {
+  background-color: #e8f5fe;
+  color: #1d9bf0;
+  border: 1px solid #1d9bf0;
+}
+
+/* ===== Common UI ===== */
+.post-card,
+.post-item {
+  padding: 16px 18px;
+}
+
+.post-actions {
+  margin-top: 8px;
+  gap: 20px;
+}
+
+.filter-clear-btn {
+  background: none;
+  color: #536471;
+  border: 1px solid #cfd9de;
+}
+
+.filter-clear-btn:hover {
+  background-color: #eff3f4;
+  color: #0f1419;
+}
+
+.x-user-card {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.x-hover {
+  transition: background-color 0.2s ease;
+}
+
+.x-hover:hover {
+  background-color: #f7f7f7;
+}
+
+/* ===== Study Summary ===== */
+.study-summary-main {
+  box-shadow: 0 6px 18px rgba(29, 155, 240, 0.08);
+}
+
+.study-summary-head-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #eaf4ff;
+  color: #1d9bf0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.study-summary-box {
+  background: #fbfdff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 14px;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.study-summary-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 20, 25, 0.06);
+}
+
+.study-summary-box-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.study-summary-mini-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.summary-icon-posts {
+  background: #e8f1ff;
+  color: #2563eb;
+}
+
+.summary-icon-total {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.summary-icon-weekly {
+  background: #eef8ff;
+  color: #06b6d4;
+}
+
+.summary-icon-streak {
+  background: #fff7e6;
+  color: #f59e0b;
+}
+
+.study-summary-label {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  line-height: 1.4;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.study-summary-value {
+  color: #0f1419;
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.study-summary-unit {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+/* ===== Pagination ===== */
+.studyhub-pagination-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.studyhub-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.studyhub-page-item {
+  margin: 0;
+}
+
+.studyhub-page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #dbe1e8;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.studyhub-page-link:hover {
+  background: #f3f8ff;
+  border-color: #bcd8ff;
+  color: #1d9bf0;
+  text-decoration: none;
+}
+
+.studyhub-page-item.active .studyhub-page-link {
+  background: #1d9bf0;
+  border-color: #1d9bf0;
+  color: #ffffff;
+}
+
+.studyhub-page-item.disabled .studyhub-page-link {
+  background: #f8f9fa;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.studyhub-page-prev,
+.studyhub-page-next {
+  padding: 0 16px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+  .x-nav-link {
+    border-radius: 14px;
+    padding: 10px 12px !important;
+  }
+
+  .navbar-nav {
+    padding-top: 10px;
+  }
+
+  .x-signup-btn,
+  .x-login-btn,
+  .x-logout-btn {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 767px) {
+  .dm-message-row {
+    max-width: 95%;
+  }
+
+  .dm-title {
+    font-size: 1rem;
+  }
+
+  .dm-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .dm-header-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .study-summary-box {
+    padding: 12px;
+  }
+
+  .study-summary-mini-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+
+  .study-summary-value {
+    font-size: 1rem;
+  }
+
+  .study-summary-label {
+    font-size: 0.75rem;
+  }
 }

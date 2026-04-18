@@ -1,0 +1,99 @@
+<div class="container py-4" style="max-width: 640px;">
+  <div class="border rounded-4 bg-white">
+    <div class="p-4">
+
+      <!-- タイトル -->
+      <div class="mb-4">
+        <h5 class="fw-bold mb-1">もくもく会を作成</h5>
+        <p class="text-muted small mb-0">
+          学習テーマやルールを設定して、新しいもくもく会を作成できます。
+        </p>
+      </div>
+
+      <%= form_with model: @group, local: true do |f| %>
+        <% if @group.errors.any? %>
+          <div class="alert alert-danger py-2 small rounded-3">
+            <h6 class="fw-bold mb-2"><%= @group.errors.count %>件のエラーがあります</h6>
+            <ul class="mb-0 ps-3">
+              <% @group.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="d-flex gap-3">
+          <!-- アイコン -->
+          <div class="flex-shrink-0">
+            <% if authenticated? %>
+              <%= user_avatar(Current.user, size: 48) %>
+            <% else %>
+              <div class="rounded-circle bg-light border d-flex justify-content-center align-items-center"
+                   style="width: 48px; height: 48px;">
+                <i class="fa-solid fa-user text-secondary"></i>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- フォーム本体 -->
+          <div class="flex-grow-1">
+
+            <div class="mb-3">
+              <%= f.text_field :name,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "もくもく会名" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.text_field :study_theme,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "学習テーマ（Rails / Ruby / ポートフォリオ制作 など）" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.text_area :description,
+                              class: "form-control rounded-4 border-0 bg-light py-3 px-4",
+                              rows: 4,
+                              placeholder: "このもくもく会の内容や目的を書いてください" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.text_area :rule,
+                              class: "form-control rounded-4 border-0 bg-light py-3 px-4",
+                              rows: 3,
+                              placeholder: "ルール（例：入退室自由 / 雑談は休憩時間のみ / 学習報告歓迎）" %>
+            </div>
+
+            <!-- 定員 -->
+            <div class="mb-4">
+  <label class="form-label fw-semibold small text-muted">
+    <i class="fa-solid fa-users me-1"></i>定員人数
+  </label>
+
+  <%= f.number_field :max_members,
+                     class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                     min: 2,
+                     max: 100,
+                     value: @group.max_members || 10 %>
+</div>
+
+            <!-- ボタン -->
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+              <%= link_to groups_path, class: "btn btn-light rounded-pill px-4" do %>
+                <i class="fa-solid fa-arrow-left me-2"></i>一覧に戻る
+              <% end %>
+
+              <%= f.button type: "submit",
+                           class: "btn rounded-pill px-4 fw-bold",
+                           style: "background-color: #1d9bf0; color: white;" do %>
+                <i class="fa-solid fa-plus me-2"></i>作成する
+              <% end %>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

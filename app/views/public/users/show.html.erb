@@ -1,0 +1,368 @@
+<div class="container py-3" style="max-width: 700px;">
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">ユーザー詳細</h5>
+  </div>
+
+  <!-- ユーザー情報 -->
+  <div class="bg-white border rounded-4 mb-3">
+    <div class="p-3">
+      <div class="d-flex gap-3 align-items-start">
+        <div>
+          <%= user_avatar(@user, size: 56) %>
+        </div>
+
+        <div class="flex-grow-1">
+          <div class="mb-1">
+            <span class="fw-bold text-dark"><%= @user.name %></span>
+          </div>
+
+          <div class="text-muted small mb-2">
+            <%= @user.email_address %>
+          </div>
+
+          <!-- フォロー情報 -->
+          <div class="d-flex align-items-center gap-4 text-muted small flex-wrap mb-3">
+            <div>
+              <%= link_to following_user_path(@user), class: "text-decoration-none text-muted" do %>
+                <i class="fa-solid fa-user-plus me-1"></i>
+                <span><%= @user.following.count %> フォロー中</span>
+              <% end %>
+            </div>
+
+            <div>
+              <%= link_to followers_user_path(@user), class: "text-decoration-none text-muted" do %>
+                <i class="fa-solid fa-users me-1"></i>
+                <span><%= @user.followers.count %> フォロワー</span>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- ボタン -->
+          <div class="d-flex gap-2 flex-wrap">
+  <% if Current.user == @user %>
+    <%= link_to "編集する",
+                edit_user_path(@user),
+                class: "btn btn-outline-secondary rounded-pill px-4" %>
+
+    <%= button_to "退会する",
+                  user_path(@user),
+                  method: :delete,
+                  data: { turbo_confirm: "本当に退会しますか？この操作は取り消せません。" },
+                  class: "btn btn-outline-danger rounded-pill px-4" %>
+
+  <% elsif authenticated? %>
+    <% relationship = Current.user.active_relationships.find_by(followed_id: @user.id) %>
+    <% mutual_follow = Current.user.following?(@user) && @user.following?(Current.user) %>
+
+    <% if relationship.present? %>
+      <%= button_to "フォロー解除",
+                    relationship_path(relationship),
+                    method: :delete,
+                    class: "btn btn-outline-secondary rounded-pill px-4" %>
+    <% else %>
+      <%= button_to "フォローする",
+                    relationships_path,
+                    method: :post,
+                    params: { followed_id: @user.id },
+                    class: "x-main-btn rounded-pill px-4" %>
+    <% end %>
+
+    <% if mutual_follow %>
+      <%= button_to "メッセージを送る",
+                    dm_rooms_path(user_id: @user.id),
+                    method: :post,
+                    class: "x-main-btn rounded-pill px-4" %>
+    <% end %>
+  <% end %>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学習サマリー -->
+  <div class="bg-white border rounded-4 p-4 mb-4 study-summary-main">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <div>
+        <h5 class="fw-bold mb-1">学習サマリー</h5>
+        <p class="text-muted small mb-0"><%= @user.name %>さんの学習状況をひと目で確認できます</p>
+      </div>
+
+      <div class="study-summary-head-icon">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-posts">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div class="study-summary-label">投稿数</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= @posts_count %><span class="study-summary-unit">件</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-total">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="study-summary-label">累計時間</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= format_study_time(@total_study_time) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-weekly">
+              <i class="fa-solid fa-fire"></i>
+            </div>
+            <div class="study-summary-label">今週の時間</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= format_study_time(@weekly_study_time) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="study-summary-box h-100">
+          <div class="study-summary-box-top">
+            <div class="study-summary-mini-icon summary-icon-streak">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="study-summary-label">連続日数</div>
+          </div>
+
+          <div class="study-summary-value">
+            <%= @streak_days %><span class="study-summary-unit">日</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学習グラフ -->
+  <div class="bg-white border rounded-4 p-3 mb-4">
+    <div class="fw-bold mb-2">直近7日間の学習時間</div>
+    <canvas id="studyTimeChart"></canvas>
+  </div>
+
+  <!-- タブ -->
+  <div class="d-flex gap-2 mb-3">
+    <button type="button"
+            id="posts-tab-btn"
+            class="x-main-btn rounded-pill px-4"
+            onclick="showUserPageTab('posts')">
+      投稿
+    </button>
+
+    <button type="button"
+            id="groups-tab-btn"
+            class="btn btn-outline-secondary rounded-pill px-4"
+            onclick="showUserPageTab('groups')">
+      もくもく会
+    </button>
+  </div>
+
+    <!-- 投稿タブ -->
+  <div id="posts-tab-content">
+    <div class="mb-3">
+      <h5 class="fw-bold mb-0"><%= @user.name %>さんの投稿一覧</h5>
+    </div>
+
+    <% if @posts.empty? %>
+      <div class="bg-white border rounded-4 p-4 text-muted text-center">
+        まだ投稿がありません。
+      </div>
+    <% else %>
+      <% @posts.each do |post| %>
+        <div class="bg-white border rounded-4 mb-3 x-hover"
+             style="cursor: pointer;"
+             onclick="window.location='<%= post_path(post) %>'">
+
+          <div class="p-3">
+            <div class="d-flex gap-3">
+              <div onclick="event.stopPropagation();">
+                <%= link_to user_path(post.user) do %>
+                  <%= user_avatar(post.user, size: 48) %>
+                <% end %>
+              </div>
+
+              <div class="flex-grow-1">
+                <div class="mb-1">
+                  <span onclick="event.stopPropagation();">
+                    <%= link_to post.user.name,
+                                user_path(post.user),
+                                class: "fw-bold text-dark text-decoration-none" %>
+                  </span>
+                  <span class="text-muted small ms-2">
+                    <%= l post.created_at, format: :short %>
+                  </span>
+                </div>
+
+                <div class="fw-bold text-dark mb-2">
+                  <%= post.title %>
+                </div>
+
+                <% if post.body.present? %>
+                  <div class="text-dark mb-2">
+                    <%= truncate(post.body, length: 80) %>
+                  </div>
+                <% end %>
+
+                <div class="mb-2">
+                  <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                    <i class="fa-solid fa-pen me-1"></i><%= format_study_time(post.study_time) %>
+                  </span>
+                </div>
+
+                <% if post.tags.any? %>
+                  <div class="mb-2" onclick="event.stopPropagation();">
+                    <% post.tags.each do |tag| %>
+                      <%= link_to tag.name,
+                                  posts_path(tag_name: tag.name),
+                                  class: "badge bg-light text-primary border me-1 text-decoration-none rounded-pill px-3 py-2" %>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+                  <div onclick="event.stopPropagation();">
+                    <%= render "public/likes/button", post: post %>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-1">
+                    <i class="fa-regular fa-comment"></i>
+                    <span><%= post.comments.count %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="mt-0 mb-5 d-flex justify-content-center">
+        <%= paginate @posts %>
+      </div>
+    <% end %>
+  </div>
+  
+
+
+  <!-- もくもく会タブ -->
+  <div id="groups-tab-content" style="display: none;">
+    <div class="mb-3">
+      <h5 class="fw-bold mb-0">参加中のもくもく会</h5>
+    </div>
+
+    <% if @joined_groups.present? && @joined_groups.any? %>
+      <% @joined_groups.each do |group| %>
+        <div class="bg-white border rounded-4 mb-3 x-hover"
+             style="cursor: pointer;"
+             onclick="window.location='<%= group_path(group) %>'">
+
+          <div class="p-3">
+            <div class="d-flex gap-3">
+              <div>
+                <%= user_avatar(group.owner, size: 48) %>
+              </div>
+
+              <div class="flex-grow-1">
+                <div class="fw-bold mb-2"><%= group.name %></div>
+
+                <div class="text-muted small">
+                  <i class="fa-solid fa-user-group me-1"></i>
+                  <%= group.members.count %>人参加中
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bg-white border rounded-4 p-4 text-muted text-center">
+        まだ参加中のもくもく会はありません
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  function showUserPageTab(tab) {
+    const postsTab = document.getElementById("posts-tab-content");
+    const groupsTab = document.getElementById("groups-tab-content");
+    const postsBtn = document.getElementById("posts-tab-btn");
+    const groupsBtn = document.getElementById("groups-tab-btn");
+
+    if (!postsTab || !groupsTab || !postsBtn || !groupsBtn) return;
+
+    if (tab === "posts") {
+      postsTab.style.display = "block";
+      groupsTab.style.display = "none";
+      postsBtn.className = "x-main-btn rounded-pill px-4";
+      groupsBtn.className = "btn btn-outline-secondary rounded-pill px-4";
+    } else {
+      postsTab.style.display = "none";
+      groupsTab.style.display = "block";
+      postsBtn.className = "btn btn-outline-secondary rounded-pill px-4";
+      groupsBtn.className = "x-main-btn rounded-pill px-4";
+    }
+  }
+
+  document.addEventListener("turbo:load", function () {
+    showUserPageTab("posts");
+
+    const canvas = document.getElementById("studyTimeChart");
+    if (!canvas) return;
+
+    if (window.studyTimeChartInstance) {
+      window.studyTimeChartInstance.destroy();
+    }
+
+    const labels = <%= raw @weekly_study_chart_data.map { |d| d[:label] }.to_json %>;
+    const data = <%= raw @weekly_study_chart_data.map { |d| d[:minutes] }.to_json %>;
+
+    window.studyTimeChartInstance = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "学習時間（分）",
+          data: data,
+          borderWidth: 1,
+          backgroundColor: "rgba(29, 155, 240, 0.2)",
+          borderColor: "rgba(29, 155, 240, 1)"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 30
+            }
+          }
+        }
+      }
+    });
+  });
+</script>

@@ -1,61 +1,199 @@
-<div class="container py-4" style="max-width: 720px;">
-  <!-- タイトルと新規投稿ボタン -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold mb-0">投稿一覧</h2>
+<div class="container py-3" style="max-width: 700px;">
+  <%= turbo_stream_from "posts" %>
 
-    <% if Current.user.present? %>
-      <%= link_to "新規投稿", new_post_path, class: "btn btn-primary" %>
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">投稿一覧</h5>
+  </div>
+
+  <!-- 表示切り替え -->
+  <div class="d-flex gap-2 mb-3">
+  <%= link_to "全投稿",
+      posts_path(mode: "all"),
+      class: "x-main-btn #{ @mode == 'following' ? 'outline' : '' } rounded-pill px-4 text-decoration-none" %>
+
+  <% if authenticated? %>
+    <%= link_to "フォロー中の投稿",
+        posts_path(mode: "following"),
+        class: "x-main-btn #{ @mode == 'following' ? 'primary' : 'outline' } rounded-pill px-4 text-decoration-none" %>
+  <% end %>
+</div>
+
+  <!-- 検索 -->
+  <div class="bg-white border rounded-4 p-3 mb-3">
+    <%= form_with url: posts_path, method: :get, local: true do |f| %>
+      <%= hidden_field_tag :mode, @mode %>
+
+      <div class="row g-2">
+        <div class="col-md-4">
+          <%= f.text_field :keyword,
+                           value: params[:keyword],
+                           class: "form-control rounded-pill",
+                           placeholder: "タイトル・本文を検索" %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.select :tag_name,
+                       options_for_select(@tags.pluck(:name), params[:tag_name]),
+                       { include_blank: "タグを選択" },
+                       class: "form-select rounded-pill" %>
+        </div>
+
+        <div class="col-md-3">
+          <%= f.select :period,
+                       options_for_select(
+                         [
+                           ["今日", "today"],
+                           ["3日以内", "3days"],
+                           ["7日以内", "7days"],
+                           ["30日以内", "30days"],
+                           ["今月", "this_month"]
+                         ],
+                         params[:period]
+                       ),
+                       { include_blank: "期間を選択" },
+                       class: "form-select rounded-pill" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= f.select :sort,
+                       options_for_select(
+                         [
+                           ["新しい順", "new"],
+                           ["古い順", "old"],
+                           ["いいね数が多い順", "likes"],
+                           ["コメント数が多い順", "comments"]
+                         ],
+                         @sort || "new"
+                       ),
+                       {},
+                       class: "form-select rounded-pill" %>
+        </div>
+      </div>
+
+      <div class="row g-2 mt-2">
+        <div class="col-md-6 d-grid">
+          <%= f.submit "適用", class: "x-main-btn w-100" %>
+        </div>
+        <div class="col-md-6 d-grid">
+          <%= link_to "クリア", posts_path(mode: @mode), class: "btn btn-outline-secondary rounded-pill" %>
+        </div>
+      </div>
     <% end %>
   </div>
 
-  <!-- 投稿が0件のとき -->
-  <% if @posts.empty? %>
-    <div class="alert alert-secondary">
-      まだ投稿がありません。
-    </div>
-  <% else %>
-    <div class="d-flex flex-column gap-3">
-      <% @posts.each do |post| %>
-        <div class="card shadow-sm border-0">
-          <div class="card-body">
-            <!-- 投稿者情報 -->
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <div>
-                <div class="fw-bold">
-                  <%= post.user.name %>
-                </div>
-                <div class="text-muted small">
-                  <%= l post.created_at, format: :short %>
-                </div>
-              </div>
-            </div>
-
-            <!-- 投稿タイトル -->
-            <h5 class="fw-bold mb-2">
-              <%= link_to post.title, post_path(post), class: "text-decoration-none text-dark" %>
-            </h5>
-
-            <!-- 学習時間 -->
-            <div class="mb-2">
-              <span class="badge bg-primary">
-                学習時間: <%= format_study_time(post.study_time) %>
-              </span>
-            </div>
-
-            <!-- 投稿本文 -->
-            <% if post.body.present? %>
-              <p class="mb-3 text-secondary">
-                <%= truncate(post.body, length: 140) %>
-              </p>
-            <% end %>
-
-            <!-- アクション -->
-            <div>
-              <%= link_to "詳細を見る", post_path(post), class: "btn btn-outline-primary btn-sm" %>
-            </div>
-          </div>
-        </div>
+  <!-- 作成ボタン -->
+  <% if authenticated? %>
+    <div class="mb-3 text-end">
+      <%= link_to new_post_path, class: "x-create-group-btn" do %>
+        <i class="fa-solid fa-pen-to-square me-2"></i>作成
       <% end %>
     </div>
   <% end %>
+
+  <!-- 投稿が0件のとき -->
+  <% if @posts.empty? %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      <% if @mode == "following" %>
+        フォロー中ユーザーの投稿がありません。
+      <% else %>
+        該当する投稿がありません。
+      <% end %>
+    </div>
+  <% else %>
+    <% @posts.each do |post| %>
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= post_path(post) %>'">
+
+        <div class="p-3">
+          <div class="d-flex gap-3">
+            <!-- アイコン -->
+            <div onclick="event.stopPropagation();">
+              <%= link_to user_path(post.user) do %>
+                <%= user_avatar(post.user, size: 48) %>
+              <% end %>
+            </div>
+
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 名前＋日時 -->
+              <div class="mb-1">
+                <span onclick="event.stopPropagation();">
+                  <%= link_to post.user.name,
+                              user_path(post.user),
+                              class: "fw-bold text-dark text-decoration-none" %>
+                </span>
+                <span class="text-muted small ms-2">
+                  <%= l post.created_at, format: :short %>
+                </span>
+              </div>
+
+              <!-- タイトル -->
+              <div class="fw-bold text-dark mb-2">
+                <%= post.title %>
+                <% if Current.user.present? && post.user == Current.user && post.draft? %>
+                  <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
+                <% end %>
+              </div>
+
+              <!-- 本文 -->
+              <% if post.body.present? %>
+                <div class="text-dark mb-2">
+                  <%= truncate(post.body, length: 100) %>
+                </div>
+              <% end %>
+
+              <!-- 学習時間 -->
+              <div class="mb-2">
+                <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                  <i class="fa-solid fa-pen me-1"></i><%= format_study_time(post.study_time) %>
+                </span>
+              </div>
+
+              <!-- タグ -->
+              <div class="mb-3" onclick="event.stopPropagation();">
+                <% if post.tags.any? %>
+                  <% post.tags.each do |tag| %>
+                    <% active_class = "bg-light text-primary border" %>
+
+                    <%= link_to tag.name,
+                                posts_path(
+                                  tag_name: tag.name,
+                                  keyword: params[:keyword],
+                                  period: params[:period],
+                                  sort: params[:sort],
+                                  mode: @mode
+                                ),
+                                class: "badge #{active_class} me-1 text-decoration-none rounded-pill px-3 py-2" %>
+                  <% end %>
+                <% end %>
+              </div>
+
+              <!-- 下アイコン -->
+<div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+
+  <!-- いいね -->
+  <div onclick="event.stopPropagation();">
+    <%= render "public/likes/button", post: post %>
+  </div>
+
+  <!-- コメント -->
+  <div class="d-flex align-items-center gap-1">
+    <i class="fa-regular fa-comment"></i>
+    <span><%= post.comments.count %></span>
+  </div>
+
+</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @posts %>
 </div>

@@ -1,0 +1,118 @@
+<div class="container py-3" style="max-width: 700px;">
+
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0">もくもく会</h5>
+  </div>
+
+  <!-- 検索 -->
+  <div class="mb-3">
+    <%= form_with url: groups_path, method: :get, local: true do |f| %>
+      <%= f.text_field :keyword,
+                       value: @keyword,
+                       class: "form-control rounded-pill",
+                       placeholder: "もくもく会を検索" %>
+    <% end %>
+  </div>
+
+  <!-- 作成ボタン -->
+  <% if authenticated? %>
+    <div class="mb-3 text-end">
+      <%= link_to new_group_path, class: "x-create-group-btn" do %>
+        <i class="fa-solid fa-plus"></i>作成
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- 一覧 -->
+  <% if @groups.empty? %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      該当するもくもく会はありません
+    </div>
+  <% else %>
+
+    <% @groups.each do |group| %>
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= group_path(group) %>'">
+
+        <div class="p-3">
+          <div class="d-flex gap-3">
+
+            <!-- アイコン -->
+            <div onclick="event.stopPropagation();">
+              <%= link_to user_path(group.owner) do %>
+                <%= user_avatar(group.owner, size: 48) %>
+              <% end %>
+            </div>
+
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 作成者名＋作成日時 -->
+              <div class="mb-1">
+                <span onclick="event.stopPropagation();">
+                  <%= link_to group.owner.name,
+                              user_path(group.owner),
+                              class: "fw-bold text-dark text-decoration-none" %>
+                </span>
+                <span class="text-muted small ms-2">
+                  <%= l group.created_at, format: :short %>
+                </span>
+              </div>
+
+              <!-- タイトル -->
+              <div class="fw-bold text-dark mb-2">
+                <%= group.name %>
+              </div>
+
+              <!-- 説明 -->
+              <% if group.description.present? %>
+                <div class="text-dark mb-2">
+                  <%= truncate(group.description, length: 100) %>
+                </div>
+              <% end %>
+
+              <!-- テーマ・参加人数 -->
+              <div class="mb-3 d-flex flex-wrap gap-2" onclick="event.stopPropagation();">
+                <% if group.study_theme.present? %>
+                  <span class="badge bg-light text-primary border rounded-pill px-3 py-2">
+                    #<%= group.study_theme %>
+                  </span>
+                <% end %>
+
+                <span class="badge bg-light text-success border rounded-pill px-3 py-2">
+                  <i class="fa-solid fa-user-group me-1"></i>
+                  <%= group.members.count %>/<%= group.max_members %>人
+                </span>
+              </div>
+
+              <!-- 下アイコン風の情報 -->
+              <div class="d-flex justify-content-start align-items-center text-muted small pt-2 border-top gap-4">
+                <div class="d-flex align-items-center gap-1">
+                  <i class="fa-solid fa-user-group"></i>
+                  <span><%= group.members.count %>人参加中</span>
+                </div>
+
+                <div class="d-flex align-items-center gap-1">
+                  <% if group.full? %>
+                    <i class="fa-solid fa-circle-exclamation text-danger"></i>
+                    <span class="text-danger">満員</span>
+                  <% else %>
+                    <i class="fa-regular fa-circle-check text-success"></i>
+                    <span class="text-success">募集中</span>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>
+<div class="mt-0 mb-5 d-flex justify-content-center">
+  <%= paginate @groups %>
+</div>

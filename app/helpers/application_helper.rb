@@ -13,4 +13,25 @@ module ApplicationHelper
       "#{remaining_minutes}分"
     end
   end
+
+  def user_avatar(user, size: 40, extra_class: "")
+    image =
+      if user&.profile_image&.attached?
+        user.profile_image
+      else
+        "no_image.jpg"
+      end
+
+    image_tag(
+      image,
+      size: "#{size}x#{size}",
+      class: "avatar-icon rounded-circle #{extra_class}"
+    )
+  end
+
+  def unread_notifications_count
+    return 0 unless Current.user.present?
+
+    Current.user.received_notifications.unread.count
+  end
 end

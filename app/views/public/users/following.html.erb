@@ -1,0 +1,70 @@
+<div class="container py-3" style="max-width: 700px;">
+
+  <!-- タイトル -->
+  <div class="mb-3">
+    <h5 class="fw-bold mb-0"><%= @user.name %>さんのフォロー中一覧</h5>
+  </div>
+
+  <!-- 一覧 -->
+  <% if @users.any? %>
+    <% @users.each do |user| %>
+      <div class="bg-white border rounded-4 mb-3 x-hover"
+           style="cursor: pointer;"
+           onclick="window.location='<%= user_path(user) %>'">
+
+        <div class="p-3">
+          <div class="d-flex gap-3">
+
+            <!-- アイコン -->
+            <div onclick="event.stopPropagation();">
+              <%= link_to user_path(user) do %>
+                <%= user_avatar(user, size: 48) %>
+              <% end %>
+            </div>
+
+            <!-- コンテンツ -->
+            <div class="flex-grow-1">
+
+              <!-- 名前 -->
+              <div class="mb-2">
+                <span onclick="event.stopPropagation();">
+                  <%= link_to user.name,
+                              user_path(user),
+                              class: "fw-bold text-dark text-decoration-none" %>
+                </span>
+              </div>
+
+              <!-- 下部情報 -->
+              <div class="d-flex justify-content-between align-items-center text-muted small pt-2 flex-wrap gap-2">
+
+                <div class="d-flex align-items-center gap-4">
+                  <div class="d-flex align-items-center gap-1">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span><%= user.following.count %> フォロー中</span>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-1">
+                    <i class="fa-solid fa-users"></i>
+                    <span><%= user.followers.count %> フォロワー</span>
+                  </div>
+                </div>
+
+                <% if authenticated? %>
+                  <div onclick="event.stopPropagation();">
+                    <%= render "public/relationships/btn", user: user %>
+                  </div>
+                <% end %>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="bg-white border rounded-4 p-4 text-muted text-center">
+      まだフォローしているユーザーはいません。
+    </div>
+  <% end %>
+</div>

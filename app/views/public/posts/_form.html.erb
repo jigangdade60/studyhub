@@ -1,56 +1,132 @@
-<!-- 投稿フォーム -->
-<div class="card shadow-sm border-0 rounded-4">
-  <div class="card-body p-4 p-md-5">
-    <%= form_with model: post, local: true do |f| %>
-      <!-- バリデーションエラー表示 -->
-      <% if post.errors.any? %>
-        <div class="alert alert-danger rounded-3">
-          <h5 class="mb-3"><%= post.errors.count %>件のエラーがあります</h5>
-          <ul class="mb-0 ps-3">
-            <% post.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
+<div class="container py-4" style="max-width: 640px;">
+  <div class="border rounded-4 bg-white">
+    <div class="p-4">
+
+      <!-- タイトル -->
+      <div class="mb-4">
+        <h5 class="fw-bold mb-1">
+          <%= post.new_record? ? "投稿を作成" : "投稿を編集" %>
+        </h5>
+        <p class="text-muted small mb-0">
+          <%= post.new_record? ? "今日学習した内容を記録して、あとから振り返れるようにしましょう。" :
+                                  "投稿内容を編集して、より良い記録にしましょう。" %>
+        </p>
+      </div>
+
+      <%= form_with model: post, local: true do |f| %>
+
+        <% if post.errors.any? %>
+          <div class="alert alert-danger py-2 small rounded-3">
+            <h6 class="fw-bold mb-2"><%= post.errors.count %>件のエラーがあります</h6>
+            <ul class="mb-0 ps-3">
+              <% post.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="d-flex gap-3">
+          <!-- アイコン -->
+          <div class="flex-shrink-0">
+            <% if authenticated? %>
+              <%= user_avatar(Current.user, size: 48) %>
+            <% else %>
+              <div class="rounded-circle bg-light border d-flex justify-content-center align-items-center"
+                   style="width: 48px; height: 48px;">
+                <i class="fa-solid fa-user text-secondary"></i>
+              </div>
             <% end %>
-          </ul>
+          </div>
+
+          <!-- フォーム本体 -->
+          <div class="flex-grow-1">
+
+            <!-- タイトル -->
+            <div class="mb-3">
+              <%= f.label :title, "タイトル", class: "form-label fw-semibold small text-muted" %>
+              <%= f.text_field :title,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "タイトルを入力" %>
+            </div>
+
+            <!-- 本文 -->
+            <div class="mb-3">
+              <%= f.label :body, "本文", class: "form-label fw-semibold small text-muted" %>
+              <%= f.text_area :body,
+                              class: "form-control rounded-4 border-0 bg-light py-3 px-4",
+                              rows: 5,
+                              placeholder: "今日学習した内容を入力" %>
+            </div>
+
+            <!-- 学習時間 -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold small text-muted">
+                <i class="fa-regular fa-clock me-1"></i>学習時間
+              </label>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="d-flex align-items-center">
+                    <%= f.number_field :study_time_hour,
+                                       class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                                       min: 0,
+                                       placeholder: "0" %>
+                    <span class="ms-2 text-muted small text-nowrap">時間</span>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="d-flex align-items-center">
+                    <%= f.number_field :study_time_minute,
+                                       class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                                       min: 0,
+                                       max: 59,
+                                       placeholder: "0" %>
+                    <span class="ms-2 text-muted small text-nowrap">分</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- タグ -->
+            <div class="mb-3">
+              <%= f.label :tag_names, "タグ", class: "form-label fw-semibold small text-muted" %>
+              <%= f.text_field :tag_names,
+                               value: post.tag_names,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "例: Rails, Ruby, 学習記録" %>
+              <div class="form-text">カンマ区切りで複数入力できます</div>
+            </div>
+
+            <!-- 公開設定 -->
+            <div class="mb-4">
+              <%= f.label :status, "公開設定", class: "form-label fw-semibold small text-muted" %>
+              <%= f.select :status,
+                           [["公開", "published"], ["非公開", "draft"]],
+                           {},
+                           class: "form-select rounded-pill border-0 bg-light py-3 px-4" %>
+              <div class="form-text">非公開にした投稿は自分にのみ表示されます</div>
+            </div>
+
+            <!-- ボタン -->
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+              <%= link_to posts_path, class: "btn btn-light rounded-pill px-4" do %>
+                <i class="fa-solid fa-arrow-left me-2"></i>一覧に戻る
+              <% end %>
+
+              <%= f.button type: "submit",
+                           class: "btn rounded-pill px-4 fw-bold",
+                           style: "background-color: #1d9bf0; color: white;" do %>
+                <i class="fa-regular fa-pen-to-square me-2"></i>
+                <%= post.new_record? ? "投稿する" : "更新する" %>
+              <% end %>
+            </div>
+
+          </div>
         </div>
+
       <% end %>
-
-      <!-- タイトル入力欄 -->
-      <div class="mb-4">
-        <%= f.label :title, "タイトル", class: "form-label fw-semibold" %>
-        <%= f.text_field :title, class: "form-control form-control-lg", placeholder: "学習内容のタイトルを入力" %>
-      </div>
-
-      <!-- 学習時間入力欄 -->
-      <div class="mb-4">
-        <%= f.label :study_time, "学習時間", class: "form-label fw-semibold" %>
-        <div class="row g-3 align-items-center">
-          <div class="col-md-6">
-            <div class="input-group">
-              <%= f.number_field :study_time_hour, class: "form-control", min: 0, placeholder: "0" %>
-              <span class="input-group-text">時間</span>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="input-group">
-              <%= f.number_field :study_time_minute, class: "form-control", min: 0, max: 59, placeholder: "0" %>
-              <span class="input-group-text">分</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 本文入力欄 -->
-      <div class="mb-4">
-        <%= f.label :body, "学習内容", class: "form-label fw-semibold" %>
-        <%= f.text_area :body, class: "form-control", rows: 6, placeholder: "今日学習したことを入力" %>
-      </div>
-
-      <!-- 送信ボタン -->
-      <div class="d-flex gap-2">
-        <%= f.submit "投稿する", class: "btn btn-primary px-4" %>
-        <%= link_to "一覧へ戻る", posts_path, class: "btn btn-outline-secondary px-4" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

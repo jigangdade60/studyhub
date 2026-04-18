@@ -1,55 +1,72 @@
-<div class="container py-5">
-  <div class="mx-auto" style="max-width: 720px;">
-    <div class="card shadow-sm border-0 rounded-4">
-      <div class="card-body p-4 p-md-5">
-        <!-- ページタイトル -->
-        <div class="text-center mb-4">
-          <h2 class="fw-bold mb-2">新規登録</h2>
-          <p class="text-muted mb-0">StudyHubを始めるためのアカウントを作成します</p>
-        </div>
+<div class="container py-4" style="max-width: 640px;">
+  <div class="border rounded-4 bg-white">
+    <div class="p-4">
 
-        <%= form_with model: @user, url: users_path do |f| %>
-          <!-- エラーメッセージ -->
-          <% if @user.errors.any? %>
-            <div class="alert alert-danger rounded-3">
-              <ul class="mb-0 ps-3">
-                <% @user.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-            </div>
-          <% end %>
+      <!-- タイトル -->
+      <div class="mb-4 text-center">
+        <h5 class="fw-bold mb-1">新規登録</h5>
+        <p class="text-muted small mb-0">
+          StudyHubを始めるためのアカウントを作成します
+        </p>
+      </div>
 
-          <!-- ユーザー名 -->
-          <div class="mb-3">
-            <%= f.label :name, "ユーザー名", class: "form-label fw-semibold" %>
-            <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "ユーザー名を入力" %>
-          </div>
-
-          <!-- メールアドレス -->
-          <div class="mb-3">
-            <%= f.label :email_address, "メールアドレス", class: "form-label fw-semibold" %>
-            <%= f.text_field :email_address, class: "form-control form-control-lg", placeholder: "メールアドレスを入力" %>
-          </div>
-
-          <!-- パスワード -->
-          <div class="mb-3">
-            <%= f.label :password, "パスワード", class: "form-label fw-semibold" %>
-            <%= f.password_field :password, class: "form-control form-control-lg", placeholder: "パスワードを入力" %>
-          </div>
-
-          <!-- 確認用パスワード -->
-          <div class="mb-4">
-            <%= f.label :password_confirmation, "確認用パスワード", class: "form-label fw-semibold" %>
-            <%= f.password_field :password_confirmation, class: "form-control form-control-lg", placeholder: "もう一度パスワードを入力" %>
-          </div>
-
-          <!-- 登録ボタン -->
-          <div class="d-grid">
-            <%= f.submit "登録する", class: "btn btn-primary btn-lg" %>
+      <%= form_with model: @user, url: sign_up_path, local: true do |f| %>
+        <% if @user.errors.any? %>
+          <div class="alert alert-danger py-2 small rounded-3">
+            <h6 class="fw-bold mb-2"><%= @user.errors.count %>件のエラーがあります</h6>
+            <ul class="mb-0 ps-3">
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
           </div>
         <% end %>
+
+        <div class="mb-3">
+          <%= f.label :name, "ユーザー名",
+                      class: "form-label fw-semibold small text-muted" %>
+          <%= f.text_field :name,
+                           class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                           placeholder: "ユーザー名を入力" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email_address, "メールアドレス",
+                      class: "form-label fw-semibold small text-muted" %>
+          <%= f.email_field :email_address,
+                            class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                            placeholder: "メールアドレスを入力" %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :password, "パスワード",
+                      class: "form-label fw-semibold small text-muted" %>
+          <%= f.password_field :password,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "パスワードを入力" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :password_confirmation, "確認用パスワード",
+                      class: "form-label fw-semibold small text-muted" %>
+          <%= f.password_field :password_confirmation,
+                               class: "form-control rounded-pill border-0 bg-light py-3 px-4",
+                               placeholder: "もう一度パスワードを入力" %>
+        </div>
+
+        <div class="d-grid mb-3">
+          <%= f.submit "登録する",
+                       class: "btn rounded-pill py-3 fw-bold text-white",
+                       style: "background-color: #1d9bf0;" %>
+        </div>
+      <% end %>
+
+      <div class="text-center">
+        <%= link_to "ログインはこちら",
+                    new_session_path,
+                    class: "text-decoration-none text-primary small" %>
       </div>
+
     </div>
   </div>
 </div>

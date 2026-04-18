@@ -3,60 +3,72 @@
   <head>
     <title>StudyHub</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <!-- CSRF対策 -->
     <%= csrf_meta_tags %>
-
-    <!-- Content Security Policy -->
     <%= csp_meta_tag %>
-
-    <!-- アプリ用CSS -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    
-    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/b133953e56.js" crossorigin="anonymous"></script>
-
-    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- importmap用JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <%= javascript_importmap_tags %>
   </head>
 
   <body class="bg-light">
-
-    <!-- ヘッダーをpartialとして読み込む -->
-    <%= render "layouts/header" %>
-
-    <!-- フラッシュメッセージ -->
-    <div class="container mt-3">
-      <% flash.each do |type, message| %>
-        <% alert_class =
-          case type.to_sym
-          when :notice
-            "alert-success"
-          when :alert
-            "alert-danger"
-          else
-            "alert-secondary"
-          end
-        %>
-
-        <div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
-          <%= message %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
-        </div>
-      <% end %>
+    <div class="d-lg-none">
+      <%= render "layouts/header" %>
     </div>
 
-    <% flash.discard %>
+    <div class="app-shell">
+      <aside class="app-sidebar d-none d-lg-block">
+        <%= render "layouts/sidebar" %>
+      </aside>
 
-    <!-- 各ページの中身 -->
-    <main>
-      <%= yield %>
-    </main>
+      <div class="app-main-area">
+        <div class="container mt-3">
+          <% flash.each do |type, message| %>
+            <% alert_class =
+              case type.to_sym
+              when :notice
+                "alert-success"
+              when :alert
+                "alert-danger"
+              else
+                "alert-secondary"
+              end
+            %>
 
-    <!-- Bootstrap JS -->
+            <div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
+              <%= message %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
+            </div>
+          <% end %>
+        </div>
+
+        <% flash.discard %>
+
+        <main class="app-main">
+          <%= yield %>
+        </main>
+
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener('turbo:load', function() {
+        const navbarCollapse = document.getElementById('studyhubNavbar');
+        if (navbarCollapse) {
+          const navLinks = navbarCollapse.querySelectorAll('.nav-link, .btn');
+
+          navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+              const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                hide: true
+              });
+            });
+          });
+        }
+      });
+    </script>
   </body>
 </html>

@@ -1,11 +1,12 @@
-<div class="container py-5">
+<div class="py-5">
 
   <!-- ヒーローセクション -->
-  <div class="row align-items-center mb-5">
-    <div class="col-lg-6 mb-4 mb-lg-0">
+  <div class="row align-items-center mb-5 px-3 px-md-4 px-lg-5">
+    <div class="col-lg-6 mb-4 mb-lg-0 d-flex flex-column align-items-center justify-content-center text-center">
       <!-- サービス名 -->
-      <h1 class="display-5 fw-bold mb-3">
-        StudyHub
+      <h1 class="display-5 fw-bold mb-3 d-flex align-items-center gap-3 justify-content-center">
+        <i class="fa-solid fa-graduation-cap" style="color: #1d9bf0; font-size: 3rem;"></i>
+        <span>StudyHub</span>
       </h1>
 
       <!-- サービス説明 -->
@@ -15,13 +16,22 @@
       </p>
 
       <!-- ボタンエリア -->
-      <div class="d-flex flex-wrap gap-2">
+      <div class="d-flex gap-2 top-page justify-content-center">
         <% if authenticated? %>
-          <%= link_to "マイページ", mypage_path, class: "btn btn-primary btn-lg px-4" %>
-          <%= link_to "投稿一覧", posts_path, class: "btn btn-outline-primary btn-lg px-4" %>
+          <%= link_to mypage_path, class: "x-signup-btn text-center" do %>
+            <i class="fa-solid fa-user me-2"></i>マイページ
+          <% end %>
+          <%= link_to posts_path, class: "x-login-btn text-center" do %>
+            <i class="fa-regular fa-file-lines me-2"></i>投稿一覧
+          <% end %>
         <% else %>
-          <%= link_to "新規登録", new_user_path, class: "btn btn-primary btn-lg px-4" %>
-          <%= link_to "ログイン", new_session_path, class: "btn btn-outline-primary btn-lg px-4" %>
+          <%= link_to new_user_path, class: "x-signup-btn text-center" do %>
+            <i class="fa-solid fa-user-plus me-2"></i>新規登録
+          <% end %>
+
+          <%= link_to new_session_path, class: "x-login-btn text-center" do %>
+            <i class="fa-solid fa-right-to-bracket me-2"></i>ログイン
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -35,71 +45,75 @@
   </div>
 
   <!-- ===== 特徴セクション ===== -->
-  <div class="row g-4 mb-5">
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm border-0">
-        <div class="card-body">
-          <!-- 特徴1 -->
-          <h3 class="h5 fw-bold mb-3">記録する</h3>
-          <p class="text-secondary mb-0">
-            その日に学習した内容や時間を投稿して、自分の努力をしっかり残せます。
-          </p>
+  <div class="px-3 px-md-4 px-lg-5 mb-5">
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <!-- 特徴1 -->
+            <h3 class="h5 fw-bold mb-3">記録する</h3>
+            <p class="text-secondary mb-0">
+              その日に学習した内容や時間を投稿して、自分の努力をしっかり残せます。
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm border-0">
-        <div class="card-body">
-          <!-- 特徴2 -->
-          <h3 class="h5 fw-bold mb-3">継続する</h3>
-          <p class="text-secondary mb-0">
-            学習の積み重ねを見える形にすることで、継続のモチベーションにつながります。
-          </p>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <!-- 特徴2 -->
+            <h3 class="h5 fw-bold mb-3">継続する</h3>
+            <p class="text-secondary mb-0">
+              学習の積み重ねを見える形にすることで、継続のモチベーションにつながります。
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm border-0">
-        <div class="card-body">
-          <!-- 特徴3 -->
-          <h3 class="h5 fw-bold mb-3">つながる</h3>
-          <p class="text-secondary mb-0">
-            他の学習者の投稿を見ることで、新しい気づきや刺激を得られます。
-          </p>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <!-- 特徴3 -->
+            <h3 class="h5 fw-bold mb-3">つながる</h3>
+            <p class="text-secondary mb-0">
+              他の学習者の投稿を見ることで、新しい気づきや刺激を得られます。
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ===== 利用イメージセクション ===== -->
-  <div class="p-4 p-md-5 bg-light rounded-4 mb-5">
-    <h2 class="h3 fw-bold mb-3">こんな人におすすめ</h2>
+  <div class="px-3 px-md-4 px-lg-5 mb-5">
+    <div class="bg-light rounded-4 p-4 p-md-5">
+      <h2 class="h3 fw-bold mb-3">こんな人におすすめ</h2>
 
-    <div class="row g-3">
-      <div class="col-md-4">
+      <div class="row g-3 justify-content-center">
+        <div class="col-md-6 col-lg-4">
         <div class="bg-white rounded-3 p-3 h-100 border">
           <p class="mb-0">勉強の記録を習慣化したい人</p>
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="bg-white rounded-3 p-3 h-100 border">
-          <p class="mb-0">学習の継続を見える化したい人</p>
+        <div class="col-md-6 col-lg-4">
+          <div class="bg-white rounded-3 p-3 h-100 border">
+            <p class="mb-0">学習の継続を見える化したい人</p>
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="bg-white rounded-3 p-3 h-100 border">
-          <p class="mb-0">他の学習者とゆるくつながりたい人</p>
+        <div class="col-md-6 col-lg-4">
+          <div class="bg-white rounded-3 p-3 h-100 border">
+            <p class="mb-0">他の学習者とゆるくつながりたい人</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ===== 下部CTAセクション ===== -->
-  <div class="text-center py-4">
+  <div class="text-center py-4 px-3 px-md-4 px-lg-5">
     <h2 class="h3 fw-bold mb-3">今日の学習から、少しずつ積み上げよう</h2>
     <p class="text-secondary mb-4">
       学習の記録を残して、継続をあなたの強みにしていきましょう。
@@ -107,11 +121,19 @@
 
     <div class="d-flex justify-content-center flex-wrap gap-2">
       <% if authenticated? %>
-        <%= link_to "新しく記録する", new_post_path, class: "btn btn-primary px-4" %>
-        <%= link_to "投稿一覧を見る", posts_path, class: "btn btn-outline-secondary px-4" %>
+        <%= link_to new_post_path, class: "x-signup-btn text-center" do %>
+          <i class="fa-solid fa-pen-to-square me-2"></i>新しく記録する
+        <% end %>
+        <%= link_to posts_path, class: "x-login-btn text-center" do %>
+          <i class="fa-regular fa-file-lines me-2"></i>投稿一覧を見る
+        <% end %>
       <% else %>
-        <%= link_to "今すぐ始める", new_user_path, class: "btn btn-primary px-4" %>
-        <%= link_to "StudyHubについて見る", about_path, class: "btn btn-outline-secondary px-4" %>
+        <%= link_to new_user_path, class: "x-signup-btn text-center" do %>
+          <i class="fa-solid fa-user-plus me-2"></i>今すぐ始める
+        <% end %>
+        <%= link_to about_path, class: "x-login-btn text-center" do %>
+          <i class="fa-regular fa-circle-question me-2"></i>StudyHubについて見る
+        <% end %>
       <% end %>
     </div>
   </div>
