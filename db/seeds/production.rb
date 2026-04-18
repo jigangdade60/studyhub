@@ -18,6 +18,14 @@ demo_user = User.find_or_create_by!(email_address: "demo@studyhub.com") do |user
   user.demo = true
 end
 
+unless demo_user.avatar.attached?
+  demo_user.avatar.attach(
+    io: File.open(Rails.root.join("db/seed_images/demo_user.png")),
+    filename: "demo_user.png",
+    content_type: "image/png"
+  )
+end
+
 # =========================
 # タグ
 # =========================
