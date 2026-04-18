@@ -18,6 +18,41 @@ User.destroy_all
 Tag.destroy_all if defined?(Tag)
 
 # =========================
+# 日本語テンプレ
+# =========================
+titles = [
+  "Railsでいいね機能を実装しました",
+  "SQLのJOINを復習",
+  "ポートフォリオのUI改善",
+  "今日の学習記録",
+  "N+1問題を解消しました",
+  "通知機能の設計を見直し中",
+  "バリデーションを整理しました"
+]
+
+post_bodies = [
+  "今日はRailsでいいね機能を実装しました。思ったよりシンプルで理解が深まりました。",
+  "SQLのJOINを復習しました。まだ曖昧な部分があるので引き続き学習します。",
+  "ポートフォリオのUIを改善中です。少しずつ見やすくなってきました。",
+  "N+1問題をincludesで解消しました。かなりスッキリしました。",
+  "通知機能を実装しました。設計を考えるのが楽しかったです。",
+  "今日はあまり進まなかったけど、少しだけ前進。",
+  "エラーに時間を使ったけど原因が分かってスッキリ。",
+  "バリデーション周りを整理しました。コードが読みやすくなりました。"
+]
+
+comment_bodies = [
+  "すごく参考になりました！",
+  "自分も同じところで詰まっていました",
+  "この書き方わかりやすいですね",
+  "あとで試してみます！",
+  "ナイス実装です👏",
+  "勉強になります！",
+  "自分も改善してみます",
+  "いい視点ですね"
+]
+
+# =========================
 # タグ作成
 # =========================
 tag_names = ["英語", "数学", "プログラミング", "資格", "読書", "TOEIC", "Rails"]
@@ -47,16 +82,14 @@ users.each do |user|
   rand(3..8).times do
     post = Post.create!(
       user: user,
-      title: Faker::Educator.course_name,
-      body: Faker::Lorem.sentence(word_count: 25),
+      title: titles.sample,
+      body: post_bodies.sample,
       study_time: rand(10..180),
       created_at: rand(1..7).days.ago
     )
 
     # タグ付け（1〜3個）
-    if post.respond_to?(:tags)
-      post.tags << tags.sample(rand(1..3))
-    end
+    post.tags << tags.sample(rand(1..3)) if post.respond_to?(:tags)
 
     posts << post
   end
@@ -85,6 +118,8 @@ end
 # =========================
 posts.each do |post|
   users.sample(rand(1..5)).each do |user|
+    next if post.user == user # 自分の投稿にはいいねしない
+
     Like.find_or_create_by!(
       user: user,
       post: post
@@ -97,51 +132,16 @@ end
 # =========================
 posts.each do |post|
   rand(2..6).times do
+    user = users.sample
+    next if post.user == user # 自分の投稿にはコメントしない
+
     Comment.create!(
-      user: users.sample,
+      user: user,
       post: post,
-      body: Faker::Lorem.sentence(word_count: 12),
+      body: comment_bodies.sample,
       created_at: rand(1..5).days.ago
     )
   end
-end
-
-# =========================
-# 通知（いいね）
-# =========================
-Like.all.each do |like|
-  Notification.find_or_create_by!(
-    recipient: like.post.user,
-    actor: like.user,
-    action: "liked",
-    notifiable: like
-  )
-end
-
-# =========================
-# 通知（フォロー）
-# =========================
-Relationship.all.each do |rel|
-  Notification.find_or_create_by!(
-    recipient: rel.followed,
-    actor: rel.follower,
-    action: "followed",
-    notifiable: rel
-  )
-end
-
-# =========================
-# 通知（コメント）
-# =========================
-Comment.all.each do |comment|
-  next if comment.post.user == comment.user
-
-  Notification.find_or_create_by!(
-    recipient: comment.post.user,
-    actor: comment.user,
-    action: "commented",
-    notifiable: comment
-  )
 end
 
 # =========================
