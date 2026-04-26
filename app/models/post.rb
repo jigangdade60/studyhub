@@ -61,14 +61,14 @@ class Post < ApplicationRecord
   scope :keyword_search, ->(keyword) {
     return all if keyword.blank?
 
-    where("title LIKE ? OR body LIKE ?", "%#{keyword}%", "%#{keyword}%")
+    where("posts.title LIKE ? OR posts.body LIKE ?", "%#{keyword}%", "%#{keyword}%")
   }
 
   # タグ検索
   scope :tag_search, ->(tag_name) {
     return all if tag_name.blank?
 
-    joins(:tags).where(tags: { name: tag_name }).distinct
+    joins(:tags).where(tags: { name: tag_name })
   }
 
   # 期間検索（今日・直近◯日など）
