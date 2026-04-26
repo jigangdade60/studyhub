@@ -1,11 +1,5 @@
 <div class="container py-0.5" style="max-width: 640px;">
 
-  <% if flash[:alert].present? %>
-    <div class="alert alert-danger">
-      <%= flash[:alert] %>
-    </div>
-  <% end %>
-
   <%= render "form", post: @post %>
 
 </div>

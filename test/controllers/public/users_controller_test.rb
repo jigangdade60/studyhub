@@ -2,12 +2,22 @@ require "test_helper"
 
 class Public::UsersControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
-    get public_users_new_url
+    get new_user_url
     assert_response :success
   end
 
-  test "should get create" do
-    get public_users_create_url
-    assert_response :success
+  test "should create user" do
+    assert_difference("User.count", 1) do
+      post sign_up_url, params: {
+        user: {
+          name: "テストユーザー",
+          email_address: "test@example.com",
+          password: "password",
+          password_confirmation: "password"
+        }
+      }
+    end
+
+    assert_redirected_to mypage_path
   end
 end

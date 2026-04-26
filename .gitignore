@@ -33,3 +33,12 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /.env
+
+# editor
+*.swp
+*.swo
+*~
+sion.lastSession*
+
+# mac
+.DS_Store

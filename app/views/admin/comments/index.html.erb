@@ -4,12 +4,6 @@
     <h5 class="fw-bold mb-0">コメント管理</h5>
   </div>
 
-  <% if flash[:notice] %>
-    <div class="alert alert-success">
-      <%= flash[:notice] %>
-    </div>
-  <% end %>
-
   <% if @comments.empty? %>
     <div class="bg-white border rounded-4 p-4 text-muted text-center">
       コメントはまだありません。
