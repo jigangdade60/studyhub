@@ -76,6 +76,7 @@
 - パスワード：password
 
 ### 管理者
+- 管理者用URL : http://13.113.151.78/admin/login
 - メールアドレス：admin@example.com
 - パスワード：password
 
