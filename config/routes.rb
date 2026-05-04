@@ -74,5 +74,8 @@ Rails.application.routes.draw do
         patch :read_all
       end
     end
+
+    resource :theme, only: [:update]
   end
+  
 end
