@@ -12,7 +12,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-light">
+  <body class="bg-light <%= current_user&.dark? ? 'dark-mode' : '' %>">
     <div class="d-lg-none">
       <%= render "layouts/header" %>
     </div>

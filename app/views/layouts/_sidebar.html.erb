@@ -100,6 +100,14 @@
             <% end %>
           </li>
 
+          <li class="mb-2">
+            <%= button_to theme_path,
+                          method: :patch,
+                          class: "btn btn-outline-secondary rounded-pill w-100" do %>
+              <%= Current.user.dark? ? "☀️ ライトモード" : "🌙 ダークモード" %>
+            <% end %>
+          </li>
+
         <% else %>
           <!-- 未ログイン -->
           <li class="mb-2">
