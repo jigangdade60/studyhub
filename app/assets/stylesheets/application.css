@@ -885,3 +885,121 @@ turbo-frame {
     font-size: 0.75rem;
   }
 }
+
+/* ===== Dark Mode ===== */
+.dark-mode {
+  background-color: #15202b !important;
+}
+.dark-mode .studyhub-header {
+  background-color: rgba(21, 32, 43, 0.96);
+  border-bottom: 1px solid #192734;
+}
+.dark-mode .studyhub-logo {
+  color: #ffffff;
+}
+.dark-mode .studyhub-logo i {
+  color: #1d9bf0;
+}
+.dark-mode .studyhub-logo:hover {  color: #ffffff;
+  opacity: 0.9;
+}
+.dark-mode .x-nav-link {
+  color: #ffffff !important;
+}
+.dark-mode .x-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+.dark-mode .profile-link img {  border: 1px solid #192734;
+}
+.dark-mode .notification-badge {  background-color: #1d9bf0;
+  color: #ffffff;
+  border: 2px solid #15202b;
+}
+.dark-mode .x-signup-btn,
+.dark-mode .x-post-btn,
+.dark-mode .x-create-group-btn {
+  background-color: #1d9bf0;
+  color: #ffffff !important;
+}
+.dark-mode .x-signup-btn:hover,
+.dark-mode .x-post-btn:hover,
+.dark-mode .x-create-group-btn:hover {  background-color: #1a8cd8;
+  color: #ffffff !important;
+}
+.dark-mode .x-login-btn,
+.dark-mode .x-logout-btn {  background-color: transparent;
+  color: #ffffff !important;
+  border: 1px solid #192734;
+}
+.dark-mode .x-login-btn:hover,
+.dark-mode .x-logout-btn:hover {  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+.dark-mode .app-shell {
+  background-color: #15202b;
+}
+.dark-mode .app-sidebar {  background-color: #15202b;
+  border-right: 1px solid #192734;
+}
+.dark-mode .app-main-area {  background-color: #15202b;
+}
+.dark-mode .x-sidebar {  background-color: #15202b;
+}
+.dark-mode .x-logo-link {  color: #ffffff;
+}
+.dark-mode .x-logo-link i {  color: #1d9bf0;
+}
+.dark-mode .x-logo-link:hover {  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.dark-mode .x-side-link {  color: #ffffff !important;
+}
+.dark-mode .x-side-link:hover {  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+.dark-mode .x-side-link.active {  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode .profile-side-link img {  border: 1px solid #192734;
+}
+.dark-mode .x-post-btn {  background-color: #1d9bf0;
+  color: #ffffff !important;
+}
+.dark-mode .x-post-btn:hover {  background-color: #1a8cd8;
+  color: #ffffff !important;
+}
+.dark-mode .x-create-group-btn {  background-color: #1d9bf0;
+  color: #ffffff !important;
+}
+.dark-mode .x-create-group-btn:hover {  background-color: #1a8cd8;
+  color: #ffffff !important;
+}
+.dark-mode .x-logout-side-btn {  background-color: transparent;
+  color: #ffffff !important;
+  border: 1px solid #192734;
+}
+.dark-mode .x-logout-side-btn:hover {  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+}
+.dark-mode .app-right {  background-color: #15202b;
+}
+.dark-mode .right-box {  background-color: #192734;
+  border: 1px solid #192734;
+}
+.dark-mode .dm-page {  background-color: #15202b;
+}
+.dark-mode .dm-header {  background-color: rgba(21, 32, 43, 0.96);
+  border-bottom: 1px solid #192734;
+}
+.dark-mode .dm-back-link {  color: #ffffff;}
+.dark-mode .dm-back-link:hover {  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.dark-mode .dm-title {  color: #ffffff;}
+.dark-mode .dm-subtitle {  color: #8899a6;}
+.dark-mode .dm-card {  background-color: #192734;
+  border-left: 1px solid #192734;
+  border-right: 1px solid #192734;
+  border-bottom: 1px solid #192734;
+}
