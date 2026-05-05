@@ -97,6 +97,12 @@ class User < ApplicationRecord
            dependent: :destroy
 
   # =========================
+  # テーマ設定
+  # =========================
+
+  enum :theme, { light: "light", dark: "dark" }, default: "light"
+
+  # =========================
   # バリデーション
   # =========================
 
