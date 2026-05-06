@@ -49,24 +49,14 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    # 学習の見える化のために、投稿数・累計学習時間・今週の学習時間・連続学習日数を算出する
-    @posts_count = all_posts.count
-    @total_study_time = all_posts.sum(:study_time)
-    @weekly_study_time = all_posts.where(created_at: Time.current.all_week).sum(:study_time)
-    @streak_days = calculate_streak_days(all_posts)
+    # 学習サマリー表示用データはService Objectに切り出す
+    statistics = UserStatistics.new(@user)
 
-    # 直近7日分の学習時間をグラフ表示用データに変換する
-    today = Date.current
-    days = (6.days.ago.to_date..today).to_a
-
-    @weekly_study_chart_data = days.map do |day|
-      total_minutes = all_posts.where(created_at: day.all_day).sum(:study_time)
-
-      {
-        label: %w[日 月 火 水 木 金 土][day.wday],
-        minutes: total_minutes
-      }
-    end
+    @posts_count = statistics.posts_count
+    @total_study_time = statistics.total_study_time
+    @weekly_study_time = statistics.weekly_study_time
+    @streak_days = statistics.streak_days
+    @weekly_study_chart_data = statistics.weekly_study_chart_data
   end
 
   def mypage
@@ -84,24 +74,14 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    # 学習サマリー表示用データ
-    @posts_count = all_posts.count
-    @total_study_time = all_posts.sum(:study_time)
-    @weekly_study_time = all_posts.where(created_at: Time.current.all_week).sum(:study_time)
-    @streak_days = calculate_streak_days(all_posts)
+    # 学習サマリー表示用データはService Objectに切り出す
+    statistics = UserStatistics.new(@user)
 
-    # 直近7日分の学習グラフ用データ
-    today = Date.current
-    days = (6.days.ago.to_date..today).to_a
-
-    @weekly_study_chart_data = days.map do |day|
-      total_minutes = all_posts.where(created_at: day.all_day).sum(:study_time)
-
-      {
-        label: %w[日 月 火 水 木 金 土][day.wday],
-        minutes: total_minutes
-      }
-    end
+    @posts_count = statistics.posts_count
+    @total_study_time = statistics.total_study_time
+    @weekly_study_time = statistics.weekly_study_time
+    @streak_days = statistics.streak_days
+    @weekly_study_chart_data = statistics.weekly_study_chart_data
   end
 
   def edit
@@ -173,28 +153,5 @@ class Public::UsersController < ApplicationController
       :profile_image,
       :is_public
     )
-  end
-
-  def calculate_streak_days(posts)
-    # 投稿日を日付単位に変換し、連続学習日数を計算する
-    studied_dates = posts.pluck(:created_at)
-                         .map(&:to_date)
-                         .uniq
-                         .sort
-                         .reverse
-
-    streak = 0
-    current_day = Date.current
-
-    studied_dates.each do |date|
-      if date == current_day
-        streak += 1
-        current_day -= 1
-      else
-        break
-      end
-    end
-
-    streak
   end
 end
