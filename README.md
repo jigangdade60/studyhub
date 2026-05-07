@@ -64,7 +64,7 @@
 ---
 
 ## URL
-- アプリURL：http://13.113.151.78
+- アプリURL：http://43.207.232.126
 - GitHubリポジトリ：https://github.com/jigangdade60/studyhub
 
 ---
@@ -76,7 +76,7 @@
 - パスワード：password
 
 ### 管理者
-- 管理者用URL : http://13.113.151.78/admin/login
+- 管理者用URL : http://43.207.232.126/admin/login
 - メールアドレス：admin@example.com
 - パスワード：password
 
