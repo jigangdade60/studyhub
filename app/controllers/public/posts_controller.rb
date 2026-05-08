@@ -14,55 +14,11 @@ class Public::PostsController < ApplicationController
     @period = params[:period]
     @mode = params[:mode] || "all"
 
-    base_posts =
-      if authenticated?
-        # ログイン中は公開投稿に加えて、自分の下書きも一覧に含める
-        Post.includes(:user, :tags, :likes, :comments)
-            .where("posts.status = ? OR posts.user_id = ?", Post.statuses[:published], Current.user.id)
-      else
-        # 未ログイン時は公開投稿のみ表示する
-        Post.includes(:user, :tags, :likes, :comments)
-            .where(status: :published)
-      end
-
-    if @mode == "following"
-      base_posts =
-        if authenticated?
-          # フォロー中ユーザーの投稿だけに絞り込む
-          base_posts.where(user_id: Current.user.following_ids)
-        else
-          Post.none
-        end
-    end
-
-    # キーワード・タグ・期間で絞り込みを行う
-    filtered_posts = base_posts
-                     .keyword_search(params[:keyword])
-                     .tag_search(params[:tag_name])
-                     .period_search(params[:period])
-                     .distinct
-
-    @posts =
-      case @sort
-      when "old"
-        filtered_posts.order(created_at: :asc)
-      when "likes"
-        # いいね数の多い順に並べる
-        filtered_posts
-          .left_joins(:likes)
-          .group("posts.id")
-          .order(Arel.sql("COUNT(likes.id) DESC"), created_at: :desc)
-      when "comments"
-        # コメント数の多い順に並べる
-        filtered_posts
-          .left_joins(:comments)
-          .group("posts.id")
-          .order(Arel.sql("COUNT(comments.id) DESC"), created_at: :desc)
-      else
-        filtered_posts.order(created_at: :desc)
-      end
-
-    @posts = @posts.page(params[:page]).per(10)
+    @posts = PostSearchQuery.new(
+      params: params,
+      current_user: Current.user,
+      authenticated: authenticated?
+    ).call.page(params[:page]).per(10)
   end
 
   def show
