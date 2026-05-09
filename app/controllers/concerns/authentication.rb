@@ -31,12 +31,12 @@ module Authentication
 
   # 現在のセッションから一般ユーザーを取得する
   def current_user
-    resume_session&.user
+    Current.user
   end
 
   # 現在のセッションから管理者を取得する
   def current_admin
-    resume_session&.admin
+    Current.admin
   end
 
   # 毎リクエスト時にセッションを復元し、
