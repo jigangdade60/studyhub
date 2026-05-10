@@ -44,7 +44,7 @@
                               class: "fw-bold text-dark text-decoration-none" %>
                 </span>
 
-                <% if authenticated? && Current.user == user %>
+                <% if authenticated? && current_user == user %>
                   <% if user.is_public? %>
                     <span class="badge bg-success rounded-pill">公開中</span>
                   <% else %>
@@ -81,7 +81,7 @@
 
                 <!-- 右 -->
                 <div class="x-user-action" onclick="event.stopPropagation();">
-                  <% if authenticated? && Current.user != user %>
+                  <% if authenticated? && current_user != user %>
                     <%= render "public/relationships/btn", user: user %>
                   <% end %>
                 </div>

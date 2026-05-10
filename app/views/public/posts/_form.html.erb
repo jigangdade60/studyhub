@@ -30,7 +30,7 @@
           <!-- アイコン -->
           <div class="flex-shrink-0">
             <% if authenticated? %>
-              <%= user_avatar(Current.user, size: 48) %>
+              <%= user_avatar(current_user, size: 48) %>
             <% else %>
               <div class="rounded-circle bg-light border d-flex justify-content-center align-items-center"
                    style="width: 48px; height: 48px;">

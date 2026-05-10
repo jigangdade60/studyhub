@@ -33,9 +33,9 @@
           <!-- タイトル -->
           <div class="fw-bold text-dark mb-2">
             <%= @post.title %>
-            <% if Current.user.present? && @post.user == Current.user && @post.draft? %>
+            <% if current_user.present? && @post.user == current_user && @post.draft? %>
               <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
-            <% elsif Current.user.present? && @post.user == Current.user && @post.published? %>
+            <% elsif current_user.present? && @post.user == current_user && @post.published? %>
               <span class="badge bg-primary rounded-pill ms-2">公開中</span>
             <% end %>
           </div>
@@ -88,7 +88,7 @@
   <div class="d-flex flex-wrap gap-2 mb-3">
     <%= link_to "一覧へ戻る", posts_path, class: "btn btn-outline-secondary rounded-pill px-4" %>
 
-    <% if Current.user&.id == @post.user_id %>
+    <% if current_user&.id == @post.user_id %>
       <%= link_to "編集する", edit_post_path(@post), class: "x-main-btn rounded-pill px-4 text-decoration-none" %>
 
       <%= button_to "削除する",
@@ -101,7 +101,7 @@
 
   <% if @post.published? %>
     <!-- コメント投稿フォーム -->
-    <% if Current.user.present? %>
+    <% if current_user.present? %>
       <div class="bg-white border rounded-4 p-3 mb-3">
         <%= form_with model: [@post, @comment] do |f| %>
           <% if @comment.errors.any? %>
@@ -170,7 +170,7 @@
               </div>
 
               <!-- 削除ボタン -->
-              <% if Current.user&.id == comment.user_id %>
+              <% if current_user&.id == comment.user_id %>
                 <div>
                   <%= button_to "削除",
                                 post_comment_path(@post, comment),
@@ -191,7 +191,7 @@
   </div>
 </div>
 
-  <% elsif Current.user.present? && @post.user == Current.user %>
+  <% elsif current_user.present? && @post.user == current_user %>
     <div class="bg-white border rounded-4 p-3 text-muted">
       この投稿は非公開です。公開するまで、いいねやコメントは表示されません。
     </div>
