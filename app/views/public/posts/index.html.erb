@@ -133,7 +133,7 @@
               <!-- タイトル -->
               <div class="fw-bold text-dark mb-2">
                 <%= post.title %>
-                <% if Current.user.present? && post.user == Current.user && post.draft? %>
+                <% if current_user.present? && post.user == current_user && post.draft? %>
                   <span class="badge bg-secondary rounded-pill ms-2">非公開</span>
                 <% end %>
               </div>

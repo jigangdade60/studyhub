@@ -12,7 +12,7 @@
     <nav>
       <ul class="list-unstyled mb-0">
 
-        <% if Current.admin.present? %>
+        <% if current_admin.present? %>
           <!-- 管理者ログイン後 -->
           <li class="mb-2">
             <%= link_to admin_users_path, class: "x-side-link #{'active' if current_page?(admin_users_path)}" do %>
@@ -89,7 +89,7 @@
 
           <li class="mb-2">
             <%= link_to mypage_path, class: "x-side-link #{'active' if current_page?(mypage_path)} profile-side-link" do %>
-              <%= user_avatar(Current.user, size: 34) %>
+              <%= user_avatar(current_user, size: 34) %>
               <span>マイページ</span>
             <% end %>
           </li>
@@ -104,7 +104,7 @@
             <%= button_to theme_path,
                           method: :patch,
                           class: "btn btn-outline-secondary rounded-pill w-100" do %>
-              <%= Current.user.dark? ? "☀️ ライトモード" : "🌙 ダークモード" %>
+              <%= current_user.dark? ? "☀️ ライトモード" : "🌙 ダークモード" %>
             <% end %>
           </li>
 
@@ -151,7 +151,7 @@
         <i class="fa-solid fa-right-from-bracket me-2"></i>ログアウト
       <% end %>
 
-    <% elsif Current.admin.present? %>
+    <% elsif current_admin.present? %>
       <%= link_to admin_logout_path,
                   data: { turbo_method: :delete },
                   class: "x-logout-side-btn" do %>

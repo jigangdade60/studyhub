@@ -33,8 +33,8 @@
         <% if @dm_messages.any? %>
           <div class="d-flex flex-column gap-4">
             <% @dm_messages.each do |message| %>
-              <% mine = message.user_id == Current.user.id %>
-              <% message_user = mine ? Current.user : message.user %>
+              <% mine = message.user_id == current_user.id %>
+              <% message_user = mine ? current_user : message.user %>
 
               <div class="d-flex <%= mine ? 'justify-content-end' : 'justify-content-start' %>">
                 <div class="dm-message-row <%= mine ? 'mine' : 'other' %>">
@@ -61,8 +61,8 @@
 
                   <% if mine %>
                     <div class="dm-avatar">
-                      <% if Current.user.profile_image.attached? %>
-                        <%= image_tag Current.user.profile_image, class: "dm-user-avatar-img" %>
+                      <% if current_user.profile_image.attached? %>
+                        <%= image_tag current_user.profile_image, class: "dm-user-avatar-img" %>
                       <% else %>
                         <%= image_tag "no_image.jpg", class: "dm-user-avatar-img" %>
                       <% end %>

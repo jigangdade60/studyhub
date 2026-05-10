@@ -23,7 +23,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="studyhubNavbar">
         <ul class="navbar-nav align-items-lg-center gap-lg-1">
 
-          <% if Current.admin.present? %>
+          <% if current_admin.present? %>
             <!-- 管理者ログイン後 -->
             <li class="nav-item">
               <%= link_to admin_users_path, class: "nav-link x-nav-link" do %>
@@ -105,7 +105,7 @@
 
             <li class="nav-item">
               <%= link_to mypage_path, class: "nav-link x-nav-link profile-link d-flex align-items-center gap-2" do %>
-                <%= user_avatar(Current.user, size: 34) %>
+                <%= user_avatar(current_user, size: 34) %>
                 <span>マイページ</span>
               <% end %>
             </li>
