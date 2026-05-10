@@ -2,6 +2,10 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    # 毎リクエスト時にセッションを復元し、
+    # 公開ページでも current_user / current_admin を使えるようにする
+    before_action :resume_session
+
     # 基本は全画面でログイン必須にし、
     # ログイン不要な画面だけ allow_unauthenticated_access で除外する
     before_action :require_authentication
@@ -39,10 +43,9 @@ module Authentication
     Current.admin
   end
 
-  # 毎リクエスト時にセッションを復元し、
-  # セッションがなければログイン画面へ誘導する
+  # Current.session がなければログイン画面へ誘導する
   def require_authentication
-    resume_session || request_authentication
+    Current.session || request_authentication
   end
 
   # Cookieに保存された session_id からセッション情報を復元し、

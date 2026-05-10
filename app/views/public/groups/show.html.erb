@@ -73,7 +73,7 @@
                   new_session_path,
                   class: "btn btn-outline-primary rounded-pill px-4" %>
 
-    <% elsif @group.owned_by?(Current.user) %>
+    <% elsif @group.owned_by?(current_user) %>
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <p class="mb-0">あなたは作成者です</p>
         <%= link_to "申請管理",
@@ -81,10 +81,10 @@
                     class: "x-main-btn rounded-pill px-4 text-decoration-none" %>
       </div>
 
-    <% elsif @group.joined_by?(Current.user) %>
+    <% elsif @group.joined_by?(current_user) %>
       <p class="mb-0 text-primary fw-semibold">参加中</p>
 
-    <% elsif @group.pending_request_by?(Current.user) %>
+    <% elsif @group.pending_request_by?(current_user) %>
       <p class="mb-0 text-warning fw-semibold">申請中</p>
 
     <% elsif @group.full? %>
@@ -129,7 +129,7 @@
     <div class="p-3">
       <h5 class="fw-bold mb-3">グループチャット</h5>
 
-      <% if authenticated? && @group.joined_by?(Current.user) %>
+      <% if authenticated? && @group.joined_by?(current_user) %>
 
         <!-- 投稿フォーム -->
         <div class="mb-3">
