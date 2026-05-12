@@ -10,13 +10,13 @@ class Public::DmMessagesController < ApplicationController
     @dm_message = @dm_room.dm_messages.new(dm_message_params)
 
     # 送信者はログイン中ユーザーに固定する
-    @dm_message.user = Current.user
+    @dm_message.user = current_user
 
     if @dm_message.save
       redirect_to dm_room_path(@dm_room), notice: "メッセージを送信しました"
     else
       # エラー時はDM画面を再表示できるように必要なデータを再取得する
-      @other_user = @dm_room.other_user(Current.user)
+      @other_user = @dm_room.other_user(current_user)
       @dm_messages = @dm_room.dm_messages.includes(:user).order(:created_at)
       render "public/dm_rooms/show", status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class Public::DmMessagesController < ApplicationController
 
   def ensure_room_member
     # DMルーム参加者以外はメッセージ送信できないようにする
-    return if @dm_room.includes_user?(Current.user)
+    return if @dm_room.includes_user?(current_user)
 
     redirect_to root_path, alert: "このDMルームには入れません"
   end
