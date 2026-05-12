@@ -33,8 +33,8 @@ class Public::UsersController < ApplicationController
                  .order(created_at: :desc)
 
     # ログイン中は、自分が非公開設定でも一覧に表示できるようにする
-    if authenticated? && Current.user.present?
-      @users = @users.or(User.where(id: Current.user.id)).distinct
+    if authenticated? && current_user.present?
+      @users = @users.or(User.where(id: current_user.id)).distinct
     end
 
     @users = @users.page(params[:page]).per(10)
@@ -61,7 +61,7 @@ class Public::UsersController < ApplicationController
 
   def mypage
     # マイページは現在ログイン中のユーザー情報を表示する
-    @user = Current.user
+    @user = current_user
     all_posts = @user.posts.order(created_at: :desc)
     @posts = all_posts.page(params[:page]).per(10)
 
@@ -86,11 +86,11 @@ class Public::UsersController < ApplicationController
 
   def edit
     # 他ユーザーではなく、自分自身のプロフィールのみ編集できる
-    @user = Current.user
+    @user = current_user
   end
 
   def update
-    @user = Current.user
+    @user = current_user
 
     if @user.update(user_params)
       redirect_to mypage_path, notice: "プロフィールを更新しました。"
@@ -101,7 +101,7 @@ class Public::UsersController < ApplicationController
 
   def destroy
     # ログイン中ユーザー自身の退会処理
-    @user = Current.user
+    @user = current_user
     @user.destroy
     redirect_to root_path, notice: "退会しました。"
   end
@@ -111,7 +111,7 @@ class Public::UsersController < ApplicationController
     @users = @user.following.public_profiles
 
     # 自分自身のページでは非公開ユーザーも含めて確認できるようにする
-    if authenticated? && Current.user.present? && @user == Current.user
+    if authenticated? && current_user.present? && @user == current_user
       @users = @user.following
     end
 
@@ -123,7 +123,7 @@ class Public::UsersController < ApplicationController
     @users = @user.followers.public_profiles
 
     # 自分自身のページでは非公開ユーザーも含めて確認できるようにする
-    if authenticated? && Current.user.present? && @user == Current.user
+    if authenticated? && current_user.present? && @user == current_user
       @users = @user.followers
     end
 
@@ -138,7 +138,7 @@ class Public::UsersController < ApplicationController
 
   def ensure_profile_visible
     # 非公開ユーザーのプロフィールは本人以外アクセスできないようにする
-    return if @user.visible_to?(Current.user)
+    return if @user.visible_to?(current_user)
 
     redirect_to users_path, alert: "このユーザーのプロフィールは非公開です。"
   end

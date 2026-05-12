@@ -13,7 +13,7 @@ class Public::GroupMessagesController < ApplicationController
     @group_message = @group.group_messages.new(group_message_params)
 
     # 投稿者はログイン中ユーザーに固定する
-    @group_message.user = Current.user
+    @group_message.user = current_user
 
     if @group_message.save
       redirect_to group_path(@group), notice: "メッセージを送信しました。"
@@ -31,7 +31,7 @@ class Public::GroupMessagesController < ApplicationController
 
   def ensure_member!
     # グループ参加者以外はチャットを利用できないようにする
-    return if @group.joined_by?(Current.user)
+    return if @group.joined_by?(current_user)
 
     redirect_to group_path(@group), alert: "チャットは参加者のみ利用できます。"
   end
