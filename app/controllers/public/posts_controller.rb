@@ -16,14 +16,14 @@ class Public::PostsController < ApplicationController
 
     @posts = PostSearchQuery.new(
       params: params,
-      current_user: Current.user,
+      current_user: current_user,
       authenticated: authenticated?
     ).call.page(params[:page]).per(10)
   end
 
   def show
     # 下書きは投稿者本人だけが閲覧できるようにする
-    if @post.draft? && (!authenticated? || @post.user != Current.user)
+    if @post.draft? && (!authenticated? || @post.user != current_user)
       redirect_to posts_path, alert: "この投稿は表示できません。"
       return
     end
@@ -38,7 +38,7 @@ class Public::PostsController < ApplicationController
 
   def create
     # 投稿は必ずログイン中ユーザーに紐づけて作成する
-    @post = Current.user.posts.build(post_params)
+    @post = current_user.posts.build(post_params)
 
     if @post.save
       # タグは保存後に文字列から分解して関連付ける
@@ -78,7 +78,7 @@ class Public::PostsController < ApplicationController
 
   def ensure_correct_user
     # 投稿者本人以外は編集・更新・削除できないようにする
-    return if @post.user == Current.user
+    return if @post.user == current_user
 
     redirect_to posts_path, alert: "権限がありません。"
   end
