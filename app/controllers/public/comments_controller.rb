@@ -1,8 +1,7 @@
 class Public::CommentsController < ApplicationController
-  def create
-    # ネストされたルーティングから対象投稿を取得する
-    @post = Post.find(params[:post_id])
+  before_action :set_post, only: %i[create destroy]
 
+  def create
     # コメントは対象投稿に紐づけて作成する
     @comment = @post.comments.build(comment_params)
 
@@ -12,15 +11,13 @@ class Public::CommentsController < ApplicationController
     if @comment.save
       redirect_to post_path(@post), notice: "コメントを投稿しました。"
     else
-      # バリデーションエラー時は投稿詳細画面を再表示できるようにコメント一覧も再取得する
-      @comments = @post.comments.includes(:user).order(created_at: :desc)
+      # バリデーションエラー時は投稿詳細画面を再表示できるように表示用データを再取得する
+      set_view_resources
       render "public/posts/show", status: :unprocessable_entity
     end
   end
 
   def destroy
-    @post = Post.find(params[:post_id])
-
     # 自分が投稿したコメントだけ削除できるようにする
     @comment = current_user.comments.find(params[:id])
     @comment.destroy
@@ -29,6 +26,15 @@ class Public::CommentsController < ApplicationController
   end
 
   private
+
+  def set_post
+    # ネストされたルーティングから対象投稿を取得する
+    @post = Post.find(params[:post_id])
+  end
+
+  def set_view_resources
+    @comments = @post.comments.includes(:user).order(created_at: :desc)
+  end
 
   def comment_params
     # コメント本文のみ受け取る
