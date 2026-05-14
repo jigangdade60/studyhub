@@ -16,8 +16,7 @@ class Public::DmMessagesController < ApplicationController
       redirect_to dm_room_path(@dm_room), notice: "メッセージを送信しました"
     else
       # エラー時はDM画面を再表示できるように必要なデータを再取得する
-      @other_user = @dm_room.other_user(current_user)
-      @dm_messages = @dm_room.dm_messages.includes(:user).order(:created_at)
+      set_view_resources
       render "public/dm_rooms/show", status: :unprocessable_entity
     end
   end
@@ -34,6 +33,11 @@ class Public::DmMessagesController < ApplicationController
     return if @dm_room.includes_user?(current_user)
 
     redirect_to root_path, alert: "このDMルームには入れません"
+  end
+
+  def set_view_resources
+    @other_user = @dm_room.other_user(current_user)
+    @dm_messages = @dm_room.dm_messages.includes(:user).order(:created_at)
   end
 
   def dm_message_params
