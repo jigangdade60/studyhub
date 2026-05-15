@@ -49,14 +49,7 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    # 学習サマリー表示用データはService Objectに切り出す
-    statistics = UserStatistics.new(@user)
-
-    @posts_count = statistics.posts_count
-    @total_study_time = statistics.total_study_time
-    @weekly_study_time = statistics.weekly_study_time
-    @streak_days = statistics.streak_days
-    @weekly_study_chart_data = statistics.weekly_study_chart_data
+    set_learning_statistics
   end
 
   def mypage
@@ -74,14 +67,7 @@ class Public::UsersController < ApplicationController
                           .includes(:owner, :members)
                           .order(created_at: :desc)
 
-    # 学習サマリー表示用データはService Objectに切り出す
-    statistics = UserStatistics.new(@user)
-
-    @posts_count = statistics.posts_count
-    @total_study_time = statistics.total_study_time
-    @weekly_study_time = statistics.weekly_study_time
-    @streak_days = statistics.streak_days
-    @weekly_study_chart_data = statistics.weekly_study_chart_data
+    set_learning_statistics
   end
 
   def edit
@@ -141,6 +127,17 @@ class Public::UsersController < ApplicationController
     return if @user.visible_to?(current_user)
 
     redirect_to users_path, alert: "このユーザーのプロフィールは非公開です。"
+  end
+
+  def set_learning_statistics
+    # 学習サマリー表示用データはService Objectに切り出す
+    statistics = UserStatistics.new(@user)
+
+    @posts_count = statistics.posts_count
+    @total_study_time = statistics.total_study_time
+    @weekly_study_time = statistics.weekly_study_time
+    @streak_days = statistics.streak_days
+    @weekly_study_chart_data = statistics.weekly_study_chart_data
   end
 
   def user_params
