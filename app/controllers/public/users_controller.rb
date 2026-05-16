@@ -41,32 +41,23 @@ class Public::UsersController < ApplicationController
   end
 
   def show
-    all_posts = @user.posts.order(created_at: :desc)
-    @posts = all_posts.page(params[:page]).per(10)
-
-    # 参加中グループをあわせて表示できるように取得する
-    @joined_groups = @user.joined_groups
-                          .includes(:owner, :members)
-                          .order(created_at: :desc)
-
+    set_posts
+    set_joined_groups
     set_learning_statistics
   end
 
   def mypage
     # マイページは現在ログイン中のユーザー情報を表示する
     @user = current_user
-    all_posts = @user.posts.order(created_at: :desc)
-    @posts = all_posts.page(params[:page]).per(10)
+
+    set_posts
 
     # 自分が作成したグループと参加しているグループを分けて表示する
     @owned_groups = @user.owned_groups
                          .includes(:members)
                          .order(created_at: :desc)
 
-    @joined_groups = @user.joined_groups
-                          .includes(:owner, :members)
-                          .order(created_at: :desc)
-
+    set_joined_groups
     set_learning_statistics
   end
 
@@ -127,6 +118,17 @@ class Public::UsersController < ApplicationController
     return if @user.visible_to?(current_user)
 
     redirect_to users_path, alert: "このユーザーのプロフィールは非公開です。"
+  end
+
+  def set_posts
+    all_posts = @user.posts.order(created_at: :desc)
+    @posts = all_posts.page(params[:page]).per(10)
+  end
+
+  def set_joined_groups
+    @joined_groups = @user.joined_groups
+                          .includes(:owner, :members)
+                          .order(created_at: :desc)
   end
 
   def set_learning_statistics
