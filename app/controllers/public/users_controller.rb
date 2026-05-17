@@ -5,8 +5,17 @@ class Public::UsersController < ApplicationController
   # ユーザー詳細・フォロー一覧・フォロワー一覧では対象ユーザーを取得する
   before_action :set_user, only: %i[show following followers]
 
+  # マイページでは現在ログイン中のユーザーを取得する
+  before_action :set_current_user, only: %i[mypage]
+
   # 非公開プロフィールは本人以外から閲覧できないように制御する
   before_action :ensure_profile_visible, only: %i[show following followers]
+
+  # ユーザー詳細・マイページで表示するデータを取得する
+  before_action :set_posts, only: %i[show mypage]
+  before_action :set_joined_groups, only: %i[show mypage]
+  before_action :set_owned_groups, only: %i[mypage]
+  before_action :set_learning_statistics, only: %i[show mypage]
 
   def new
     @user = User.new
@@ -41,24 +50,9 @@ class Public::UsersController < ApplicationController
   end
 
   def show
-    set_posts
-    set_joined_groups
-    set_learning_statistics
   end
 
   def mypage
-    # マイページは現在ログイン中のユーザー情報を表示する
-    @user = current_user
-
-    set_posts
-
-    # 自分が作成したグループと参加しているグループを分けて表示する
-    @owned_groups = @user.owned_groups
-                         .includes(:members)
-                         .order(created_at: :desc)
-
-    set_joined_groups
-    set_learning_statistics
   end
 
   def edit
@@ -113,6 +107,10 @@ class Public::UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def set_current_user
+    @user = current_user
+  end
+
   def ensure_profile_visible
     # 非公開ユーザーのプロフィールは本人以外アクセスできないようにする
     return if @user.visible_to?(current_user)
@@ -123,6 +121,12 @@ class Public::UsersController < ApplicationController
   def set_posts
     all_posts = @user.posts.order(created_at: :desc)
     @posts = all_posts.page(params[:page]).per(10)
+  end
+
+  def set_owned_groups
+    @owned_groups = @user.owned_groups
+                         .includes(:members)
+                         .order(created_at: :desc)
   end
 
   def set_joined_groups
