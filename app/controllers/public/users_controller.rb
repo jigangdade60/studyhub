@@ -5,8 +5,8 @@ class Public::UsersController < ApplicationController
   # ユーザー詳細・フォロー一覧・フォロワー一覧では対象ユーザーを取得する
   before_action :set_user, only: %i[show following followers]
 
-  # マイページでは現在ログイン中のユーザーを取得する
-  before_action :set_current_user, only: %i[mypage]
+  # マイページ・編集・更新・退会では現在ログイン中のユーザーを取得する
+  before_action :set_current_user, only: %i[mypage edit update destroy]
 
   # 非公開プロフィールは本人以外から閲覧できないように制御する
   before_action :ensure_profile_visible, only: %i[show following followers]
@@ -57,12 +57,9 @@ class Public::UsersController < ApplicationController
 
   def edit
     # 他ユーザーではなく、自分自身のプロフィールのみ編集できる
-    @user = current_user
   end
 
   def update
-    @user = current_user
-
     if @user.update(user_params)
       redirect_to mypage_path, notice: "プロフィールを更新しました。"
     else
@@ -72,7 +69,6 @@ class Public::UsersController < ApplicationController
 
   def destroy
     # ログイン中ユーザー自身の退会処理
-    @user = current_user
     @user.destroy
     redirect_to root_path, notice: "退会しました。"
   end
