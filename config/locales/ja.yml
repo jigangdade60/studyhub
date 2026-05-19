@@ -1,0 +1,41 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      post: 投稿
+      comment: コメント
+      group: グループ
+      dm_message: DMメッセージ
+      tag: タグ
+      group_message: グループメッセージ
+
+    attributes:
+      user:
+        name: ユーザー名
+        email_address: メールアドレス
+        password: パスワード
+
+      post:
+        title: タイトル
+        body: 学習内容
+        study_time: 学習時間
+        study_time_minute: 分
+
+      comment:
+        body: コメント
+
+      group:
+        name: グループ名
+        description: グループ説明
+        rule: ルール
+        study_theme: 学習テーマ
+        max_members: 最大人数
+
+      dm_message:
+        content: メッセージ
+
+      tag:
+        name: タグ名
+
+      group_message:
+        content: メッセージ
