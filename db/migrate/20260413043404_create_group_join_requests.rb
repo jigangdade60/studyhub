@@ -8,6 +8,6 @@ class CreateGroupJoinRequests < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :group_join_requests, [:group_id, :user_id], unique: true
+    add_index :group_join_requests, [ :group_id, :user_id ], unique: true
   end
 end

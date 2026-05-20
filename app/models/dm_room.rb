@@ -15,7 +15,7 @@ class DmRoom < ApplicationRecord
   # 2人のユーザー間のDMルームを取得し、なければ新規作成する
   # ユーザーIDを昇順にそろえることで、同じ2人で常に同一ルームを参照できる
   def self.find_or_create_between(user_a, user_b)
-    smaller_id, larger_id = [user_a.id, user_b.id].sort
+    smaller_id, larger_id = [ user_a.id, user_b.id ].sort
     find_or_create_by!(user1_id: smaller_id, user2_id: larger_id)
   end
 

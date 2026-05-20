@@ -3,7 +3,7 @@ class Admin::CommentsController < ApplicationController
   include Authentication
 
   # 削除時は対象コメントを事前に取得する
-  before_action :set_comment, only: [:destroy]
+  before_action :set_comment, only: [ :destroy ]
 
   def index
     # 管理者がコメント一覧を確認しやすいように、

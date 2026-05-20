@@ -80,13 +80,35 @@ module Authentication
   # 一般ユーザーのログイン成功時に Session レコードを作成し、
   # そのIDを署名付きCookieに保存してログイン状態を維持する
   def start_new_session_for(user)
+    # セッション固定攻撃対策として、
+    # ログイン成功時に既存セッションを破棄して新しい session_id を発行する
+    reset_session
+
     user.sessions.create!(
       user_agent: request.user_agent,
       ip_address: request.remote_ip
     ).tap do |session_record|
+      # Current.session に保持し、
+      # リクエスト中どこからでも参照できるようにする
       Current.session = session_record
-      cookies.signed.permanent[:session_id] = {
+
+      # session_id を署名付きCookieへ保存する
+      # secure:
+      #   本番環境では HTTPS 通信時のみCookie送信
+      #
+      # httponly:
+      #   JavaScriptからCookieへアクセス不可にし、
+      #   XSSによるCookie窃取リスクを軽減
+      #
+      # same_site:
+      #   CSRF対策として外部サイトからのCookie送信を制限
+      #
+      # expires:
+      #   セッション有効期限を2週間に設定
+      cookies.signed[:session_id] = {
         value: session_record.id,
+        expires: 2.weeks.from_now,
+        secure: Rails.env.production?,
         httponly: true,
         same_site: :lax
       }
@@ -96,25 +118,35 @@ module Authentication
   # 管理者ログイン用のセッション作成処理
   # 一般ユーザーと同じ Session モデルを使い、admin を紐付けて管理する
   def start_new_session_for_admin(admin)
+    # セッション固定攻撃対策
+    reset_session
+
     Session.create!(
       admin: admin,
       user_agent: request.user_agent,
       ip_address: request.remote_ip
     ).tap do |session_record|
       Current.session = session_record
-      cookies.signed.permanent[:session_id] = {
+
+      # 管理者用セッションも同様に安全なCookie設定を行う
+      cookies.signed[:session_id] = {
         value: session_record.id,
+        expires: 2.weeks.from_now,
+        secure: Rails.env.production?,
         httponly: true,
         same_site: :lax
       }
     end
   end
 
-  # ログアウト時はDB上のセッションとCookieを削除し、セッション情報を完全に破棄する
+  # ログアウト時はDB上のセッションとCookieを削除し、
+  # セッション情報を完全に破棄する
   def terminate_session
     Current.session&.destroy
     Current.session = nil
     cookies.delete(:session_id)
+
+    # Railsセッションも完全破棄する
     reset_session
   end
 end

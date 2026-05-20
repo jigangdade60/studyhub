@@ -62,15 +62,15 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem 'dotenv-rails'
+gem "dotenv-rails"
 group :production do
-  gem 'mysql2'
+  gem "mysql2"
 end
 
 gem "kaminari"
 
 group :development do
-  gem 'faker'
+  gem "faker"
 end
 
-gem 'rails-i18n'
+gem "rails-i18n"
