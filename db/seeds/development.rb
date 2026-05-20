@@ -55,7 +55,7 @@ comment_bodies = [
 # =========================
 # タグ作成
 # =========================
-tag_names = ["英語", "数学", "プログラミング", "資格", "読書", "TOEIC", "Rails"]
+tag_names = [ "英語", "数学", "プログラミング", "資格", "読書", "TOEIC", "Rails" ]
 
 tags = tag_names.map do |name|
   Tag.create!(name: name)
@@ -99,7 +99,7 @@ end
 # フォロー関係
 # =========================
 users.each do |user|
-  others = users - [user]
+  others = users - [ user ]
 
   others.sample(rand(2..5)).each do |followed|
     if user.respond_to?(:follow)

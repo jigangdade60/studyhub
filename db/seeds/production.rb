@@ -29,7 +29,7 @@ end
 # =========================
 # タグ
 # =========================
-tag_names = ["英語", "数学", "プログラミング", "資格", "読書"]
+tag_names = [ "英語", "数学", "プログラミング", "資格", "読書" ]
 
 tags = tag_names.map do |name|
   Tag.find_or_create_by!(name: name)
@@ -66,7 +66,7 @@ if Post.where(demo: true).empty?
 
   # タグ紐付け
   if defined?(Tag) && post1.respond_to?(:tags)
-    [post1, post2, post3].each do |post|
+    [ post1, post2, post3 ].each do |post|
       post.tags = tags.sample(rand(1..2))
     end
   end
