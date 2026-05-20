@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  
   namespace :admin do
     get    "login",  to: "sessions#new"
     post   "login",  to: "sessions#create"
@@ -31,7 +30,7 @@ Rails.application.routes.draw do
 
     get "/mypage", to: "users#mypage", as: :mypage
 
-    resources :users, only: [:index, :show, :edit, :update, :destroy] do
+    resources :users, only: [ :index, :show, :edit, :update, :destroy ] do
       member do
         get :following
         get :followers
@@ -39,11 +38,11 @@ Rails.application.routes.draw do
     end
 
     resources :posts do
-      resources :comments, only: [:create, :destroy]
-      resource :like, only: [:create, :destroy]
+      resources :comments, only: [ :create, :destroy ]
+      resource :like, only: [ :create, :destroy ]
     end
 
-    resources :likes, only: [:index]
+    resources :likes, only: [ :index ]
     resources :relationships, only: %i[create destroy]
 
     resources :groups, only: %i[index show new create] do
@@ -66,7 +65,7 @@ Rails.application.routes.draw do
       resources :dm_messages, only: :create
     end
 
-    resources :notifications, only: [:index] do
+    resources :notifications, only: [ :index ] do
       member do
         patch :read
       end
@@ -76,7 +75,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :theme, only: [:update]
+    resource :theme, only: [ :update ]
   end
-
 end

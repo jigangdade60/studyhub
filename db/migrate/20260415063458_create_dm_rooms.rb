@@ -7,6 +7,6 @@ class CreateDmRooms < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :dm_rooms, [:user1_id, :user2_id], unique: true
+    add_index :dm_rooms, [ :user1_id, :user2_id ], unique: true
   end
 end
