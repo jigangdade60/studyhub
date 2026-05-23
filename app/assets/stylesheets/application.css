@@ -1003,3 +1003,61 @@ turbo-frame {
   border-right: 1px solid #192734;
   border-bottom: 1px solid #192734;
 }
+
+/* ===== 投稿一覧・詳細の白背景対策 ===== */
+.dark-mode .bg-white {
+  background-color: #192734 !important;
+}
+
+.dark-mode .bg-light {
+  background-color: #22303c !important;
+}
+
+/* ===== 黒文字 → 白文字 ===== */
+.dark-mode .text-dark,
+.dark-mode .fw-bold.text-dark,
+.dark-mode .text-dark.mb-2,
+.dark-mode .text-dark.text-start {
+  color: #ffffff !important;
+}
+
+/* ===== カード枠 ===== */
+.dark-mode .border,
+.dark-mode .border-top,
+.dark-mode .border-bottom {
+  border-color: #38444d !important;
+}
+
+/* ===== 投稿一覧・投稿詳細カード ===== */
+.dark-mode .x-hover,
+.dark-mode .rounded-4 {
+  background-color: #192734 !important;
+  color: #ffffff !important;
+}
+
+/* ===== badge ===== */
+.dark-mode .badge.bg-light {
+  background-color: #22303c !important;
+  color: #ffffff !important;
+  border: 1px solid #38444d !important;
+}
+
+/* ===== muted文字 ===== */
+.dark-mode .text-muted {
+  color: #8899a6 !important;
+}
+
+/* ===== コメント欄 ===== */
+.dark-mode textarea,
+.dark-mode input,
+.dark-mode .form-control,
+.dark-mode .form-select {
+  background-color: #22303c !important;
+  color: #ffffff !important;
+  border: 1px solid #38444d !important;
+}
+
+.dark-mode .form-control::placeholder,
+.dark-mode textarea::placeholder {
+  color: #8899a6 !important;
+}
