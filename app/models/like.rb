@@ -3,7 +3,7 @@ class Like < ApplicationRecord
 
   # いいねはユーザーと投稿をつなぐ中間テーブル（多対多関係）
   belongs_to :user
-  belongs_to :post
+  belongs_to :post, counter_cache: true
 
   # いいねに対する通知をポリモーフィック関連で管理する
   has_many :notifications, as: :notifiable, dependent: :destroy
