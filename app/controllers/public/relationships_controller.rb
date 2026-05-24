@@ -18,11 +18,12 @@ class Public::RelationshipsController < ApplicationController
 
       # フォロー成功時は相手ユーザーへ通知を送る
       if relationship.present?
-        Notification.create!(
-          recipient: @user,
-          actor: current_user,
-          notifiable: relationship,
-          action: :followed
+        NotificationJob.perform_later(
+          @user.id,
+          current_user.id,
+          :followed,
+          relationship.class.name,
+          relationship.id
         )
       end
     end

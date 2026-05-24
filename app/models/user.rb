@@ -144,7 +144,7 @@ class User < ApplicationRecord
 
   # フォローしているか判定
   def following?(user)
-    following.include?(user)
+    following.exists?(id: user.id)
   end
 
   # 相互フォロー判定（DM解放などに使用）
