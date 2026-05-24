@@ -1,7 +1,9 @@
 class Comment < ApplicationRecord
+  include Notifiable
+
   # コメントは投稿したユーザーと対象の投稿に紐づく
   belongs_to :user
-  belongs_to :post
+  belongs_to :post, counter_cache: true
 
   # コメントに対する通知をポリモーフィック関連で管理する
   has_many :notifications, as: :notifiable, dependent: :destroy
@@ -9,7 +11,7 @@ class Comment < ApplicationRecord
   # コメント本文は必須かつ300文字以内に制限する
   validates :body, presence: true, length: { maximum: 300 }
 
-  # コメント作成後、投稿者へ通知を送る
+  # コメント作成後、投稿者へ通知を送る（非同期）
   after_create_commit :notify_post_owner
 
   private
@@ -18,7 +20,7 @@ class Comment < ApplicationRecord
   def notify_post_owner
     return if post.user == user
 
-    Notification.create!(
+    create_notification!(
       recipient: post.user,
       actor: user,
       action: :commented,

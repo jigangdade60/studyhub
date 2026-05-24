@@ -51,15 +51,9 @@ class PostSearchQuery
     when "old"
       posts.order(created_at: :asc)
     when "likes"
-      posts
-        .left_joins(:likes)
-        .group("posts.id")
-        .order(Arel.sql("COUNT(likes.id) DESC"), created_at: :desc)
+      posts.order(likes_count: :desc, created_at: :desc)
     when "comments"
-      posts
-        .left_joins(:comments)
-        .group("posts.id")
-        .order(Arel.sql("COUNT(comments.id) DESC"), created_at: :desc)
+      posts.order(comments_count: :desc, created_at: :desc)
     else
       posts.order(created_at: :desc)
     end

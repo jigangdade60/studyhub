@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_03_111517) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_24_120005) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -164,6 +164,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_03_111517) do
     t.integer "study_time", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.boolean "demo", default: false, null: false
+    t.integer "likes_count", default: 0, null: false
+    t.integer "comments_count", default: 0, null: false
+    t.index ["comments_count"], name: "index_posts_on_comments_count"
+    t.index ["likes_count"], name: "index_posts_on_likes_count"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
