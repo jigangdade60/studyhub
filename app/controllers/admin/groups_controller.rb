@@ -17,7 +17,7 @@ class Admin::GroupsController < ApplicationController
     # 管理者は不適切なグループを削除できる
     # 一般ユーザーとは異なり、作成者でなくても削除可能
     @group.destroy
-    redirect_to admin_groups_path, notice: "もくもく会を削除しました。"
+    redirect_to admin_groups_path, notice: t("flash.notice.group_deleted")
   end
 
   private
@@ -31,6 +31,6 @@ class Admin::GroupsController < ApplicationController
     # 管理者としてログインしているかを確認する
     return if current_admin.present?
 
-    redirect_to admin_login_path, alert: "管理者ログインが必要です。"
+    redirect_to admin_login_path, alert: t("flash.alert.admin_login_required")
   end
 end

@@ -16,10 +16,10 @@ class Admin::SessionsController < ApplicationController
     if admin&.authenticate(params[:password])
       # 管理者用セッションを作成して管理画面トップへ遷移する
       start_new_session_for_admin(admin)
-      redirect_to admin_users_path, notice: "管理者ログインしました。"
+      redirect_to admin_users_path, notice: t("flash.notice.admin_logged_in")
     else
       # ログイン失敗時は入力画面を再表示し、エラーメッセージを表示する
-      flash.now[:alert] = "メールアドレスまたはパスワードが正しくありません。"
+      flash.now[:alert] = t("flash.alert.invalid_credentials")
       render :new, status: :unprocessable_entity
     end
   end
@@ -27,6 +27,6 @@ class Admin::SessionsController < ApplicationController
   def destroy
     # 管理者ログアウト時も共通のセッション削除処理を使う
     terminate_session
-    redirect_to admin_login_path, notice: "管理者ログアウトしました。"
+    redirect_to admin_login_path, notice: t("flash.notice.admin_logged_out")
   end
 end

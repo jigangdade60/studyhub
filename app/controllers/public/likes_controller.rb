@@ -20,7 +20,7 @@ module Public
 
       respond_to do |format|
         # 通常リクエスト時は元の画面へ戻す
-        format.html { redirect_back fallback_location: posts_path, notice: "いいねしました。" }
+        format.html { redirect_back fallback_location: posts_path, notice: t("flash.notice.like") }
 
         # Turbo Stream により一覧やボタン表示を非同期で更新する
         format.turbo_stream
@@ -36,7 +36,7 @@ module Public
 
       respond_to do |format|
         # 通常リクエスト時は元の画面へ戻す
-        format.html { redirect_back fallback_location: posts_path, notice: "いいねを取り消しました。" }
+        format.html { redirect_back fallback_location: posts_path, notice: t("flash.notice.unlike") }
 
         # Turbo Stream により一覧やボタン表示を非同期で更新する
         format.turbo_stream
