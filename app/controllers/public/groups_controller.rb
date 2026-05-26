@@ -43,7 +43,7 @@ class Public::GroupsController < ApplicationController
       GroupMembership.create!(group: @group, user: current_user)
     end
 
-    redirect_to group_path(@group), notice: "もくもく会を作成しました。"
+    redirect_to group_path(@group), notice: t("flash.notice.group_created")
   rescue ActiveRecord::RecordInvalid
     render :new, status: :unprocessable_entity
   end
@@ -67,7 +67,7 @@ class Public::GroupsController < ApplicationController
     # グループ作成者以外は申請管理画面にアクセスできないようにする
     return if @group.owned_by?(current_user)
 
-    redirect_to groups_path, alert: "権限がありません。"
+    redirect_to groups_path, alert: t("flash.alert.unauthorized")
   end
 
   def group_params

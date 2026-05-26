@@ -18,6 +18,6 @@ class Public::NotificationsController < ApplicationController
   def read_all
     # 未読通知をまとめて既読にする
     current_user.received_notifications.unread.update_all(read_at: Time.current)
-    redirect_to notifications_path, notice: "すべての通知を既読にしました。"
+    redirect_to notifications_path, notice: t("flash.notice.notifications_read")
   end
 end

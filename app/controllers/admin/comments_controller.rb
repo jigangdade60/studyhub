@@ -16,7 +16,7 @@ class Admin::CommentsController < ApplicationController
     # 管理者は不適切なコメントを削除できる
     # 一般ユーザーと異なり、本人以外のコメントも管理権限で削除可能
     @comment.destroy
-    redirect_to admin_comments_path, notice: "コメントを削除しました。"
+    redirect_to admin_comments_path, notice: t("flash.notice.comment_deleted")
   end
 
   private

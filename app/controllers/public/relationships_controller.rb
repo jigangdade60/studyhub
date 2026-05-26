@@ -28,7 +28,7 @@ class Public::RelationshipsController < ApplicationController
       end
     end
 
-    redirect_back fallback_location: user_path(@user), notice: "フォローしました。"
+    redirect_back fallback_location: user_path(@user), notice: t("flash.notice.follow")
   end
 
   def destroy
@@ -37,7 +37,7 @@ class Public::RelationshipsController < ApplicationController
     # 自分が作成したフォロー関係だけ解除できるようにする
     @relationship.destroy if @relationship.follower == current_user
 
-    redirect_back fallback_location: user_path(user), notice: "フォロー解除しました。"
+    redirect_back fallback_location: user_path(user), notice: t("flash.notice.unfollow")
   end
 
   private

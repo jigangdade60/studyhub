@@ -15,18 +15,18 @@ module Public
         # 退会済みユーザーはログインさせない
         if user.is_active?
           start_new_session_for user
-          redirect_to mypage_path, notice: "ログインしました。"
+          redirect_to mypage_path, notice: t("flash.notice.login")
         else
-          redirect_to new_session_path, alert: "このアカウントは退会済みです。"
+          redirect_to new_session_path, alert: t("flash.alert.account_withdrawn")
         end
       else
-        redirect_to new_session_path, alert: "メールアドレスまたはパスワードが正しくありません。"
+        redirect_to new_session_path, alert: t("flash.alert.invalid_credentials")
       end
     end
 
     def destroy
       terminate_session
-      redirect_to root_path, notice: "ログアウトしました。"
+      redirect_to root_path, notice: t("flash.notice.logout")
     end
   end
 end

@@ -17,6 +17,6 @@ class Admin::BaseController < ApplicationController
     return if current_admin.present?
 
     # 未ログインの場合は管理者ログイン画面へリダイレクト
-    redirect_to admin_login_path, alert: "管理者ログインが必要です。"
+    redirect_to admin_login_path, alert: t("flash.alert.admin_login_required")
   end
 end

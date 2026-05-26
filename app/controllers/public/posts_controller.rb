@@ -24,7 +24,7 @@ class Public::PostsController < ApplicationController
   def show
     # 下書きは投稿者本人だけが閲覧できるようにする
     if @post.draft? && (!authenticated? || @post.user != current_user)
-      redirect_to posts_path, alert: "この投稿は表示できません。"
+      redirect_to posts_path, alert: t("flash.alert.cannot_view_post")
       return
     end
 
@@ -43,9 +43,9 @@ class Public::PostsController < ApplicationController
     if @post.save
       # タグは保存後に文字列から分解して関連付ける
       @post.save_tags(post_params[:tag_names])
-      redirect_to post_path(@post), notice: @post.draft? ? "下書きを保存しました。" : "投稿を作成しました。"
+      redirect_to post_path(@post), notice: @post.draft? ? t("flash.notice.draft_saved") : t("flash.notice.post_created")
     else
-      flash.now[:alert] = "投稿に失敗しました。"
+      flash.now[:alert] = t("flash.alert.post_failed")
       render :new, status: :unprocessable_entity
     end
   end
@@ -53,16 +53,16 @@ class Public::PostsController < ApplicationController
   def update
     if @post.update(post_params)
       @post.save_tags(post_params[:tag_names])
-      redirect_to post_path(@post), notice: @post.draft? ? "下書きを更新しました。" : "投稿を更新しました。"
+      redirect_to post_path(@post), notice: @post.draft? ? t("flash.notice.draft_updated") : t("flash.notice.post_updated")
     else
-      flash.now[:alert] = "更新に失敗しました。"
+      flash.now[:alert] = t("flash.alert.update_failed")
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @post.destroy
-    redirect_to posts_path, notice: "投稿を削除しました。"
+    redirect_to posts_path, notice: t("flash.notice.post_deleted")
   end
 
   private
@@ -80,6 +80,6 @@ class Public::PostsController < ApplicationController
     # 投稿者本人以外は編集・更新・削除できないようにする
     return if @post.user == current_user
 
-    redirect_to posts_path, alert: "権限がありません。"
+    redirect_to posts_path, alert: t("flash.alert.unauthorized")
   end
 end
