@@ -27,7 +27,7 @@ class Public::UsersController < ApplicationController
     if @user.save
       # 登録完了と同時にログイン状態を作り、そのままマイページへ遷移させる
       start_new_session_for @user
-      redirect_to mypage_path, notice: "登録が完了しました。"
+      redirect_to mypage_path, notice: t("flash.notice.registration_complete")
     else
       render :new, status: :unprocessable_entity
     end
@@ -61,7 +61,7 @@ class Public::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to mypage_path, notice: "プロフィールを更新しました。"
+      redirect_to mypage_path, notice: t("flash.notice.profile_updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -70,7 +70,7 @@ class Public::UsersController < ApplicationController
   def destroy
     # ログイン中ユーザー自身の退会処理
     @user.destroy
-    redirect_to root_path, notice: "退会しました。"
+    redirect_to root_path, notice: t("flash.notice.account_withdrawn")
   end
 
   def following
@@ -111,7 +111,7 @@ class Public::UsersController < ApplicationController
     # 非公開ユーザーのプロフィールは本人以外アクセスできないようにする
     return if @user.visible_to?(current_user)
 
-    redirect_to users_path, alert: "このユーザーのプロフィールは非公開です。"
+    redirect_to users_path, alert: t("flash.alert.profile_private")
   end
 
   def set_posts

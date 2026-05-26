@@ -9,7 +9,7 @@ class Public::CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      redirect_to post_path(@post), notice: "コメントを投稿しました。"
+      redirect_to post_path(@post), notice: t("flash.notice.comment_created")
     else
       # バリデーションエラー時は投稿詳細画面を再表示できるように表示用データを再取得する
       set_view_resources
@@ -22,7 +22,7 @@ class Public::CommentsController < ApplicationController
     @comment = current_user.comments.find(params[:id])
     @comment.destroy
 
-    redirect_to post_path(@post), notice: "コメントを削除しました。"
+    redirect_to post_path(@post), notice: t("flash.notice.comment_deleted")
   end
 
   private

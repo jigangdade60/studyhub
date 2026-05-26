@@ -16,7 +16,7 @@ class Public::GroupMessagesController < ApplicationController
     @group_message.user = current_user
 
     if @group_message.save
-      redirect_to group_path(@group), notice: "メッセージを送信しました。"
+      redirect_to group_path(@group), notice: t("flash.notice.message_sent")
     else
       redirect_to group_path(@group), alert: @group_message.errors.full_messages.join(", ")
     end
@@ -33,7 +33,7 @@ class Public::GroupMessagesController < ApplicationController
     # グループ参加者以外はチャットを利用できないようにする
     return if @group.joined_by?(current_user)
 
-    redirect_to group_path(@group), alert: "チャットは参加者のみ利用できます。"
+    redirect_to group_path(@group), alert: t("flash.alert.cannot_enter_group_chat")
   end
 
   def group_message_params

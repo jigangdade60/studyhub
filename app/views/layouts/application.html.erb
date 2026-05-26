@@ -36,8 +36,8 @@
               end
             %>
 
-            <div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
-              <%= message %>
+            <div class="alert <%= alert_class %> alert-dismissible fade show js-auto-dismissable" role="alert">
+              <%= t(message, default: message) %>
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="閉じる"></button>
             </div>
           <% end %>
@@ -68,6 +68,14 @@
             });
           });
         }
+
+        const autoDismissAlerts = document.querySelectorAll('.js-auto-dismissable');
+        autoDismissAlerts.forEach(alertElement => {
+          setTimeout(() => {
+            const alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+            alert.close();
+          }, 5000);
+        });
       });
     </script>
   </body>

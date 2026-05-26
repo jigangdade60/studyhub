@@ -10,13 +10,13 @@ class Public::DmRoomsController < ApplicationController
 
     # 自分自身とのDMルーム作成は許可しない
     if current_user == other_user
-      redirect_to user_path(other_user), alert: "自分自身とはDMできません"
+      redirect_to user_path(other_user), alert: t("flash.alert.cannot_dm_self")
       return
     end
 
     # 相互フォローのユーザー同士だけDMできるように制御する
     unless current_user.mutual_follow_with?(other_user)
-      redirect_to user_path(other_user), alert: "相互フォローのユーザーのみDMできます"
+      redirect_to user_path(other_user), alert: t("flash.alert.dm_requires_follow")
       return
     end
 
@@ -43,6 +43,6 @@ class Public::DmRoomsController < ApplicationController
     # DMルーム参加者以外は閲覧できないようにする
     return if @dm_room.includes_user?(current_user)
 
-    redirect_to root_path, alert: "このDMルームには入れません"
+    redirect_to root_path, alert: t("flash.alert.cannot_enter_dm")
   end
 end

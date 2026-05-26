@@ -13,7 +13,7 @@ class Public::DmMessagesController < ApplicationController
     @dm_message.user = current_user
 
     if @dm_message.save
-      redirect_to dm_room_path(@dm_room), notice: "メッセージを送信しました"
+      redirect_to dm_room_path(@dm_room), notice: t("flash.notice.message_sent")
     else
       # エラー時はDM画面を再表示できるように必要なデータを再取得する
       set_view_resources
@@ -32,7 +32,7 @@ class Public::DmMessagesController < ApplicationController
     # DMルーム参加者以外はメッセージ送信できないようにする
     return if @dm_room.includes_user?(current_user)
 
-    redirect_to root_path, alert: "このDMルームには入れません"
+    redirect_to root_path, alert: t("flash.alert.cannot_enter_dm")
   end
 
   def set_view_resources

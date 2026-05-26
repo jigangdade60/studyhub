@@ -16,7 +16,7 @@ class Public::GroupJoinRequestsController < ApplicationController
     @group_join_request = @group.group_join_requests.new(user: current_user)
 
     if @group_join_request.save
-      redirect_to group_path(@group), notice: "参加申請を送りました。"
+      redirect_to group_path(@group), notice: t("flash.notice.request_sent")
     else
       redirect_to group_path(@group), alert: @group_join_request.errors.full_messages.join(", ")
     end
@@ -25,7 +25,7 @@ class Public::GroupJoinRequestsController < ApplicationController
   def approve
     # 定員に達している場合は承認できないようにする
     if @group_join_request.group.full?
-      redirect_to requests_group_path(@group_join_request.group), alert: "定員に達しているため承認できません。"
+      redirect_to requests_group_path(@group_join_request.group), alert: t("flash.alert.members_full")
       return
     end
 
@@ -38,13 +38,13 @@ class Public::GroupJoinRequestsController < ApplicationController
       )
     end
 
-    redirect_to requests_group_path(@group_join_request.group), notice: "参加申請を承認しました。"
+    redirect_to requests_group_path(@group_join_request.group), notice: t("flash.notice.request_approved")
   end
 
   def reject
     # 申請状態を拒否に更新する
     @group_join_request.rejected!
-    redirect_to requests_group_path(@group_join_request.group), notice: "参加申請を拒否しました。"
+    redirect_to requests_group_path(@group_join_request.group), notice: t("flash.notice.request_rejected")
   end
 
   private
@@ -63,6 +63,6 @@ class Public::GroupJoinRequestsController < ApplicationController
     # グループ作成者以外は承認・拒否を行えないようにする
     return if @group_join_request.group.owned_by?(current_user)
 
-    redirect_to groups_path, alert: "権限がありません。"
+    redirect_to groups_path, alert: t("flash.alert.unauthorized")
   end
 end
