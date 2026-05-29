@@ -19,6 +19,11 @@ class Public::GroupsController < ApplicationController
                    .search_by_keyword(@keyword)
                    .order(created_at: :desc)
                    .page(params[:page]).per(10)
+
+    # owner/member に紐づくユーザーのプロフィール画像をプリロード
+    owners = @groups.map(&:owner).compact
+    members = @groups.flat_map(&:members)
+    ActiveRecord::Associations::Preloader.new.preload(owners + members, :profile_image) if (owners + members).any?
   end
 
   def show

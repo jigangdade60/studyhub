@@ -19,11 +19,12 @@ class PostSearchQuery
   def base_posts
     if authenticated && current_user.present?
       # ログイン中は公開投稿に加えて、自分の下書きも一覧に含める
-      Post.includes(:user, :tags, :likes, :comments)
+      # ユーザーのプロフィール画像(ActiveStorage)もプリロードして N+1 を防ぐ
+      Post.includes(user: { profile_image_attachment: :blob }, :tags, :likes, :comments)
           .where("posts.status = ? OR posts.user_id = ?", Post.statuses[:published], current_user.id)
     else
       # 未ログイン時は公開投稿のみ表示する
-      Post.includes(:user, :tags, :likes, :comments)
+      Post.includes(user: { profile_image_attachment: :blob }, :tags, :likes, :comments)
           .where(status: :published)
     end
   end

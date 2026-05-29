@@ -38,8 +38,9 @@ class Public::UsersController < ApplicationController
 
     # 公開ユーザーのみを対象に、名前検索と新着順表示を行う
     @users = User.search_by_name(@keyword)
-                 .public_profiles
-                 .order(created_at: :desc)
+           .public_profiles
+           .order(created_at: :desc)
+           .with_attached_profile_image
 
     # ログイン中は、自分が非公開設定でも一覧に表示できるようにする
     if authenticated? && current_user.present?
@@ -75,7 +76,7 @@ class Public::UsersController < ApplicationController
 
   def following
     # 他ユーザーのページでは公開プロフィールのユーザーだけ表示する
-    @users = @user.following.public_profiles
+    @users = @user.following.public_profiles.with_attached_profile_image
 
     # 自分自身のページでは非公開ユーザーも含めて確認できるようにする
     if authenticated? && current_user.present? && @user == current_user
@@ -87,7 +88,7 @@ class Public::UsersController < ApplicationController
 
   def followers
     # 他ユーザーのページでは公開プロフィールのユーザーだけ表示する
-    @users = @user.followers.public_profiles
+    @users = @user.followers.public_profiles.with_attached_profile_image
 
     # 自分自身のページでは非公開ユーザーも含めて確認できるようにする
     if authenticated? && current_user.present? && @user == current_user
@@ -123,12 +124,20 @@ class Public::UsersController < ApplicationController
     @owned_groups = @user.owned_groups
                          .includes(:members)
                          .order(created_at: :desc)
+
+    # preload member profile images
+    members = @owned_groups.flat_map(&:members)
+    ActiveRecord::Associations::Preloader.new.preload(members, :profile_image) if members.any?
   end
 
   def set_joined_groups
     @joined_groups = @user.joined_groups
                           .includes(:owner, :members)
                           .order(created_at: :desc)
+
+    owners = @joined_groups.map(&:owner).compact
+    members = @joined_groups.flat_map(&:members)
+    ActiveRecord::Associations::Preloader.new.preload(owners + members, :profile_image) if (owners + members).any?
   end
 
   def set_learning_statistics

@@ -6,8 +6,8 @@ module Public
     def index
       # 自分がいいねした投稿一覧を取得する
       @liked_posts = current_user.liked_posts
-                                 .includes(:user)
-                                 .order(created_at: :desc)
+                 .includes(user: { profile_image_attachment: :blob })
+                 .order(created_at: :desc)
 
       @liked_posts = @liked_posts.page(params[:page]).per(10)
     end
