@@ -2,6 +2,7 @@ class Admin::UsersController < Admin::BaseController
   def index
     # 管理者画面では全ユーザーを新しい順で一覧表示する
     @users = User.order(created_at: :desc)
+                 .with_attached_profile_image
                  .page(params[:page])
                  .per(10)
   end

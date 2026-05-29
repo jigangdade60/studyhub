@@ -9,8 +9,12 @@ class Admin::GroupsController < ApplicationController
     # 管理者がグループ一覧を確認しやすいように、
     # 作成者とメンバー情報も含めて新しい順で表示する
     @groups = Group.includes(:owner, :members)
-                   .order(created_at: :desc)
-                   .page(params[:page]).per(10)
+             .order(created_at: :desc)
+             .page(params[:page]).per(10)
+
+    owners = @groups.map(&:owner).compact
+    members = @groups.flat_map(&:members)
+    ActiveRecord::Associations::Preloader.new.preload(owners + members, :profile_image) if (owners + members).any?
   end
 
   def destroy
