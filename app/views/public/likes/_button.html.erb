@@ -6,7 +6,7 @@
                     class: "x-like-btn liked",
                     form: { class: "x-like-form" } do %>
         <i class="fa-solid fa-heart"></i>
-        <span><%= post.likes.count %></span>
+        <span><%= post.likes_count %></span>
       <% end %>
     <% else %>
       <%= button_to post_like_path(post),
@@ -14,13 +14,13 @@
                     class: "x-like-btn",
                     form: { class: "x-like-form" } do %>
         <i class="fa-regular fa-heart"></i>
-        <span><%= post.likes.count %></span>
+        <span><%= post.likes_count %></span>
       <% end %>
     <% end %>
   <% else %>
     <span class="x-like-btn disabled-like">
       <i class="fa-regular fa-heart"></i>
-      <span><%= post.likes.count %></span>
+      <span><%= post.likes_count %></span>
     </span>
   <% end %>
 <% end %>

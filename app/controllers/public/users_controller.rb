@@ -127,7 +127,7 @@ class Public::UsersController < ApplicationController
 
     # preload member profile images
     members = @owned_groups.flat_map(&:members)
-    ActiveRecord::Associations::Preloader.new.preload(members, :profile_image) if members.any?
+    ActiveRecord::Associations::Preloader.new(records: members, associations: { profile_image_attachment: :blob }).call if members.any?
   end
 
   def set_joined_groups
@@ -137,7 +137,7 @@ class Public::UsersController < ApplicationController
 
     owners = @joined_groups.map(&:owner).compact
     members = @joined_groups.flat_map(&:members)
-    ActiveRecord::Associations::Preloader.new.preload(owners + members, :profile_image) if (owners + members).any?
+    ActiveRecord::Associations::Preloader.new(records: owners + members, associations: { profile_image_attachment: :blob }).call if (owners + members).any?
   end
 
   def set_learning_statistics
