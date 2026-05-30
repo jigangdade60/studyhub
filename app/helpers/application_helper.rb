@@ -15,18 +15,28 @@ module ApplicationHelper
   end
 
   def user_avatar(user, size: 40, extra_class: "")
-    image =
-      if user&.profile_image&.attached?
-        user.profile_image
-      else
-        "no_image.jpg"
-      end
+    image_cache_key = if user&.profile_image&.attached?
+                        user.profile_image.blob.cache_key
+                      else
+                        "no_image"
+                      end
 
-    image_tag(
-      image,
-      size: "#{size}x#{size}",
-      class: "avatar-icon rounded-circle #{extra_class}"
-    )
+    cache_key = ["user-avatar", user&.cache_key_with_version || "guest", image_cache_key, size, extra_class]
+
+    Rails.cache.fetch(cache_key) do
+      image =
+        if user&.profile_image&.attached?
+          user.profile_image
+        else
+          "no_image.jpg"
+        end
+
+      image_tag(
+        image,
+        size: "#{size}x#{size}",
+        class: "avatar-icon rounded-circle #{extra_class}"
+      )
+    end
   end
 
   def unread_notifications_count

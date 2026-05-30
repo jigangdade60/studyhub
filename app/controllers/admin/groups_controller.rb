@@ -14,7 +14,7 @@ class Admin::GroupsController < ApplicationController
 
     owners = @groups.map(&:owner).compact
     members = @groups.flat_map(&:members)
-    ActiveRecord::Associations::Preloader.new.preload(owners + members, :profile_image) if (owners + members).any?
+    ActiveRecord::Associations::Preloader.new(records: owners + members, associations: { profile_image_attachment: :blob }).call if (owners + members).any?
   end
 
   def destroy
