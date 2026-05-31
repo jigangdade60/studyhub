@@ -62,9 +62,8 @@
 
           navLinks.forEach(link => {
             link.addEventListener('click', function() {
-              const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-                hide: true
-              });
+              const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || new bootstrap.Collapse(navbarCollapse);
+              bsCollapse.hide();
             });
           });
         }
