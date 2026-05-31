@@ -131,9 +131,17 @@ class Post < ApplicationRecord
     return if tag_names.nil?
 
     tag_list = tag_names.split(",").map(&:strip).reject(&:blank?).uniq
-
-    self.tags = tag_list.map do |tag_name|
+    new_tags = tag_list.map do |tag_name|
       Tag.find_or_create_by!(name: tag_name)
+    end
+
+    # 既存タグと差分がある場合のみ更新して updated_at を更新（断片キャッシュのキーを変える）
+    existing_names = tags.pluck(:name)
+    new_names = new_tags.map(&:name)
+
+    if existing_names.sort != new_names.sort
+      self.tags = new_tags
+      touch
     end
   end
 
