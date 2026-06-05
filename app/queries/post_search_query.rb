@@ -106,16 +106,42 @@ class PostSearchQuery
       posts.order(created_at: :asc)
     when "likes"
       # いいね数が多い順に並び替える
-      # likes_countはcounter_cacheで保持しているカラム
-      # likesテーブルを毎回集計せずに並び替えられるため、パフォーマンスが良い
       posts.order(likes_count: :desc, created_at: :desc)
     when "comments"
       # コメント数が多い順に並び替える
-      # comments_countもcounter_cacheで保持しているカラム
       posts.order(comments_count: :desc, created_at: :desc)
     else
-      # デフォルトは新しい投稿順
-      posts.order(created_at: :desc)
+      # デフォルトは新しい投稿順だが、キーワード検索がある場合は
+      # タイトルにキーワードが含まれる投稿を優先して表示する
+      if params[:keyword].present?
+        # ここでは「キーワードがタイトルに含まれる投稿を先に表示する」ための
+        # 簡易的なスコア付けを行います。
+        #
+        # 仕組み:
+        #  - SQLのCASE式で、タイトルにキーワードが含まれるときは0、含まれないときは1を返す
+        #  - この値で昇順ソートすると、タイトルにキーワードが含まれる投稿が先に並ぶ
+        #  - さらに同じスコア内では作成日時の降順で新しい順に並べる
+        #
+        # 注意点:
+        #  - 大文字小文字を区別しない検索のために ILIKE を使っています（PostgreSQL用）
+        #  - SQLを直接組み立てるため、パラメータは必ずサニタイズして渡しています
+
+        # 検索ワードを部分一致用に整形（例: 'Ruby' -> '%Ruby%'）
+        keyword = "%#{params[:keyword]}%"
+
+        # SQLの断片を安全に作る: プレースホルダ(?)にkeywordを埋める形でサニタイズする
+        # sanitize_sql_array は ActiveRecord の機能で、SQLインジェクション対策になります
+        title_score_sql = ActiveRecord::Base.send(:sanitize_sql_array, [
+          "(CASE WHEN posts.title ILIKE ? THEN 0 ELSE 1 END) ASC",
+          keyword
+        ])
+
+        # Arel.sql で生SQLを渡して複合的な並び替えを実行する
+        # ここでは "CASE式によるスコア, 作成日時 DESC" の順にソートしています
+        posts.order(Arel.sql("#{title_score_sql}, posts.created_at DESC"))
+      else
+        posts.order(created_at: :desc)
+      end
     end
   end
 
