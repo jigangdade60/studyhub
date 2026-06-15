@@ -10,7 +10,6 @@
 # Railsでは、1回のリクエストごとに Current の値がリセットされるため、
 # 別のユーザーの情報が混ざらないように管理できる
 class Current < ActiveSupport::CurrentAttributes
-
   # Current.session という形で、
   # 現在のリクエストに紐づくセッション情報を保持できるようにしている
   #

@@ -17,11 +17,11 @@ module ApplicationHelper
   def user_avatar(user, size: 40, extra_class: "")
     image_cache_key = if user&.profile_image&.attached?
                         user.profile_image.blob.cache_key
-                      else
+    else
                         "no_image"
-                      end
+    end
 
-    cache_key = ["user-avatar", user&.cache_key_with_version || "guest", image_cache_key, size, extra_class]
+    cache_key = [ "user-avatar", user&.cache_key_with_version || "guest", image_cache_key, size, extra_class ]
 
     Rails.cache.fetch(cache_key) do
       image =

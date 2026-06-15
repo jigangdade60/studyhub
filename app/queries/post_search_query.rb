@@ -160,30 +160,30 @@ class PostSearchQuery
       # 投稿タイトルや本文を対象に検索する想定。
       #
       # keyword_search は Postモデル側に定義したscope。
-      .keyword_search(params[:keyword])
-
+      #
       # タグ検索
       #
       # params[:tag_name] に値がある場合、
       # 指定されたタグが付いた投稿に絞り込む。
       #
       # tag_search も Postモデル側に定義したscope。
-      .tag_search(params[:tag_name])
-
+      #
       # 期間検索
       #
       # params[:period] に値がある場合、
       # 今日、今週、今月などの期間で絞り込む想定。
       #
       # period_search も Postモデル側に定義したscope。
-      .period_search(params[:period])
-
+      #
       # distinct
       #
       # タグ検索などでJOINを使う場合、
       # 同じ投稿が重複して取得される可能性がある。
       #
       # distinctをつけることで、同じ投稿が複数回表示されるのを防ぐ。
+      .keyword_search(params[:keyword])
+      .tag_search(params[:tag_name])
+      .period_search(params[:period])
       .distinct
   end
 

@@ -8,7 +8,6 @@
 # そのため、ここに共通処理を書くことで、
 # アプリ全体のコントローラで同じ処理を使えるようになります。
 class ApplicationController < ActionController::Base
-
   # Authentication モジュールを読み込んでいます。
   #
   # Authentication には、

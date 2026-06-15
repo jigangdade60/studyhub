@@ -19,15 +19,12 @@ module Public
       # liked_posts は Userモデル側で
       # has_many :liked_posts, through: :likes, source: :post
       # のように定義している想定
+      #
+      # 投稿者のプロフィール画像を一緒に読み込む
+      # これにより、一覧表示時に投稿ごとに画像取得SQLが発生するN+1問題を防ぐ
       @liked_posts = current_user.liked_posts
-                 # 投稿者のプロフィール画像を一緒に読み込む
-                 # これにより、一覧表示時に投稿ごとに画像取得SQLが発生する
-                 # N+1問題を防ぐ
-                 .includes(user: { profile_image_attachment: :blob })
-
-                 # 新しく作成された投稿順に並べる
-                 # いいねした順ではなく、投稿の作成日時順で表示している
-                 .order(created_at: :desc)
+                                 .includes(user: { profile_image_attachment: :blob })
+                                 .order(created_at: :desc)
 
       # kaminari によるページネーション
       # 1ページあたり10件ずつ表示する
